@@ -3,8 +3,14 @@ import { getMysqlPool } from '../../../config/mysql'
 import { getSqlServer } from '../../../config/sqlserver'
 import { createNotification } from '../../../services/notification.service'
 import { hashString } from '../../../utils/sankhya/pass'
+import logger from '../../../utils/logger' // Import the logger
+import { getUserDetails, SankhyaUserDetails } from '../tsiusu/tsiusu.service' // Import getUserDetails and SankhyaUserDetails from its new location
+import { getUserGroups } from '../tsigpu/tsigpu.service' // Import getUserGroups from its new location
+import { getUserConfigurations } from '../tsicfg/tsicfg.service' // Import getUserConfigurations from its new location
+import { getPartnerDetails } from '../tgfpar/tgfpar.service' // Import getPartnerDetails
+import { getEmployeeDetails } from '../tfpfun/tfpfun.service' // Import getEmployeeDetails
 
-// Tipagem para usuário Sankhya
+// Tipagem para usuário Sankhya (basic, will be replaced by SankhyaUserDetails in return)
 export interface SankhyaUser {
   CODUSU: number
   NOMEUSU: string
@@ -13,64 +19,118 @@ export interface SankhyaUser {
   CPF?: string
 }
 
-export async function login(username: string, password: string): Promise<{ token: string, sessionId: number, user: SankhyaUser }> {
+export async function login(username: string, password: string): Promise<{ token: string, sessionId: number, user: SankhyaUserDetails }> {
   const mysqlPool = await getMysqlPool() // garante que o pool esteja inicializado
-  console.log('Login attempt for username:', username)
+  logger.info('Login attempt for username:', { username })
 
   const sql = await getSqlServer()
-  if (!sql) throw new Error('Erro ao conectar ao servidor SQL.')
-  console.log('Successfully obtained SQL Server connection.')
+  if (!sql) {
+    logger.error('Error connecting to SQL Server during login', new Error('SQL Server connection failed'), { username });
+    throw new Error('Erro ao conectar ao servidor SQL.')
+  }
+  logger.debug('Successfully obtained SQL Server connection for login.', { username })
 
   const normalizedUsername = username.toLowerCase()
-  console.log('Normalized username:', normalizedUsername)
+  logger.debug('Normalized username:', { normalizedUsername })
 
   // Buscar usuário
   const userFoundByUsername = await findUserByUsername(username)
-  if (!userFoundByUsername) throw new Error('Usuário não encontrado')
-  console.log('User found by username. Proceeding with password verification.')
+  if (!userFoundByUsername) {
+    logger.warn('Login failed: User not found', { username });
+    throw new Error('Usuário não encontrado')
+  }
+  logger.debug('User found by username. Proceeding with password verification.', { username: userFoundByUsername.NOMEUSU })
 
   // Gerar hash da senha
   const passwordHash = hashString((username + password).trim())
-  console.log('Password hash generated:', passwordHash)
+  logger.debug('Password hash generated.', { username })
 
   // Verificar senha no SQL Server
   const result = await sql.query`
-    SELECT CODUSU, NOMEUSU, EMAIL 
-    FROM TSIUSU 
+    SELECT CODUSU, NOMEUSU, EMAIL
+    FROM TSIUSU
     WHERE NOMEUSU = ${normalizedUsername} AND INTERNO = ${passwordHash}
   `
-  if (result.recordset.length === 0) throw new Error('Senha inválida')
-  const user: SankhyaUser = result.recordset[0]
-  console.log('User authenticated:', user.NOMEUSU)
+  if (result.recordset.length === 0) {
+    logger.warn('Login failed: Invalid password', { username });
+    throw new Error('Senha inválida')
+  }
+  const basicUser: SankhyaUser = result.recordset[0]
+  logger.info('User authenticated successfully.', { codUsu: basicUser.CODUSU, nomeUsu: basicUser.NOMEUSU })
 
   // Gerar JWT
   const expiresIn = '8h'
-  const token = jwt.sign({ id: user.CODUSU, username: user.NOMEUSU }, process.env.JWT_SECRET!, { expiresIn })
+  const token = jwt.sign({ id: basicUser.CODUSU, username: basicUser.NOMEUSU }, process.env.JWT_SECRET!, { expiresIn })
   const expiresAt = new Date()
   expiresAt.setHours(expiresAt.getHours() + 8)
 
   // Inserir sessão no MySQL
   const [sessionResult]: any = await mysqlPool.query(
     'INSERT INTO user_sessions (user_id, token, expires_at) VALUES (?, ?, ?)',
-    [user.CODUSU, token, expiresAt]
+    [basicUser.CODUSU, token, expiresAt]
   )
-  console.log('Session inserted with ID:', sessionResult.insertId)
+  logger.debug('Session inserted into MySQL.', { sessionId: sessionResult.insertId, codUsu: basicUser.CODUSU })
 
   // Criar notificação
   try {
     await createNotification({
-      user_id: user.CODUSU,
+      user_id: basicUser.CODUSU,
       type: 'LOGIN',
       category: 'SECURITY',
       title: 'Novo login detectado',
-      message: `O usuário ${user.NOMEUSU} acabou de fazer login.`,
+      message: `O usuário ${basicUser.NOMEUSU} acabou de fazer login.`,
     })
-    console.log('Notification created successfully.')
+    logger.info('Notification created successfully for login.', { codUsu: basicUser.CODUSU })
   } catch (notificationError: any) {
-    console.error('Error creating notification:', notificationError.message)
+    logger.error('Error creating notification for login', notificationError, { codUsu: basicUser.CODUSU })
   }
 
-  return { token, sessionId: sessionResult.insertId, user }
+  // --- Fetch and log additional user details after successful login ---
+  let userDetails: SankhyaUserDetails | undefined;
+  try {
+    userDetails = await getUserDetails(basicUser.CODUSU);
+    if (!userDetails) {
+      logger.error('Sankhya User Details not found after login for CODUSU', null, { codUsu: basicUser.CODUSU });
+      throw new Error('Detalhes do usuário Sankhya não encontrados.');
+    }
+    logger.info('Sankhya User Details after login:', { codUsu: basicUser.CODUSU, details: userDetails });
+
+    const userGroups = await getUserGroups(basicUser.CODUSU);
+    logger.info('Sankhya User Groups after login:', { codUsu: basicUser.CODUSU, groups: userGroups });
+
+    // Fetch Partner Details if CODPARC exists
+    if (userDetails.CODPARC) {
+      const partnerDetails = await getPartnerDetails(userDetails.CODPARC);
+      if (partnerDetails) {
+        userDetails.partnerDetails = partnerDetails;
+        logger.info('Sankhya Partner Details fetched.', { codUsu: basicUser.CODUSU, codParc: userDetails.CODPARC, partnerDetails });
+      } else {
+        logger.warn('Sankhya Partner Details not found for CODPARC', { codUsu: basicUser.CODUSU, codParc: userDetails.CODPARC });
+      }
+    }
+
+    // Fetch Employee Details if CODFUNC exists
+    if (userDetails.CODFUNC && userDetails.CODEMP) { // Ensure CODEMP also exists
+      const employeeDetails = await getEmployeeDetails(userDetails.CODEMP, userDetails.CODFUNC); // Pass both CODEMP and CODFUNC
+      if (employeeDetails) {
+        userDetails.employeeDetails = employeeDetails;
+        logger.info('Sankhya Employee Details fetched.', { codUsu: basicUser.CODUSU, codEmp: userDetails.CODEMP, codFunc: userDetails.CODFUNC, employeeDetails });
+      } else {
+        logger.warn('Sankhya Employee Details not found for CODEMP/CODFUNC', { codUsu: basicUser.CODUSU, codEmp: userDetails.CODEMP, codFunc: userDetails.CODFUNC });
+      }
+    }
+
+    // Example: Log a specific configuration if needed
+    // const userConfig = await getUserConfigurations(basicUser.CODUSU, 'VERSAOSKWBIN', 'T');
+    // logger.info('Sankhya User Configuration (VERSAOSKWBIN) after login:', { codUsu: basicUser.CODUSU, config: userConfig });
+
+  } catch (detailsError: any) {
+    logger.error('Error fetching additional Sankhya user details after login', detailsError, { codUsu: basicUser.CODUSU });
+    throw detailsError; // Re-throw to indicate a critical failure in getting user details
+  }
+  // --- End of additional logging ---
+
+  return { token, sessionId: sessionResult.insertId, user: userDetails }
 }
 
 export async function findUserByUsername(username: string): Promise<SankhyaUser | null> {
@@ -86,3 +146,4 @@ export async function findUserByUsername(username: string): Promise<SankhyaUser 
   if (result.recordset.length === 0) return null
   return result.recordset[0] as SankhyaUser
 }
+

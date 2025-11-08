@@ -5,12 +5,14 @@ import { createNotification } from '../../../services/notification.service'
 import { hashString } from '../../../utils/sankhya/pass'
 import logger from '../../../utils/logger' // Import the logger
 import { getUserDetails, SankhyaUserDetails } from '../tsiusu/tsiusu.service' // Import getUserDetails and SankhyaUserDetails from its new location
-import { getUserGroups } from '../tsigpu/tsigpu.service' // Import getUserGroups from its new location
+import { getUserGroups, SankhyaUserGroup } from '../tsigpu/tsigpu.service' // Import getUserGroups and SankhyaUserGroup from its new location
 import { getUserConfigurations } from '../tsicfg/tsicfg.service' // Import getUserConfigurations from its new location
 import { getPartnerDetails } from '../tgfpar/tgfpar.service' // Import getPartnerDetails
 import { getEmployeeDetails } from '../tfpfun/tfpfun.service' // Import getEmployeeDetails
+import { getAllUserPermissions } from '../tddper/tddper.service' // Import getAllUserPermissions
+import { CompactSankhyaUser } from './auth.types' // Import CompactSankhyaUser
 
-// Tipagem para usuário Sankhya (basic, will be replaced by SankhyaUserDetails in return)
+// Tipagem para usuário Sankhya (basic, will be replaced by CompactSankhyaUser in return)
 export interface SankhyaUser {
   CODUSU: number
   NOMEUSU: string
@@ -19,7 +21,7 @@ export interface SankhyaUser {
   CPF?: string
 }
 
-export async function login(username: string, password: string): Promise<{ token: string, sessionId: number, user: SankhyaUserDetails }> {
+export async function login(username: string, password: string): Promise<{ token: string, sessionId: number, user: CompactSankhyaUser }> {
   const mysqlPool = await getMysqlPool() // garante que o pool esteja inicializado
   logger.info('Login attempt for username:', { username })
 
@@ -87,6 +89,9 @@ export async function login(username: string, password: string): Promise<{ token
 
   // --- Fetch and log additional user details after successful login ---
   let userDetails: SankhyaUserDetails | undefined;
+  let userGroups: SankhyaUserGroup[] = [];
+  let userPermissions: string[] = [];
+
   try {
     userDetails = await getUserDetails(basicUser.CODUSU);
     if (!userDetails) {
@@ -95,7 +100,7 @@ export async function login(username: string, password: string): Promise<{ token
     }
     logger.info('Sankhya User Details after login:', { codUsu: basicUser.CODUSU, details: userDetails });
 
-    const userGroups = await getUserGroups(basicUser.CODUSU);
+    userGroups = await getUserGroups(basicUser.CODUSU);
     logger.info('Sankhya User Groups after login:', { codUsu: basicUser.CODUSU, groups: userGroups });
 
     // Fetch Partner Details if CODPARC exists
@@ -120,6 +125,11 @@ export async function login(username: string, password: string): Promise<{ token
       }
     }
 
+    // Fetch all permissions for the user and their groups
+    const groupCods = userGroups.map(group => group.CODGRUPO);
+    userPermissions = await getAllUserPermissions(basicUser.CODUSU, groupCods);
+    logger.info('Sankhya User Permissions fetched:', { codUsu: basicUser.CODUSU, permissionsCount: userPermissions.length });
+
     // Example: Log a specific configuration if needed
     // const userConfig = await getUserConfigurations(basicUser.CODUSU, 'VERSAOSKWBIN', 'T');
     // logger.info('Sankhya User Configuration (VERSAOSKWBIN) after login:', { codUsu: basicUser.CODUSU, config: userConfig });
@@ -130,7 +140,23 @@ export async function login(username: string, password: string): Promise<{ token
   }
   // --- End of additional logging ---
 
-  return { token, sessionId: sessionResult.insertId, user: userDetails }
+  // Construct the compacted user object
+  const compactedUser: CompactSankhyaUser = {
+    CODUSU: userDetails.CODUSU,
+    NOMEUSU: userDetails.NOMEUSU || basicUser.NOMEUSU, // Use basicUser.NOMEUSU if userDetails.NOMEUSU is null
+    EMAIL: userDetails.ACCOUNTEMAIL || basicUser.EMAIL, // Use basicUser.EMAIL if userDetails.ACCOUNTEMAIL is null
+    CODEMP: userDetails.CODEMP,
+    CODFUNC: userDetails.CODFUNC,
+    CODPARC: userDetails.CODPARC,
+    AD_CARGO: userDetails.AD_CARGO,
+    AD_FUNCAO: userDetails.AD_FUNCAO,
+    partnerDetails: userDetails.partnerDetails,
+    employeeDetails: userDetails.employeeDetails,
+    permissions: userPermissions,
+    groups: userGroups.map(group => group.CODGRUPO),
+  };
+
+  return { token, sessionId: sessionResult.insertId, user: compactedUser }
 }
 
 export async function findUserByUsername(username: string): Promise<SankhyaUser | null> {

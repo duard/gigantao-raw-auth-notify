@@ -32,3 +32,30 @@ export async function checkUserPermission(
     throw error;
   }
 }
+
+export async function getAllUserPermissions(codUsu: number, userGroups: number[]): Promise<string[]> {
+  // Ensure userGroups is not empty to avoid SQL errors with IN clause
+  const groupList = userGroups.length > 0 ? userGroups.join(',') : 'NULL';
+
+  const query = `
+    SELECT DISTINCT IDACESSO
+    FROM TDDPER
+    WHERE CODUSU = @codUsu
+    UNION
+    SELECT DISTINCT IDACESSO
+    FROM TDDPER
+    WHERE CODGRUPO IN (${groupList})
+  `;
+  try {
+    const pool = await getSqlServer();
+    const request = pool.request();
+    request.input('codUsu', codUsu);
+    const result = await request.query(query);
+    const permissions = result.recordset.map((row: any) => row.IDACESSO);
+    logger.debug('getAllUserPermissions executed', { codUsu, userGroups, resultCount: permissions.length });
+    return permissions;
+  } catch (error: any) {
+    logger.error('Error in getAllUserPermissions', error, { codUsu, userGroups });
+    throw error;
+  }
+}

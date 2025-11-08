@@ -1,0 +1,164 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Notification & Auth API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/sankhya/login": {
+      "post": {
+        "summary": "Authenticate a user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful authentication"
+          }
+        }
+      }
+    },
+    "/sankhya/sessions/{id}/invalidate": {
+      "post": {
+        "summary": "Invalidate a user session",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session invalidated"
+          }
+        }
+      }
+    },
+    "/sankhya/sessions/{userId}": {
+      "get": {
+        "summary": "Get active sessions for a user",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of active sessions"
+          }
+        }
+      }
+    },
+    "/notifications": {
+      "post": {
+        "summary": "Create a new notification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Notification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notification created"
+          }
+        }
+      }
+    },
+    "/email/send": {
+      "post": {
+        "summary": "Send an email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "to": {
+                    "type": "string"
+                  },
+                  "subject": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email sent"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer"
+          },
+          "tenant_id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          },
+          "parent_id": {
+            "type": "integer"
+          },
+          "root_id": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

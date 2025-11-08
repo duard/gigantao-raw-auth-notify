@@ -1,0 +1,33 @@
+export class AdGigpontosintegra {
+  id: number;
+  codemp: number;
+  codfunc: number;
+  marcaPonto: Date;
+  enviawpp: string;
+  show: string;
+  ip: string;
+  registroOriginal: string;
+  momento: string;
+  dtCreated: Date;
+  usuCreated: number;
+  dtUpdt: Date;
+  usuUpdt: number;
+  pontManu: string;
+  process: string;
+  fonte: string;
+  nsr: string;
+  cpf: string;
+  hashUid: string;
+  latitude: number;
+  longitude: number;
+  coletorId: string;
+  coletorNome: string;
+  coletorCategoria: string;
+  codlocal: string;
+  img: string;
+  urlLocaliza: string;
+  momento2: string;
+  enviotel: string;
+  dhexec: number;
+  dhlimite: Date;
+}

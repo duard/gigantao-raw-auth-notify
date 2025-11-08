@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  api:
+    build: .
+    command: sh -c "./wait-for-it.sh mysql:3306 -- npm run dev"
+    ports:
+      - "3103:3103"
+    env_file: .env
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_HOST: mysql
+      MYSQL_USER: auth_api
+      MYSQL_PASSWORD: senha123
+      MYSQL_DATABASE: gigantao_auth_notify_dev
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./wait-for-it.sh:/app/wait-for-it.sh  # Copiando script para dentro do container
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: gigantao_auth_notify_dev
+      TZ: America/Sao_Paulo
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mysql_data:

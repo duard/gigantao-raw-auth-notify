@@ -1,0 +1,403 @@
+Introdução
+É necessário para a personalização de um projeto comercial, além de conhecer as regras de negócios, a estrutura do banco de dados.
+
+Deter conhecimento sobre as tabelas associadas e as ligações entre os campos é importante para extrair bons resultados Definir a tabela principal e os principais campos de relacionamento é o primeiro passo para a construção de um DER que verifica o volume de vendas, por exemplo.
+
+O DER abaixo representa as relações entre as tabelas utilizadas para analisar as vendas por produto, com a principal tabela sendo a TGFCAB, juntamente com a TGFITE, que contém as informações pertinentes aos produtos, quantidades e os valores atribuídos.
+
+As duas instâncias, apresentam todas chaves estrangeiras (FK) necessárias para realização das ligações pertinentes aos processos.
+
+O processo de compras e venda são similares e grande parte das instâncias são utilizadas nos dois processos. A diferenciação fica por alguns pontos como:
+
+parametrizações nos campos da tabela TGFTOP;
+uso das instância de preços TGFTAB e TGFEXC para vendas;
+uso das instância de preços TGFCUS e TGFCUSITE para compras;
+O DER apresenta o seguinte conjunto de tabelas:
+
+TGFCAB
+TGFTOP
+TGFITE
+TGFPRO
+TGFGRU
+TGFVEN
+TGFPAR
+TGFTAB
+TGFEXC
+TGFCUS
+TGFCUSITE
+TGFTPV
+TGFLOC
+TGFEST
+TGFVAR
+
+TGFCAB
+A TGFCAB é a instância que corresponde ao cabeçalho da nota, e recebe grande parte das chaves estrangeiras (FK) de outras tabelas relacionadas a ela. Ligada a ela, através da chave primária NUNOTA, temos a TGFITE. Essa ligação permite ao usuário elaborar uma visão, tanto do prisma comercial, financeiro ou gerencial.
+
+A TGFCAB possui campos de datas importantes, como por exemplo:
+
+DTNEG - quando utilizado em operações de vendas, indica data de negociação da operação de saída. Já em operações de compras, é preenchido com a data de emissão da nota de compra emitida pelo fornecedor.
+
+DTENTSAI - usualmente utilizado em operações de compras, indicando o registro do dia em que a nota de compra é lançado no ERP Sankhya.
+
+DTMOV - é usado com o mesmo intuito do campo DTENTSAI, porém, mais utilizado em operações contábeis (registros contábeis) e atualização de estoque, registrando a entrada de estoque no dia indicado, dentro do ERP Sankhya.
+
+
+
+
+Nome da Coluna	Descrição do Campo	Tipo de Dado	NULO	DEFAULT
+NUNOTA (PK)	Número Único	NUMBER (10)	N	(null)
+CODEMP (FK)	Código Empresa	NUMBER (5)	N	(null)
+CODCENUS (FK)	Código do Centro de Resultado	NUMBER (10)	N	0
+NUNNOTA	Número da Nota	VARCHAR2	N	(null)
+DTNEG	Data Negociação	DATE	N	(null)
+DTFATUR	Data de Faturamento	DATE	S	(null)
+DTENTSAI	Data de Entrada e Saída	DATE	S	(null)
+CODPARC	Código do Parceiro	NUMBER (10)	N	0
+CODTIPOPER	Tipo de Operação	NUMBER (5)	N	(null)
+DHTIPOPER	Data de Alteração da tabela TGFTOP	DATE	N	(null)
+TIPMOV	Tipo de Movimento	VARCHAR2	N	'P'
+CODTIPVENDA (FK)	Código de Tipo de Negociação	NUMBER (5)	N	0
+DHTIPVENDA (FK)	Data de Alteração do Tipo de Negociação	DATE	N	TO_DATE('01/01/1998', 'DD/MM/YYYY')
+CODVEND	Código do Vendedor	NUMBER	N	0
+OBSERVACAO	Observações	VARCHAR2	S	(null)
+VLOUTROS	Outros Valores	FLOAT (126)	N	0
+VLRDESCTOT	Desconto no Total	FLOAT (126)	N	0
+VLRDESCTOTITEM	Valor de Desconto nos Itens	FLOAT (126)	N	0
+VLRFRETE	Valor de Frete	FLOAT (126)	N	0
+TIPFRETE	Tipo de Frete	VARCHAR2	N	'S'
+VLRNOTA	Valor da Nota	FLOAT (126)	N	0
+ORDEMCARGA	Ordem de carga	NUMBER (10)	N	(null)
+CODPARCTRANSP	Código do Parceiro Transportador	NUMBER (10)	N	0
+BASEICMS	Base ICMS	FLOAT (126)	N	0
+VLRICMS	Valor ICMS	FLOAT (126)	N	0
+BASEIPI	Base IPI	FLOAT (126)	N	0
+VLRIPI	Valor do IPI	FLOAT (126)	N	0
+STATUSNOTA	Status da Nota	VARCHAR2	N	'P'
+PERCDESC	Percentual de Desconto	FLOAT (126)	N	0
+CODNAT	Código de Natureza	NUMBER (10)	N	0
+CHAVENFE	Chave NF-e	VARCHAR2	N	(null)
+STATUSNFE	Status NF-e	VARCHAR2	N	(null)
+
+
+
+
+
+
+TGFTOP
+Instância onde ocorre a parametrizações dos processos de entradas ou saídas, registros financeiros e movimentos de estoque. A ligação entre a TGFTOP e a TGFCAB apresenta pontos importantes, que devem ser analisados:
+
+relacionamento entre o campo DHTIPOPER da tabela TGFCAB e o campo DHALTER da tabela TGFTOP.
+
+ligação entra a chave estrangeira CODTIPOPER da tabela TGFCAB e a chave primária do campo CODTIPOPER da tabela TGTOP.
+
+
+
+
+O detalhe importante que existe na TGFTOP é que ela é conhecida como uma tabela histórica, guardando cada parametrização através do campo DHALTER da TGFTOP, logo cada vendas irá registrar as parametrizações criadas com o decorrer do tempo.
+
+Por exemplo: Se parametrizarmos a TGFTOP de venda para não gerar financeiro e criarmos uma venda no Portal de Vendas, essa nota não irá gerar o financeiro, e no campo DHTIPOPER da TGFCAB estará o registro da data e hora em que essa parametrização foi realizada.
+
+Se voltarmos na TGFTOP e alterarmos para que ela gere financeiro como receita, o campo DHALTER registrará a data e hora dessa nova parametrização e todas as próximas vendas realizadas começarão a gerar financeiro do tipo receita. Porém a venda realizada na parametrização anterior permanecerá imutável, pois a parametrização anterior permaneceu igual e a venda realizada naquele momento dizia que não geraria financeiro.
+
+Isso é o efeito histórico que essa tabela possui, sendo possível o registro de todas as parametrizações realizadas no decorrer do tempo.
+
+SQL
+
+FROM
+TGFCAB CAB
+inner join TGFTOP TPO on CAB.CODTIPOPER = TPO.CODTIPOPER and CAB.DHTIPOPER = TPO.DHALTER 🟢🟢🟢
+Nome da Coluna	Descrição do Campo	Tipo de Dado	NULO	DEFAULT
+CODTIPOPER (PK)	Código Tipo de Operação	NUMBER (5)	N	(null)
+DHALTER (PK)	Data Alteração	DATE	N	(null)
+DESCROPER	Descrição Tipo de Operação	VARCHAR2	N	(null)
+TIPMOV	Tipo de Movimento	VARCHAR2	N	'P'
+ATUALFIN	Atualiza Financeiro	NUMBER (5)	Y	0
+TIPATUALFIN	Tipo de Atualização do Financeiro	VARCHAR2	Y	'I'
+ATUALCOM	Atualiza Comissão	VARCHAR2	N	'N'
+ATUALEST	Atualiza Estoque	VARCHAR2	Y	'N'
+GOLSINAL	Gerente Online Sinal	NUMBER (5)	N	0
+GOLDEV	Gerente Online Devolução	NUMBER (5)	N	1
+NFE	NF-e	VARCHAR2	Y	(null)
+TGFITE
+Nessa instância tem-se informações das quantidades negociadas, através do campo QTDNEG e do preço de venda do produto, através do campo VLRUNIT. O resultado dessa operação resulta no VLRTOT.
+
+📘
+Informações Importantes
+
+Utiliza-se o campo VLRTOT para determinar o valor total dos itens negociados, ao invés de realizar a multiplicação dos campos QTDNEG e VLRUNIT.
+
+Para se obter o valor total líquido da venda do produto, utiliza-se o desconto atribuído ao item, realizando a subtração dos campos (VLRTOT – VLRDESC).
+
+SQL
+
+FROM
+TGFCAB CAB
+inner join TGFTOP TPO on CAB.CODTIPOPER = TPO.CODTIPOPER and CAB.DHTIPOPER = TPO.DHALTER
+inner join TGFITE ITE on CAB.NUNOTA = ITE.NUNOTA 🟢🟢🟢
+Nome da Coluna	Descrição do Campo	Tipo de Dado	NULO	DEFAULT
+NUNOTA (PK)	Número Único	NUMBER (10)	N	(null)
+SEQUENCIA (PK)	Sequência	NUMBER (5)	N	(null)
+CODEMP (FK)	Código de Empresa	NUMBER (5)	N	(null)
+CODPROD (FK)	Código de Produto	NUMBER (10)	N	(null)
+CODLOCALORIG (FK)	Código Local Origem	NUMBER (10)	N	0
+CONTROLE	Controle	VARCHAR2	N	..
+CODCFO (FK)	Código de CFOP	NUMBER (10)	N	0
+QTDNEG	Quantidade Negociada	FLOAT (126)	N	0
+QTDENTREGUE	Quantidade Entregue	FLOAT (126)	N	0
+VLRUNIT	Valor Unitário	FLOAT (126)	N	0
+VLRTOT	Valor Total	FLOAT (126)	N	0
+BASEIPI	Base de IPI	FLOAT (126)	N	0
+VLRIP	Valor de IPI	FLOAT (126)	N	0
+VLRICMS	Valor ICMS	FLOAT (126)	N	0
+VLRDESC	Valor Desconto	FLOAT (126)	N	0
+ALIQICMS	Alíquota de ICMS	FLOAT (126)	Y	(null)
+ALIQIPI	Alíquota de IPI	FLOAT (126)	Y	(null)
+PENDENTE	Pendente	VARCHAR2	N	'S'
+CODVOL (FK)	Código de Volume	VARCHAR2	N	'0'
+CODTRIB	Código de Tributação	NUMBER (5)	Y	(null)
+PERCDESC	Percentual de Desconto	FLOAT (126)	N	0
+TGFPRO
+Instância responsável por centralizar informações a respeito dos produtos inseridos no ERP Sankhya. Para trazer informações do cadastro de produtos, relaciona-se a chave estrangeira CODPROD da tabela TGFITE com a chave primária CODPROD da tabela TGFPRO. Ao realizar essa ação se obtém informações como a descrição do produto e sua marca.
+
+SQL
+
+FROM
+TGFCAB CAB
+inner join TGFTOP TPO on CAB.CODTIPOPER = TPO.CODTIPOPER and CAB.DHTIPOPER = TPO.DHALTER
+inner join TGFITE ITE on CAB.NUNOTA = ITE.NUNOTA
+inner join TGFPRO PRO on ITE.CODPROD = PRO.CODPROD 🟢🟢🟢
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+CODPROD (PK)	Código do Produto	NUMBER (10)	Y	(null)
+DESCRPROD	Descrição do Produto	VARCHAR2	N	(null)
+REFERENCIA	Referência	VARCHAR2	Y	(null)
+CODGRUPOPROD	Código do Grupo de Produto	NUMBER (10)	N	(null)
+CODVOL	Código do Volume	VARCHAR2	N	(null)
+MARCA	Marca	VARCHAR2	Y	(null)
+COMVEND	Comissão de Venda	FLOAT (126)	Y	(null)
+DESCMAX	Desconto Máximo	FLOAT (126)	Y	(null)
+USOPROD	Usado Como	VARCHAR2	Y	'V'
+TIPOCONTEST	Tipo de Controle de Estoque	VARCHAR2	Y	'N'
+ESTMAX	Estoque Máximo	FLOAT (126)	Y	(null)
+ESTMIN	Estoque Mínimo	FLOAT (126)	Y	(null)
+CODPARCFORN (FK)	Código Parceiro Fornecedor	NUMBER (10)	Y	(null)
+REFFORN	Referência do Fornecedor	VARCHAR2	Y	(null)
+NCM	NCM	VARCHAR2	Y	(null)
+CODLOCALPADRAO	Código do Local Padrão	NUMBER (10)	Y	(null)
+TGFGRU
+Através do relacionamento da instância TGFPRO, é possível relacionar o grupo de produto, trazendo informações como a descrição do grupo em que ele está inserido. O processo se dá através da chave estrangeira CODGRUPOPROD da tabela TGFPRO com a chave primária CODGRUPOPROD da tabela TGFGRU.
+
+SQL
+
+FROM
+TGFCAB CAB
+inner join TGFTOP TPO on CAB.CODTIPOPER = TPO.CODTIPOPER and CAB.DHTIPOPER = TPO.DHALTER
+inner join TGFITE ITE on CAB.NUNOTA = ITE.NUNOTA
+inner join TGFPRO PRO on ITE.CODPROD = PRO.CODPROD
+inner join TGFGRU GRU on PRO.CODGRUPOPROD = GRU.CODGRUPOPROD 🟢🟢🟢
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+CODGRUPOPROD	Código do Grupo de Produto	NUMBER (10)	N	(null)
+DESCRGRUPOPROD	Descrição do Grupo de Produto	VARCHAR2	N	(null)
+CODGRUPAI	Código do Grupo Pai	NUMBER (10)	N	(null)
+GRAU	Grau	NUMBER (5)	N	(null)
+TGFVEN
+Nas vendas realizadas, obtém-se o registro do vendedor através do campo CODVEND da TGFCAB. Para se ter o nome do vendedor (campo APELIDO), é necessário realizarmos a ligação da chave estrangeira CODVEND da TGFCAB com a chave primária CODVEND da TGFVEN.
+
+SQL
+
+FROM
+TGFCAB CAB
+inner join TGFTOP TPO on CAB.CODTIPOPER = TPO.CODTIPOPER and CAB.DHTIPOPER = TPO.DHALTER
+inner join TGFITE ITE on CAB.NUNOTA = ITE.NUNOTA
+inner join TGFPRO PRO on ITE.CODPROD = PRO.CODPROD
+inner join TGFGRU GRU on PRO.CODGRUPOPROD = GRU.CODGRUPOPROD
+inner join TGFVEN VEN on CAB.CODVEND = VEN.CODVEND 🟢🟢🟢
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+CODVEND (PK)	Código do Vendedor	NUMBER (5)	N	(null)
+TIPVEND	Tipo de Vendedor	VARCHAR2	Y	(null)
+APELIDO	Apelido	VARCHAR2	N	(null)
+CODPARC (FK)	Código do Parceiro	NUMBER (10)	N	0
+COMVENDA	Comissão de Venda	FLOAT (126)	Y	(null)
+COMGER	Comissão de Gerente	FLOAT (126)	Y	(null)
+CODEMP (FK)	Código da Empresa	NUMBER (5)	Y	(null)
+TGFPAR
+A instância de parceiros se relaciona com a tabela TGFCAB através da chave estrangeira CODPARC, ligando-as através da chave primária CODPARC da tabela TGFPAR.
+
+SQL
+
+FROM
+TGFCAB CAB
+inner join TGFTOP TPO on CAB.CODTIPOPER = TPO.CODTIPOPER and CAB.DHTIPOPER = TPO.DHALTER
+inner join TGFITE ITE on CAB.NUNOTA = ITE.NUNOTA
+inner join TGFPRO PRO on ITE.CODPROD = PRO.CODPROD
+inner join TGFGRU GRU on PRO.CODGRUPOPROD = GRU.CODGRUPOPROD
+inner join TGFVEN VEN on CAB.CODVEND = VEN.CODVEND
+inner join TGFPAR PAR on CAB.CODPARC = PAR.CODPARC 🟢🟢🟢
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+CODPARC (PK)	Código do Parceiro	NUMBER (10)	N	(null)
+NOMEPARC	Nome do Parceiro	VARCHAR2	N	(null)
+RAZAOSOCIAL	Razão Social	VARCHAR2	Y	(null)
+TIPPESSOA	Tipo de Pessoa	VARCHAR2	N	(null)
+CODEND (FK)	Código do Endereço	NUMBER (10)	N	0
+NUMEND	Número	VARCHAR2	Y	(null)
+CODBAI (FK)	Código do Bairro	NUMBER (10)	N	0
+CODCID (FK)	Código da Cidade	NUMBER (10)	N	0
+CEP	CEP	VARCHAR2	Y	(null)
+TELEFONE	Telefone	VARCHAR2	Y	(null)
+EMAIL	E-mail	VARCHAR2	Y	(null)
+DTNASCIMENTO	Data de Nascimento	DATE	Y	(null)
+IDENTINSCESTAD	Identidade/Inscrição Estadual	VARCHAR2	Y	(null)
+CGC_CPF	CNJP/CPF	VARCHAR2	Y	(null)
+CODTAB (FK)	Código da Tabela de Preço	NUMBER (5)	Y	(null)
+CLIENTE	Nome Cliente	VARCHAR2	N	'S'
+FORNECEDOR	Fornecedor	VARCHAR2	N	'N'
+LIMCRED	Limite de Crédito	FLOAT (126)	Y	(null)
+SEXO	Sexo	VARCHAR2	Y	(null)
+TGFTAB
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+NUTAB (PK)	Código da Tabela de Preço	NUMBER (10)	N	0
+CODTAB	Código da Tabela de Preço	NUMBER (5)	N	0
+DTVIGOR	Data de Vigor	DATE	N	(null)
+DTALTER	Data de Alteração	DATE	N	(null)
+PERCENTUAL	Percentual	FLOAT (126)	Y	(null)
+CODTABORIG	Código da Tabela de Preço Origem	NUMBER (10)	Y	0
+TGFEXC
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+NUTAB (PK)	Código da Tabela de Preço	NUMBER (10)	N	0
+CODPROD (PK)	Código do Produto	NUMBER (10)	N	0
+CODLOCAL (PK)	Código do Local	NUMBER (10)	N	0
+CONTROLE (PK)	Controle	VARCHAR2	N	' '
+VLRVENDA	Preço	FLOAT (126)	N	'V'
+TIPO	Tipo	VARCHAR2	Y	(null)
+TGFCUS
+Na parametrização do processo de compras é comum criarmos fórmulas em que os valores de custos fiscais e gerenciais são formados automaticamente.
+
+Isso ocorre através da inserção do histórico das entradas (de acordo com a empresa, local ou controle e regras de negócio do parceiro) a tabela TGFCUS.
+
+A instância TGFCUS apresenta os valores de custos registrados, estes formados pelas fórmulas de custo e preço.
+
+SQL
+
+FROM
+TGFCAB CAB
+inner join TGFITE ITE on CAB.NUNOTA = ITE.NUNOTA
+inner join TGFCUSITE CUS on ITE.NUNOTA = CUS.NUNOTA AND ITE.SEQUENCIA = CUS.SEQUENCIA 🟢🟢🟢
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+CODPROD (PK) (FK)	Número Único	NUMBER (10)	N	0
+CODEMP (PK) (FK)	Código Empresa	NUMBER (5)	N	0
+DTATUAL (PK)	Data Atual	DATE	N	(null)
+CODLOCAL (PK) (FK)	Local	NUMBER (10)	N	0
+CONTROLE (PK)	Controle	VARCHAR2	N	' '
+CUSMEDICM	Custo Médio com ICMS	FLOAT (126)	N	0
+CUSSEMICM	Custo Médio sem ICMS	FLOAT (126)	N	0
+CUSREP	Custo de Reposição	FLOAT (126)	N	0
+CUSVARIAVEL	Número Único	FLOAT (126)	N	0
+CUSGER	Sequência	FLOAT (126)	N	0
+CUSMED	Custo de Reposição	FLOAT (126)	N	0
+ENTRADACOMICMS	Último Custo sem ICMS	FLOAT (126)	N	0
+ENTRADASEMMICMS	Último Custo com ICMS	FLOAT (126)	N	0
+NUNOTA	Número Único	NUMBER (10)	N	0
+SEQUENCIA	Sequência	NUMBER (5)	N	0
+TGCUSITE
+A instância TGFCUSITE, corresponde ao custo por item, apresenta os mesmos registros presentes na TGFCUS, porém aqui são apresentados somente os itens de uma compra lançada, possibilitando a busca de notas através da chave primária composta NUNOTA e SEQUENCIA.
+
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+NUNOTA (PK)	Número Único	NUMBER (10)	N	0
+SEQUENCIA (PK)	Sequência	NUMBER (5)	N	0
+CODPROD (PK)	Código Produto	NUMBER (10)	N	0
+CODEMP	Código Empresa	NUMBER (5)	N	0
+CODLOCAL	Data Atual	NUMBER (5)	N	0
+CONTROLE	Local	VARCHAR2	N	' '
+DTATUAL	Controle	DATE	N	(null)
+CUSGER	Custo Médio com ICMS	FLOAT (126)	N	0
+CUSVARIAVEL	Custo Médio sem ICMS	FLOAT (126)	N	0
+DUSREP	Custo de Reposição	FLOAT (126)	N	0
+ENTRADACOMICMS	Número Único	FLOAT (126)	N	0
+ENTRADASEMICMS	Sequência	FLOAT (126)	N	0
+TGFTPV
+Na instância de tipos de negociações estão cadastradas as formas de pagamentos utilizadas nas operações em que existam financeiro. Ela apresenta a mesma característica de armazenamento histórico, registrando historicamente cada alteração realizada, inserindo uma nova linha de acordo com a data de alteração utilizando o campo.
+
+📘
+Dica Importante
+
+Ao iniciar uma nota de venda ou compra, se for necessário realizar alguma alteração no tipo de negociação, exclui-se a nota e cria-se uma nova. Isso garante que as alterações ocorram, pois na TGFCAB também é registrado a data de alteração do tipo de negociação, através do campo DHTIPVENDA.
+
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+CODTIPVENDA (PK)	Código do Tipo de Venda	NUMBER (5)	N	0
+DHALTER (PK)	Data e hora alteração	Date	N	(null)
+DESCRTIPVENDA	Descrição	VARCHAR2	N	(null)
+SUBTIPOVENDA	Subtipo	VARCHAR2	N	(null)
+VENDAMIN	Valor mínimo para venda	FLOAT (126)	Y	(null)
+TAXAJURO	Taxa em %	FLOAT (126)	Y	(null)
+DESCMAX	% Desconto Máximo	FLOAT (126)	Y	(null)
+DESCPROM	Desconto Promocional	VARCHAR2	Y	'S'
+PRAZOMIN	Prazo Mínimo	NUMBER (5)	Y	(null)
+TGFLOC
+Na instância TGFLOC, são cadastrados os espaços físicos ou gerenciais em que produtos são armazenados.
+Dividem-se em dois grupos:
+
+Físicos: armazéns, depósitos ou a própria empresa;
+Gerencial: avaria, separação ou site;
+O local de armazenamento, pode ser lançado em operações de compra e vendas. Em compras, é realizado no processo de entrada de estoque no local selecionado, enquanto em vendas, quando há baixa de estoque.
+
+Uma terceira opção é quando há transferência de estoque, que realiza as duas operações (compras/vendas) ao mesmo tempo e em locais distintos.
+
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+CODLOCAL (PK)	Código do Tipo de Venda	Number (10)	N	(null)
+DESCRLOCAL	Descrição	VARCHAR2	N	(null)
+ANALITICO	Analítico	VARCHAR2	N	'S'
+GRAU	Grau	Number (5)	N	(null)
+TGFEST
+A instância TFGEST (estoque) registra as quantidades que cada produto possui armazenado, podendo esse estoque ser detalhado por suas chaves primárias.
+
+A parametrização podendo ocorrer por empresa, local, controle, parceiro e tipo (próprio do parceiro ou de terceiros).
+
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+CODEMP (PK) (FK)	Código da Empresa	NUMBER (5)	N	0
+CODLOCAL (PK) (FK)	Código do Local	NUMBER (10)	N	0
+CODPROD (PK) (FK)	Código do Produto	NUMBER (10)	N	0
+CONTROLE (PK)	Controle	VARCHAR2	N	' '
+RESERVADO	Reservado	FLOAT (126)	S	0
+ESTMIN	Estoque Mínimo	FLOAT (126)	N	0
+ESTMAX	Estoque Máximo	FLOAT (126)	N	0
+DTVAL	Data de Validade	DATE	S	(null)
+TIPO (PK)	Tipo	VARCHAR2	N	'P'
+CODPARC (PK) (FK)	Código do Parceiro	NUMBER (10)	N	0
+ESTOQUE	Estoque	FLOAT (126)	N	0
+DTFABRICACAO	Data de Fabricação	DATE	S	(null)
+TGFVAR
+Instância que realiza a ligação entre orçamentos e pedidos, pedidos e notas, notas e devoluções. Ela utiliza os campos NUNOTAORIG (número único de origem) e o NUNOTA (número único destino), além dos campos SEQUENCIAORIG e SEQUENCIA.
+
+Ela é utilizada para registrar também os possíveis vários faturamentos parciais que possam ocorrer entre pedidos e notas, como também de notas e devoluções.
+
+Por exemplo, no ato da geração de um pedido de venda, a empresa pode não ter todos os itens no ato da venda e negociar com o cliente o faturamento parcial apenas dos produtos em estoque.
+
+Logo um único pedido pode ser faturado em várias notas de venda, com isso, a TGFVAR terá vários números únicos de destino (vendas) para apenas um número único de origem (o pedido de venda).
+
+Nome da Coluna	Descrição da Coluna	Tipo de Dado	NULO	DEFAULT
+NUNOTA	Número Único	NUMBER (10)	N	0
+SEQUENCIA	Sequência	NUMBER (5)	N	0
+NONOTAORIG	Número Único Origem	NUMBER (10)	N	0
+SEQUENCIAORIG	Sequência Origem	NUMBER (5)	N	0
+QTDATENDIDA	Quantidade Atendida	FLOAT (126)	S	(null)
+STATUSNOTA	Status da Nota	VARCHAR2	N	'P'
+Dicas para criação de relatórios
+No processo de criação relatórios para parceiros Sankhya, deve-se ter em mente que grande parte não será possível o reaproveitamento, pois existe nuances específicas para cada negócio. Indica-se realizar um levantamento com os usuários que irão utilizar os relatórios, e documentar os detalhes a fim de validar o escopo.
+
+📘
+Dica Importante
+
+Em processos comerciais(compra ou venda) é necessário relacionar as condições dos filtros de vendedor, grupo de produtos e parceiros, tendo como requisito funcional a não obrigatoriedade desses filtros.
+
+Na realização de queries para consulta, dentro cláusula WHERE, deve-se colocar a seguinte sequência:
+
+campo a ser filtrado seguido do operador de igualdade;
+parâmetro seguido do operador booleano OR seguido da condição IS NULL;
+Tudo deve ser realizado dentro de parênteses visto que há envolvimento do operador lógico OR.
+
+SQL
+
+WHERE
+	CAB.DTNEG BETWEEN :PERIODOINI and :PERIODOFIN
+	AND (CAB.CODVEND = :CODVEND or :CODVEND IS NULL)🟢🟢🟢
+	AND (CAB.CODPARC = :CODPARC or :CODPARC IS NULL)🟢🟢🟢
+	AND (PRO.CODGRUPOPROD = :CODGRUPOPROD or :CODGRUPOPROD IS NULL)🟢🟢🟢

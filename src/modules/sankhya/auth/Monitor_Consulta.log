@@ -1,0 +1,3425 @@
+-------------------------------------------------------------------------------------------------------
+##ID_1## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+uri: /mge/service.sbr
+*/
+SET LANGUAGE Brazilian
+Params:
+-------------------------------------------------------------------------------------------------------
+##ID_2## tempo: 2 (ms)
+{call Stp_Set_Session2(?, ?, ?, ?, ?)}
+Params:
+  1 = 292
+  2 = -1
+  3 = -1
+  4 = u= 292, t_name= default task-64
+  5 = 3aa12783ada7409c3d454fe23e1161853ca726db
+-------------------------------------------------------------------------------------------------------
+##ID_3## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+uri: /mge/service.sbr
+*/
+SELECT TEXTO FROM TSIPAR WHERE CHAVE = ? 
+Params:
+  1 = VERSAOSKWBIN
+-------------------------------------------------------------------------------------------------------
+##ID_4## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+uri: /mge/service.sbr
+*/
+SET LANGUAGE Brazilian
+Params:
+-------------------------------------------------------------------------------------------------------
+##ID_5## tempo: 2 (ms)
+{call Stp_Set_Session2(?, ?, ?, ?, ?)}
+Params:
+  1 = 292
+  2 = -1
+  3 = -1
+  4 = u= 292, t_name= default task-46
+  5 = 3aa12783ada7409c3d454fe23e1161853ca726db
+-------------------------------------------------------------------------------------------------------
+##ID_6## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+uri: /mge/service.sbr
+*/
+SELECT TEXTO FROM TSIPAR WHERE CHAVE = ? 
+Params:
+  1 = VERSAOSKWBIN
+-------------------------------------------------------------------------------------------------------
+##ID_7## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SET LANGUAGE Brazilian
+Params:
+-------------------------------------------------------------------------------------------------------
+##ID_8## tempo: 4 (ms)
+{call Stp_Set_Session2(?, ?, ?, ?, ?)}
+Params:
+  1 = 292
+  2 = -1
+  3 = -1
+  4 = u= 292, t_name= default task-46
+  5 = 3aa12783ada7409c3d454fe23e1161853ca726db
+-------------------------------------------------------------------------------------------------------
+##ID_9## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 2  TSIPVI.CODUSU AS CODUSU,TSIPVI.CONFIG AS CONFIG FROM TSIPVI  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_10## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CFC.NUCONTROLE,
+	PCO.VALOR AS RESOURCEID
+FROM
+	TRDCFC CFC
+	INNER JOIN TRDCON CON ON (CON.NUCONTROLE = CFC.NUCONTROLE AND CON.TIPOCONTROLE = 'MN')
+	INNER JOIN TRDPCO PCO ON (PCO.NUCONTROLE = CFC.NUCONTROLE AND PCO.NOME = 'resourceID')
+WHERE
+	CFC.NOME = 'inicializar' AND
+	CFC.VALOR LIKE 'S' AND
+	CFC.CODUSU = ?
+ORDER BY CFC.NUCONTROLE, CFC.NOME
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_11## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TEXTO FROM TSIPAR WHERE CHAVE = ? 
+Params:
+  1 = VERSAOSKWBIN
+-------------------------------------------------------------------------------------------------------
+##ID_12## tempo: 5 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CON.NUCONTROLE,
+ 	CON.TIPOCONTROLE,
+ 	CON.DESCRCONTROLE,
+ 	CON.ADICIONAL,
+	CON.CONTROLE,
+ 	EVE.ONCLICK,
+ 	CON.NOME
+FROM
+ 	TRDCON CON
+ 	INNER JOIN TRDPCO PCO ON (CON.NUCONTROLE = PCO.NUCONTROLE)
+ 	INNER JOIN TRDEVE EVE ON (EVE.NUCONTROLE = CON.NUCONTROLE)
+WHERE
+	CON.TIPOCONTROLE = 'MN' AND
+ 	PCO.NOME = 'resourceID' AND
+	LTRIM(RTRIM(SUBSTRING(PCO.VALOR, 1, 4000))) = LTRIM(RTRIM(?))
+Params:
+  1 = br.com.sankhya.cfg.MonitordeConsultas
+-------------------------------------------------------------------------------------------------------
+##ID_13## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PCO.NUCONTROLE,
+	PCO.NOME,
+	PCO.VALOR
+FROM
+	TRDPCO PCO
+WHERE
+	PCO.NUCONTROLE = ? AND
+	PCO.NOME IN (	'showMenu',
+					'acessOnly',
+					'icon-info',
+					'contexto',
+					'modulo',
+					'accessValidator',
+					'entityName',
+					'resourceID',
+					'resourceIDLancador',
+					'resourceIDAcessos',
+					'resourceIDReferencia',
+					'legacyResourceID',
+					'paramMenuAtivo',
+					'freeAuthorization',
+					'OI_S4W8LB',
+					'MI_S4W8LB',
+					'OI_J1WE9N',
+					'MI_J1WE9N',
+					'appProfileDescr',
+					'tipoLancador',
+					'menub2b',
+					'iconType',
+					'hideCrudOperations',
+					'onlyHtml5',
+					'contemVazamentoDeDados',
+					'visibleOnMinimumModuleVersion')
+Params:
+  1 = 7079
+-------------------------------------------------------------------------------------------------------
+##ID_14## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CFC.NOME,
+	CFC.VALOR
+FROM
+	TRDCFC CFC
+WHERE
+	CFC.CODUSU = ? AND
+	CFC.NUCONTROLE = ?
+Params:
+  1 = 292
+  2 = 7079
+-------------------------------------------------------------------------------------------------------
+##ID_15## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.cfg.MonitordeConsultas
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_16## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TSIUSU.ABREGAVETA AS ABREGAVETA,TSIUSU.ACCOUNTDHEXPIRA AS ACCOUNTDHEXPIRA,TSIUSU.ACCOUNTEMAIL AS ACCOUNTEMAIL,TSIUSU.ACCOUNTID AS ACCOUNTID,TSIUSU.ACCOUNTNOMEFOTO AS ACCOUNTNOMEFOTO,TSIUSU.ACCOUNTPARTNER AS ACCOUNTPARTNER,'$$CLOBFIELD(TSIUSU.ACCOUNTTOKEN)$$' AS ACCOUNTTOKEN,TSIUSU.ACESSAFORMULAREL AS ACESSAFORMULAREL,TSIUSU.ACESSOPDVCANCITENS AS ACESSOPDVCANCITENS,TSIUSU.ACESSOPDVSANG AS ACESSOPDVSANG,TSIUSU.ACESSOPDVSANGPDESP AS ACESSOPDVSANGPDESP,TSIUSU.ACESSOPDVSUPR AS ACESSOPDVSUPR,TSIUSU.ACESSOVISUALCAB AS ACESSOVISUALCAB,TSIUSU.AD_AUTOPERAR1 AS AD_AUTOPERAR1,TSIUSU.AD_AUTOPERAR2 AS AD_AUTOPERAR2,TSIUSU.AD_AUTOPERAR3 AS AD_AUTOPERAR3,TSIUSU.AD_AUTOPERAR4 AS AD_AUTOPERAR4,TSIUSU.AD_AUTOPERAR5 AS AD_AUTOPERAR5,TSIUSU.AD_AUTOPERAR6 AS AD_AUTOPERAR6,TSIUSU.AD_AUTOPERAR7 AS AD_AUTOPERAR7,TSIUSU.AD_AUTOSIRVO AS AD_AUTOSIRVO,TSIUSU.AD_CADEADOMOS AS AD_CADEADOMOS,TSIUSU.AD_CODVEICULO AS AD_CODVEICULO,TSIUSU.AD_ENVIA_WPP AS AD_ENVIA_WPP,TSIUSU.AD_IDEXTERNO AS AD_IDEXTERNO,TSIUSU.AD_MATMOSAIC AS AD_MATMOSAIC,TSIUSU.AD_REABRIROS AS AD_REABRIROS,TSIUSU.AD_RECEBENOTIFASO AS AD_RECEBENOTIFASO,TSIUSU.AD_RECEBENOTIFICACAO AS AD_RECEBENOTIFICACAO,TSIUSU.AD_TELEFONECORP AS AD_TELEFONECORP,TSIUSU.ALTCTAFAT AS ALTCTAFAT,TSIUSU.ALTCTAIMPBOL AS ALTCTAIMPBOL,TSIUSU.ALTORDCFECH AS ALTORDCFECH,TSIUSU.APENASCOMPLIB AS APENASCOMPLIB,TSIUSU.APROVCOT AS APROVCOT,TSIUSU.ATUNUVERSAO AS ATUNUVERSAO,TSIUSU.AVISAVARPRECO AS AVISAVARPRECO,TSIUSU.BAIXADESP AS BAIXADESP,TSIUSU.BAIXAREC AS BAIXAREC,TSIUSU.CAIXA AS CAIXA,TSIUSU.CODCARGAACESSO AS CODCARGAACESSO,TSIUSU.CODCENCUSPAD AS CODCENCUSPAD,TSIUSU.CODCONTATOPERFIL AS CODCONTATOPERFIL,TSIUSU.CODCTABCOINT AS CODCTABCOINT,TSIUSU.CODCTABCOINT2 AS CODCTABCOINT2,TSIUSU.CODEMP AS CODEMP,TSIUSU.CODEMPNEGOC AS CODEMPNEGOC,TSIUSU.CODEQUIP AS CODEQUIP,TSIUSU.CODETAPA AS CODETAPA,TSIUSU.CODFUNC AS CODFUNC,TSIUSU.CODGRUPO AS CODGRUPO,TSIUSU.CODIDECONECT AS CODIDECONECT,TSIUSU.CODPARC AS CODPARC,TSIUSU.CODPARCPERFIL AS CODPARCPERFIL,TSIUSU.CODPERFIL AS CODPERFIL,TSIUSU.CODUSU AS CODUSU,TSIUSU.CODVEND AS CODVEND,TSIUSU.CONTACESSO AS CONTACESSO,TSIUSU.CONTAGOL AS CONTAGOL,TSIUSU.CORCODIGO AS CORCODIGO,TSIUSU.CPF AS CPF,TSIUSU.DESCTOTALNOTAPDV AS DESCTOTALNOTAPDV,TSIUSU.DTALTER AS DTALTER,TSIUSU.DTLIMACESSO AS DTLIMACESSO,TSIUSU.DTNASC AS DTNASC,TSIUSU.DTULTACESSO AS DTULTACESSO,TSIUSU.DTULTIMASENHA AS DTULTIMASENHA,TSIUSU.EMAIL AS EMAIL,TSIUSU.EMAILSOLLIB AS EMAILSOLLIB,TSIUSU.EXCLIBORC AS EXCLIBORC,TSIUSU.EXIBIRVALANALRENT AS EXIBIRVALANALRENT,1 AS FOTO,TSIUSU.GESTOR AS GESTOR,TSIUSU.GRUPOREDE AS GRUPOREDE,TSIUSU.IDPERFILECONECT AS IDPERFILECONECT,TSIUSU.IGNORAHORASCRUZ AS IGNORAHORASCRUZ,TSIUSU.IGNORALDAP AS IGNORALDAP,TSIUSU.IMP2SANSUPCAI AS IMP2SANSUPCAI,TSIUSU.IMPLANTADOR AS IMPLANTADOR,TSIUSU.IMPNFCENTRAL AS IMPNFCENTRAL,TSIUSU.INFRECSEN AS INFRECSEN,TSIUSU.INSTALAPACOTESS AS INSTALAPACOTESS,TSIUSU.INTEGRAECONECT AS INTEGRAECONECT,TSIUSU.INTERNO AS INTERNO,TSIUSU.LIBERACREDITO AS LIBERACREDITO,TSIUSU.LOCALE AS LOCALE,TSIUSU.MINUTOSFIN AS MINUTOSFIN,TSIUSU.NIVEL AS NIVEL,TSIUSU.NIVELACESSO AS NIVELACESSO,TSIUSU.NOMEFILA AS NOMEFILA,TSIUSU.NOMEUSU AS NOMEUSU,TSIUSU.NOMEUSUCPLT AS NOMEUSUCPLT,TSIUSU.NOTSLAFILA AS NOTSLAFILA,TSIUSU.NUVERSAO AS NUVERSAO,TSIUSU.OPERACIONAL AS OPERACIONAL,TSIUSU.PERMALTMOEDA AS PERMALTMOEDA,TSIUSU.PERMEXPREL AS PERMEXPREL,TSIUSU.PERMIMPRIMEREL AS PERMIMPRIMEREL,TSIUSU.PERMREPERRO AS PERMREPERRO,TSIUSU.PODEALTERARPEF AS PODEALTERARPEF,TSIUSU.PORTASMTP AS PORTASMTP,TSIUSU.PROPRIETARIO AS PROPRIETARIO,TSIUSU.RENDIASVALJUR AS RENDIASVALJUR,TSIUSU.RESTRINGECART AS RESTRINGECART,TSIUSU.RG AS RG,TSIUSU.SEGURANCASMTP AS SEGURANCASMTP,TSIUSU.SELECTWCAPO AS SELECTWCAPO,TSIUSU.SENHAECONECT AS SENHAECONECT,TSIUSU.SENHANUNCAEXPIRA AS SENHANUNCAEXPIRA,TSIUSU.SENHASMTP AS SENHASMTP,TSIUSU.SERVIDORSMTP AS SERVIDORSMTP,TSIUSU.TEMECF AS TEMECF,TSIUSU.TIMBAIXAWORD AS TIMBAIXAWORD,TSIUSU.TIMBAIXTITRECABE AS TIMBAIXTITRECABE,TSIUSU.TIMPATHSCANNER AS TIMPATHSCANNER,TSIUSU.TIMVERTODASFACS AS TIMVERTODASFACS,TSIUSU.TIPENVNOTSOL AS TIPENVNOTSOL,TSIUSU.TIPOSMTP AS TIPOSMTP,TSIUSU.TIPOUSU AS TIPOUSU,TSIUSU.TOKENCHECKOUT AS TOKENCHECKOUT,TSIUSU.TOLERANCIAACESSO AS TOLERANCIAACESSO,TSIUSU.TOPBAIXADESPESA AS TOPBAIXADESPESA,TSIUSU.TOPBAIXARECEITA AS TOPBAIXARECEITA,TSIUSU.USUARIOSMTP AS USUARIOSMTP,TSIUSU.USUREDE AS USUREDE,TSIUSU.VERCABPROPRIA AS VERCABPROPRIA,TSIUSU.VISACESOUTUSU AS VISACESOUTUSU,TSIUSU.VLRMAXAUT AS VLRMAXAUT, (
+SELECT CONVERT(VARCHAR,FUN.CODCARGO) + ' - ' + CAR.DESCRCARGO
+FROM TFPFUN FUN
+JOIN TFPCAR CAR ON CAR.CODCARGO = FUN.CODCARGO
+WHERE FUN.CODEMP = TSIUSU.CODEMP
+AND FUN.CODFUNC = TSIUSU.CODFUNC) AS AD_CARGO, (
+SELECT CONVERT(VARCHAR,FUN.CODFUNCAO) + ' - ' + FCO.DESCRFUNCAO
+FROM TFPFUN FUN
+JOIN TFPFCO FCO ON FCO.CODFUNCAO = FUN.CODFUNCAO
+WHERE FUN.CODEMP = TSIUSU.CODEMP
+AND FUN.CODFUNC = TSIUSU.CODFUNC) AS AD_FUNCAO FROM TSIUSU /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TSIUSU.CODUSU = ?)
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_17## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_18## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.cfg.MonitordeConsultas
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_19## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.cfg.MonitordeConsultas
+-------------------------------------------------------------------------------------------------------
+##ID_20## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	FCO.NUCONTROLE,
+	FCO.NUCONTROLEFILHO,
+	FCO.ATIVO
+FROM 
+	TRDFCO FCO
+WHERE
+	FCO.NUCONTROLEFILHO = ? AND
+	EXISTS(
+		SELECT 1 FROM TRDCON CON WHERE (CON.NUCONTROLE = FCO.NUCONTROLE OR CON.NUCONTROLE = FCO.NUCONTROLEFILHO) AND CON.TIPOCONTROLE = 'MN'
+	)
+Params:
+  1 = 7079
+-------------------------------------------------------------------------------------------------------
+##ID_21## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CON.NUCONTROLE,
+ 	CON.TIPOCONTROLE,
+ 	CON.DESCRCONTROLE,
+ 	CON.ADICIONAL,
+	CON.CONTROLE,
+ 	EVE.ONCLICK,
+ 	CON.NOME
+FROM
+ 	TRDCON CON
+ 	LEFT JOIN TRDEVE EVE ON (EVE.NUCONTROLE = CON.NUCONTROLE)
+WHERE
+ 	CON.NUCONTROLE = ?
+Params:
+  1 = 6752
+-------------------------------------------------------------------------------------------------------
+##ID_22## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PCO.NUCONTROLE,
+	PCO.NOME,
+	PCO.VALOR
+FROM
+	TRDPCO PCO
+WHERE
+	PCO.NUCONTROLE = ? AND
+	PCO.NOME IN (	'showMenu',
+					'acessOnly',
+					'icon-info',
+					'contexto',
+					'modulo',
+					'accessValidator',
+					'entityName',
+					'resourceID',
+					'resourceIDLancador',
+					'resourceIDAcessos',
+					'resourceIDReferencia',
+					'legacyResourceID',
+					'paramMenuAtivo',
+					'freeAuthorization',
+					'OI_S4W8LB',
+					'MI_S4W8LB',
+					'OI_J1WE9N',
+					'MI_J1WE9N',
+					'appProfileDescr',
+					'tipoLancador',
+					'menub2b',
+					'iconType',
+					'hideCrudOperations',
+					'onlyHtml5',
+					'contemVazamentoDeDados',
+					'visibleOnMinimumModuleVersion')
+Params:
+  1 = 6752
+-------------------------------------------------------------------------------------------------------
+##ID_23## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CFC.NOME,
+	CFC.VALOR
+FROM
+	TRDCFC CFC
+WHERE
+	CFC.CODUSU = ? AND
+	CFC.NUCONTROLE = ?
+Params:
+  1 = 292
+  2 = 6752
+-------------------------------------------------------------------------------------------------------
+##ID_24## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	FCO.NUCONTROLE,
+	FCO.NUCONTROLEFILHO,
+	FCO.ATIVO
+FROM 
+	TRDFCO FCO
+WHERE
+	FCO.NUCONTROLEFILHO = ? AND
+	EXISTS(
+		SELECT 1 FROM TRDCON CON WHERE (CON.NUCONTROLE = FCO.NUCONTROLE OR CON.NUCONTROLE = FCO.NUCONTROLEFILHO) AND CON.TIPOCONTROLE = 'MN'
+	)
+Params:
+  1 = 6752
+-------------------------------------------------------------------------------------------------------
+##ID_25## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CON.NUCONTROLE,
+ 	CON.TIPOCONTROLE,
+ 	CON.DESCRCONTROLE,
+ 	CON.ADICIONAL,
+	CON.CONTROLE,
+ 	EVE.ONCLICK,
+ 	CON.NOME
+FROM
+ 	TRDCON CON
+ 	LEFT JOIN TRDEVE EVE ON (EVE.NUCONTROLE = CON.NUCONTROLE)
+WHERE
+ 	CON.NUCONTROLE = ?
+Params:
+  1 = 6751
+-------------------------------------------------------------------------------------------------------
+##ID_26## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PCO.NUCONTROLE,
+	PCO.NOME,
+	PCO.VALOR
+FROM
+	TRDPCO PCO
+WHERE
+	PCO.NUCONTROLE = ? AND
+	PCO.NOME IN (	'showMenu',
+					'acessOnly',
+					'icon-info',
+					'contexto',
+					'modulo',
+					'accessValidator',
+					'entityName',
+					'resourceID',
+					'resourceIDLancador',
+					'resourceIDAcessos',
+					'resourceIDReferencia',
+					'legacyResourceID',
+					'paramMenuAtivo',
+					'freeAuthorization',
+					'OI_S4W8LB',
+					'MI_S4W8LB',
+					'OI_J1WE9N',
+					'MI_J1WE9N',
+					'appProfileDescr',
+					'tipoLancador',
+					'menub2b',
+					'iconType',
+					'hideCrudOperations',
+					'onlyHtml5',
+					'contemVazamentoDeDados',
+					'visibleOnMinimumModuleVersion')
+Params:
+  1 = 6751
+-------------------------------------------------------------------------------------------------------
+##ID_27## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CFC.NOME,
+	CFC.VALOR
+FROM
+	TRDCFC CFC
+WHERE
+	CFC.CODUSU = ? AND
+	CFC.NUCONTROLE = ?
+Params:
+  1 = 292
+  2 = 6751
+-------------------------------------------------------------------------------------------------------
+##ID_28## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	FCO.NUCONTROLE,
+	FCO.NUCONTROLEFILHO,
+	FCO.ATIVO
+FROM 
+	TRDFCO FCO
+WHERE
+	FCO.NUCONTROLEFILHO = ? AND
+	EXISTS(
+		SELECT 1 FROM TRDCON CON WHERE (CON.NUCONTROLE = FCO.NUCONTROLE OR CON.NUCONTROLE = FCO.NUCONTROLEFILHO) AND CON.TIPOCONTROLE = 'MN'
+	)
+Params:
+  1 = 6751
+-------------------------------------------------------------------------------------------------------
+##ID_29## tempo: 5 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CON.NUCONTROLE,
+ 	CON.TIPOCONTROLE,
+ 	CON.DESCRCONTROLE,
+ 	CON.ADICIONAL,
+	CON.CONTROLE,
+ 	EVE.ONCLICK,
+ 	CON.NOME
+FROM
+ 	TRDCON CON
+ 	INNER JOIN TRDPCO PCO ON (CON.NUCONTROLE = PCO.NUCONTROLE)
+ 	INNER JOIN TRDEVE EVE ON (EVE.NUCONTROLE = CON.NUCONTROLE)
+WHERE
+	CON.TIPOCONTROLE = 'MN' AND
+ 	PCO.NOME = 'resourceID' AND
+	LTRIM(RTRIM(SUBSTRING(PCO.VALOR, 1, 4000))) = LTRIM(RTRIM(?))
+Params:
+  1 = br.com.sankhya.cfg.MonitordeConsultas
+-------------------------------------------------------------------------------------------------------
+##ID_30## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TRDCFC.CODUSU AS codUsu,TRDCFC.NOME AS nome,TRDCFC.NUCONTROLE AS numeroControle,TRDCFC.VALOR AS valor FROM TRDCFC /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TRDCFC.NUCONTROLE = ? AND TRDCFC.NOME = ? AND TRDCFC.CODUSU = ?)
+Params:
+  1 = 7079
+  2 = newLayoutSupChoice
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_31## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CON.NUCONTROLE,
+ 	CON.TIPOCONTROLE,
+ 	CON.DESCRCONTROLE,
+ 	CON.ADICIONAL,
+	CON.CONTROLE,
+ 	EVE.ONCLICK,
+ 	CON.NOME
+FROM
+ 	TRDCON CON
+ 	INNER JOIN TRDPCO PCO ON (CON.NUCONTROLE = PCO.NUCONTROLE)
+ 	INNER JOIN TRDEVE EVE ON (EVE.NUCONTROLE = CON.NUCONTROLE)
+WHERE
+	CON.TIPOCONTROLE = 'MN' AND
+ 	PCO.NOME = 'resourceID' AND
+	LTRIM(RTRIM(SUBSTRING(PCO.VALOR, 1, 4000))) = LTRIM(RTRIM(?))
+Params:
+  1 = br.com.sankhya.cfg.MonitordeConsultas
+-------------------------------------------------------------------------------------------------------
+##ID_32## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TRDCFC.CODUSU AS codUsu,TRDCFC.NOME AS nome,TRDCFC.NUCONTROLE AS numeroControle,TRDCFC.VALOR AS valor FROM TRDCFC /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TRDCFC.NUCONTROLE = ? AND TRDCFC.NOME = ? AND TRDCFC.CODUSU = ?)
+Params:
+  1 = 7079
+  2 = newLayoutSupChoice
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_33## tempo: 5 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	CON.NUCONTROLE,
+ 	CON.TIPOCONTROLE,
+ 	CON.DESCRCONTROLE,
+ 	CON.ADICIONAL,
+	CON.CONTROLE,
+ 	EVE.ONCLICK,
+ 	CON.NOME
+FROM
+ 	TRDCON CON
+ 	INNER JOIN TRDPCO PCO ON (CON.NUCONTROLE = PCO.NUCONTROLE)
+ 	INNER JOIN TRDEVE EVE ON (EVE.NUCONTROLE = CON.NUCONTROLE)
+WHERE
+	CON.TIPOCONTROLE = 'MN' AND
+ 	PCO.NOME = 'resourceID' AND
+	LTRIM(RTRIM(SUBSTRING(PCO.VALOR, 1, 4000))) = LTRIM(RTRIM(?))
+Params:
+  1 = br.com.sankhya.cfg.MonitordeConsultas
+-------------------------------------------------------------------------------------------------------
+##ID_34## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TRDCFC.CODUSU AS codUsu,TRDCFC.NOME AS nome,TRDCFC.NUCONTROLE AS numeroControle,TRDCFC.VALOR AS valor FROM TRDCFC /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TRDCFC.NUCONTROLE = ? AND TRDCFC.NOME = ? AND TRDCFC.CODUSU = ?)
+Params:
+  1 = 7079
+  2 = DeprecatedLayout
+  3 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_35## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TSICFG.CHAVE AS CHAVE,TSICFG.CHAVEPAI AS CHAVEPAI,TSICFG.CODUSU AS CODUSU,'$$CLOBFIELD(TSICFG.CONFIG)$$' AS CONFIG,TSICFG.TIPO AS TIPO FROM TSICFG /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TSICFG.CHAVE = ? AND TSICFG.TIPO = ? AND TSICFG.CODUSU = ?)
+Params:
+  1 = isFirstAccessHtml5
+  2 = T
+  3 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_36## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT CONFIG FROM TSICFG WHERE TSICFG.CHAVE = ? AND TSICFG.TIPO = ? AND TSICFG.CODUSU = ?
+Params:
+  1 = isFirstAccessHtml5
+  2 = T
+  3 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_37## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.core.cfg.AdministracaoServidor
+-------------------------------------------------------------------------------------------------------
+##ID_38## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.core.cfg.AdministracaoServidor
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_39## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_40## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.core.cfg.AdministracaoServidor
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_41## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.core.cfg.AdministracaoServidor
+-------------------------------------------------------------------------------------------------------
+##ID_42## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT IDACESSO  FROM TDDPER  WHERE IDACESSO LIKE 'br.com.sankhya.evo.cards.gadget%'  AND (CODUSU = ? OR CODGRUPO = ?)  OR CODGRUPO IN (SELECT CODGRUPO FROM TSIGPU  WHERE CODUSU = ? AND DATAINICIO <= GETDATE()  AND ISNULL(DATAFIM, GETDATE()) >= GETDATE())
+Params:
+  1 = 292
+  2 = 13
+  3 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_43## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 101
+-------------------------------------------------------------------------------------------------------
+##ID_44## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 112
+-------------------------------------------------------------------------------------------------------
+##ID_45## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 113
+-------------------------------------------------------------------------------------------------------
+##ID_46## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 119
+-------------------------------------------------------------------------------------------------------
+##ID_47## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 124
+-------------------------------------------------------------------------------------------------------
+##ID_48## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 132
+-------------------------------------------------------------------------------------------------------
+##ID_49## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 139
+-------------------------------------------------------------------------------------------------------
+##ID_50## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 179
+-------------------------------------------------------------------------------------------------------
+##ID_51## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 182
+-------------------------------------------------------------------------------------------------------
+##ID_52## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 191
+-------------------------------------------------------------------------------------------------------
+##ID_53## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 193
+-------------------------------------------------------------------------------------------------------
+##ID_54## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 196
+-------------------------------------------------------------------------------------------------------
+##ID_55## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 197
+-------------------------------------------------------------------------------------------------------
+##ID_56## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 33
+-------------------------------------------------------------------------------------------------------
+##ID_57## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 38
+-------------------------------------------------------------------------------------------------------
+##ID_58## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 39
+-------------------------------------------------------------------------------------------------------
+##ID_59## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 41
+-------------------------------------------------------------------------------------------------------
+##ID_60## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 57
+-------------------------------------------------------------------------------------------------------
+##ID_61## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 72
+-------------------------------------------------------------------------------------------------------
+##ID_62## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 74
+-------------------------------------------------------------------------------------------------------
+##ID_63## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 87
+-------------------------------------------------------------------------------------------------------
+##ID_64## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+ SELECT     TITULO, DESCRICAO, EVOCARD  FROM     TSIGDG  WHERE     NUGDG = ?     AND ATIVO = 'S'     AND EVOCARD IS NOT NULL 
+Params:
+  1 = 90
+-------------------------------------------------------------------------------------------------------
+##ID_65## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.nivelDeGestao
+-------------------------------------------------------------------------------------------------------
+##ID_66## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.nivelDeGestao
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_67## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_68## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.nivelDeGestao
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_69## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.nivelDeGestao
+-------------------------------------------------------------------------------------------------------
+##ID_70## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.fluxoDeCaixa
+-------------------------------------------------------------------------------------------------------
+##ID_71## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.fluxoDeCaixa
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_72## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_73## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.fluxoDeCaixa
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_74## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.fluxoDeCaixa
+-------------------------------------------------------------------------------------------------------
+##ID_75## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.servico.financeiro
+-------------------------------------------------------------------------------------------------------
+##ID_76## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.servico.financeiro
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_77## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_78## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.servico.financeiro
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_79## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.tarefasMaha
+-------------------------------------------------------------------------------------------------------
+##ID_80## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.tarefasMaha
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_81## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_82## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.tarefasMaha
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_83## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.tarefasMaha
+-------------------------------------------------------------------------------------------------------
+##ID_84## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.SankhyaStoreBanner
+-------------------------------------------------------------------------------------------------------
+##ID_85## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.SankhyaStoreBanner
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_86## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_87## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.SankhyaStoreBanner
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_88## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.SankhyaStoreBanner
+-------------------------------------------------------------------------------------------------------
+##ID_89## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.pagamentosDoDia
+-------------------------------------------------------------------------------------------------------
+##ID_90## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.pagamentosDoDia
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_91## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_92## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.pagamentosDoDia
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_93## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.pagamentosDoDia
+-------------------------------------------------------------------------------------------------------
+##ID_94## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.pagamentosEmAtraso
+-------------------------------------------------------------------------------------------------------
+##ID_95## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.pagamentosEmAtraso
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_96## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_97## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.pagamentosEmAtraso
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_98## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.pagamentosEmAtraso
+-------------------------------------------------------------------------------------------------------
+##ID_99## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.recebimentosDoDia
+-------------------------------------------------------------------------------------------------------
+##ID_100## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.recebimentosDoDia
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_101## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_102## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.recebimentosDoDia
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_103## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.recebimentosDoDia
+-------------------------------------------------------------------------------------------------------
+##ID_104## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.recebimentosEmAtraso
+-------------------------------------------------------------------------------------------------------
+##ID_105## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.recebimentosEmAtraso
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_106## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_107## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.recebimentosEmAtraso
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_108## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.recebimentosEmAtraso
+-------------------------------------------------------------------------------------------------------
+##ID_109## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.saldoBancario
+-------------------------------------------------------------------------------------------------------
+##ID_110## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.saldoBancario
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_111## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_112## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.saldoBancario
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_113## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.saldoBancario
+-------------------------------------------------------------------------------------------------------
+##ID_114## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.notasPendenteConfirmacao
+-------------------------------------------------------------------------------------------------------
+##ID_115## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.notasPendenteConfirmacao
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_116## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_117## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.notasPendenteConfirmacao
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_118## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.notasPendenteConfirmacao
+-------------------------------------------------------------------------------------------------------
+##ID_119## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.pedidosPendenteFaturamento
+-------------------------------------------------------------------------------------------------------
+##ID_120## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.pedidosPendenteFaturamento
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_121## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_122## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.pedidosPendenteFaturamento
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_123## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.pedidosPendenteFaturamento
+-------------------------------------------------------------------------------------------------------
+##ID_124## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.faturamentoMensal
+-------------------------------------------------------------------------------------------------------
+##ID_125## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.faturamentoMensal
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_126## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_127## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.faturamentoMensal
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_128## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.faturamentoMensal
+-------------------------------------------------------------------------------------------------------
+##ID_129## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.lucratividade
+-------------------------------------------------------------------------------------------------------
+##ID_130## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.lucratividade
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_131## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_132## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.lucratividade
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_133## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.lucratividade
+-------------------------------------------------------------------------------------------------------
+##ID_134## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.pontoDeEquilibrio
+-------------------------------------------------------------------------------------------------------
+##ID_135## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.pontoDeEquilibrio
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_136## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_137## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.pontoDeEquilibrio
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_138## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.pontoDeEquilibrio
+-------------------------------------------------------------------------------------------------------
+##ID_139## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.statusOP
+-------------------------------------------------------------------------------------------------------
+##ID_140## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.statusOP
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_141## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_142## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.statusOP
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_143## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.statusOP
+-------------------------------------------------------------------------------------------------------
+##ID_144## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.topMPMaiorEstoque
+-------------------------------------------------------------------------------------------------------
+##ID_145## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.topMPMaiorEstoque
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_146## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_147## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.topMPMaiorEstoque
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_148## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.topMPMaiorEstoque
+-------------------------------------------------------------------------------------------------------
+##ID_149## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.topMPMenorEstoque
+-------------------------------------------------------------------------------------------------------
+##ID_150## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.topMPMenorEstoque
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_151## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_152## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.topMPMenorEstoque
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_153## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.topMPMenorEstoque
+-------------------------------------------------------------------------------------------------------
+##ID_154## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.contratosVencer
+-------------------------------------------------------------------------------------------------------
+##ID_155## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.contratosVencer
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_156## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_157## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.contratosVencer
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_158## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.contratosVencer
+-------------------------------------------------------------------------------------------------------
+##ID_159## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.contratosReajustar
+-------------------------------------------------------------------------------------------------------
+##ID_160## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.contratosReajustar
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_161## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_162## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.contratosReajustar
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_163## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.contratosReajustar
+-------------------------------------------------------------------------------------------------------
+##ID_164## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.inadimpContratosReceita
+-------------------------------------------------------------------------------------------------------
+##ID_165## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.inadimpContratosReceita
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_166## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_167## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.inadimpContratosReceita
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_168## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.inadimpContratosReceita
+-------------------------------------------------------------------------------------------------------
+##ID_169## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.inadimpContratosDespesa
+-------------------------------------------------------------------------------------------------------
+##ID_170## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.inadimpContratosDespesa
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_171## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_172## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.inadimpContratosDespesa
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_173## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.inadimpContratosDespesa
+-------------------------------------------------------------------------------------------------------
+##ID_174## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.indicesServico
+-------------------------------------------------------------------------------------------------------
+##ID_175## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.indicesServico
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_176## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_177## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.indicesServico
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_178## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.indicesServico
+-------------------------------------------------------------------------------------------------------
+##ID_179## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.101
+-------------------------------------------------------------------------------------------------------
+##ID_180## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.101
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_181## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_182## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.101
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_183## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.101
+-------------------------------------------------------------------------------------------------------
+##ID_184## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.112
+-------------------------------------------------------------------------------------------------------
+##ID_185## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.112
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_186## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_187## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.112
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_188## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.112
+-------------------------------------------------------------------------------------------------------
+##ID_189## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.113
+-------------------------------------------------------------------------------------------------------
+##ID_190## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.113
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_191## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_192## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.113
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_193## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.113
+-------------------------------------------------------------------------------------------------------
+##ID_194## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.119
+-------------------------------------------------------------------------------------------------------
+##ID_195## tempo: 5 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.119
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_196## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_197## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.119
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_198## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.119
+-------------------------------------------------------------------------------------------------------
+##ID_199## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.124
+-------------------------------------------------------------------------------------------------------
+##ID_200## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.124
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_201## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_202## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.124
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_203## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.124
+-------------------------------------------------------------------------------------------------------
+##ID_204## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.132
+-------------------------------------------------------------------------------------------------------
+##ID_205## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.132
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_206## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_207## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.132
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_208## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.132
+-------------------------------------------------------------------------------------------------------
+##ID_209## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.139
+-------------------------------------------------------------------------------------------------------
+##ID_210## tempo: 5 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.139
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_211## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_212## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.139
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_213## tempo: 5 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.139
+-------------------------------------------------------------------------------------------------------
+##ID_214## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.179
+-------------------------------------------------------------------------------------------------------
+##ID_215## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.179
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_216## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_217## tempo: 3 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.179
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_218## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.179
+-------------------------------------------------------------------------------------------------------
+##ID_219## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.182
+-------------------------------------------------------------------------------------------------------
+##ID_220## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.182
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_221## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_222## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.182
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_223## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.182
+-------------------------------------------------------------------------------------------------------
+##ID_224## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.191
+-------------------------------------------------------------------------------------------------------
+##ID_225## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.191
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_226## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_227## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.191
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_228## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.191
+-------------------------------------------------------------------------------------------------------
+##ID_229## tempo: 4 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.193
+-------------------------------------------------------------------------------------------------------
+##ID_230## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.193
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_231## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292
+-------------------------------------------------------------------------------------------------------
+##ID_232## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.193
+  2 = 0
+  3 = 13
+-------------------------------------------------------------------------------------------------------
+##ID_233## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TDDIAC.DESCRICAO AS descricao,TDDIAC.IDACESSO AS idAcesso,TDDIAC.SEQUENCIA AS sequencia,TDDIAC.SIGLA AS sigla FROM TDDIAC  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TDDIAC.IDACESSO = ?)  ORDER BY TDDIAC.SEQUENCIA
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.193
+-------------------------------------------------------------------------------------------------------
+##ID_234## tempo: 0 (ms)
+/* Runtime-info
+Application: MonitorDeConsultas
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/MonitorDeConsultas.xhtml5
+ResourceID: br.com.sankhya.cfg.MonitordeConsultas
+uri: /mge/service.sbr
+*/
+SET LANGUAGE Brazilian
+Params:
+-------------------------------------------------------------------------------------------------------
+##ID_235## tempo: 2 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT
+	PROP.NOME,
+	PROP.VALOR
+FROM
+	TRDCON CTR
+	INNER JOIN TRDPCO PCO2
+		ON (CTR.NUCONTROLE = PCO2.NUCONTROLE AND PCO2.NOME = 'resourceID')
+	INNER JOIN TRDPCO PROP
+		ON (CTR.NUCONTROLE = PROP.NUCONTROLE AND PROP.NOME = 'legacyResourceID')
+WHERE
+	CTR.TIPOCONTROLE = 'MN'
+	AND PCO2.VALOR = ?
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.196
+-------------------------------------------------------------------------------------------------------
+##ID_236## tempo: 3 (ms)
+{call Stp_Set_Session2(?, ?, ?, ?, ?)}
+Params:
+  1 = 292
+  2 = -1
+  3 = -1
+  4 = u= 292, t_name= default task-30
+  5 = 3aa12783ada7409c3d454fe23e1161853ca726db
+-------------------------------------------------------------------------------------------------------
+##ID_237## tempo: 1 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TDDPER.ACESSO AS acesso,TDDPER.CODGRUPO AS codGrupo,TDDPER.CODUSU AS codUsu,TDDPER.IDACESSO AS idAcesso,TDDPER.VERSAO AS versao FROM TDDPER /*${no.lock}*/  /*SQL_92_JOINED_TABLES*/  WHERE (TDDPER.IDACESSO = ? AND TDDPER.CODUSU = ? AND TDDPER.CODGRUPO = ?)
+Params:
+  1 = br.com.sankhya.evo.cards.gadget.196
+  2 = 292
+  3 = 0
+-------------------------------------------------------------------------------------------------------
+##ID_238## tempo: 1 (ms)
+/* Runtime-info
+Application: MonitorDeConsultas
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/MonitorDeConsultas.xhtml5
+ResourceID: br.com.sankhya.cfg.MonitordeConsultas
+uri: /mge/service.sbr
+*/
+SELECT TEXTO FROM TSIPAR WHERE CHAVE = ? 
+Params:
+  1 = VERSAOSKWBIN
+-------------------------------------------------------------------------------------------------------
+##ID_239## tempo: 0 (ms)
+/* Runtime-info
+Application: workspace
+Referer: http://sistema.gigantaolocadora.com.br:8180/mge/system.jsp
+service-name: WorkspaceSP.getStartupData
+uri: /mge/service.sbr
+*/
+SELECT TOP 501  TSIGPU.CODGRUPO AS CODGRUPO,TSIGPU.CODUSU AS CODUSU,TSIGPU.DATAFIM AS DATAFIM,TSIGPU.DATAINICIO AS DATAINICIO,TSIGPU.REPASSAR AS REPASSAR,TSIGPU.SEQUENCIA AS SEQUENCIA FROM TSIGPU  WITH (NOLOCK)   /*SQL_92_JOINED_TABLES*/   WHERE (TSIGPU.CODUSU = ?) 
+Params:
+  1 = 292

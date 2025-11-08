@@ -1,0 +1,124 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [SANKHYA].[AD_GIGPONTOSINTEGRA](
+	[ID] [int] NOT NULL,
+	[CODEMP] [int] NULL,
+	[CODFUNC] [int] NULL,
+	[MARCA_PONTO] [datetime] NULL,
+	[ENVIAWPP] [varchar](10) NULL,
+	[SHOW] [varchar](10) NULL,
+	[IP] [varchar](100) NULL,
+	[REGISTRO_ORIGINAL] [text] NULL,
+	[MOMENTO] [varchar](100) NULL,
+	[DT_CREATED] [datetime] NULL,
+	[USU_CREATED] [int] NULL,
+	[DT_UPDT] [datetime] NULL,
+	[USU_UPDT] [int] NULL,
+	[PONT_MANU] [varchar](10) NULL,
+	[PROCESS] [varchar](10) NULL,
+	[FONTE] [varchar](10) NULL,
+	[NSR] [varchar](100) NULL,
+	[CPF] [varchar](100) NULL,
+	[HASH_UID] [varchar](100) NULL,
+	[LATITUDE] [float] NULL,
+	[LONGITUDE] [float] NULL,
+	[COLETOR_ID] [varchar](100) NULL,
+	[COLETOR_NOME] [varchar](100) NULL,
+	[COLETOR_CATEGORIA] [varchar](100) NULL,
+	[CODLOCAL] [varchar](100) NULL,
+	[IMG] [text] NULL,
+	[URL_Localiza] [varchar](50) NULL,
+	[MOMENTO2] [varchar](10) NULL,
+	[ENVIOTEL] [varchar](10) NULL,
+	[DHEXEC] [smallint] NULL,
+	[DHLIMITE] [datetime] NULL,
+ CONSTRAINT [PK_AD_GIGPONTOSINTEGRA] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_AD_GIGPONTOSINTEGRA_HASHUID] ON [SANKHYA].[AD_GIGPONTOSINTEGRA]
+(
+	[HASH_UID] ASC
+)
+WHERE ([HASH_UID] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   TRIGGER [SANKHYA].[TRG_PONTO_ESPELHO_COMPLETO]
+ON [SANKHYA].[AD_GIGPONTOSINTEGRA]
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    MERGE INTO SANKHYA.AD_PONTOESPELHODTH AS Target
+    USING (
+        SELECT
+            ID,
+            CODEMP,
+            CODFUNC,
+            MARCA_PONTO,
+            ENVIAWPP,
+            SHOW,
+            IP,
+            MOMENTO,
+            DT_CREATED,
+            USU_CREATED,
+            DT_UPDT,
+            USU_UPDT,
+            PONT_MANU,
+            PROCESS,
+            FONTE,
+            NSR,
+            CPF,
+            HASH_UID,
+            LATITUDE,
+            LONGITUDE,
+            COLETOR_ID,
+            COLETOR_NOME,
+            COLETOR_CATEGORIA,
+            CODLOCAL
+        FROM INSERTED
+    ) AS Source
+    ON (Target.ID = Source.ID)
+    WHEN MATCHED THEN
+        UPDATE SET
+            CODEMP = Source.CODEMP,
+            CODFUNC = Source.CODFUNC,
+            MARCA_PONTO = Source.MARCA_PONTO,
+            ENVIAWPP = Source.ENVIAWPP,
+            SHOW = Source.SHOW,
+            IP = Source.IP,
+            MOMENTO = Source.MOMENTO,
+            DT_CREATED = Source.DT_CREATED,
+            USU_CREATED = Source.USU_CREATED,
+            DT_UPDT = Source.DT_UPDT,
+            USU_UPDT = Source.USU_UPDT,
+            PONT_MANU = Source.PONT_MANU,
+            PROCESS = Source.PROCESS,
+            FONTE = Source.FONTE,
+            NSR = Source.NSR,
+            CPF = Source.CPF,
+            HASH_UID = Source.HASH_UID,
+            LATITUDE = Source.LATITUDE,
+            LONGITUDE = Source.LONGITUDE,
+            COLETOR_ID = Source.COLETOR_ID,
+            COLETOR_NOME = Source.COLETOR_NOME,
+            COLETOR_CATEGORIA = Source.COLETOR_CATEGORIA,
+            CODLOCAL = Source.CODLOCAL
+    WHEN NOT MATCHED BY TARGET THEN
+        INSERT (ID, CODEMP, CODFUNC, MARCA_PONTO, ENVIAWPP, SHOW, IP, MOMENTO, DT_CREATED, USU_CREATED, DT_UPDT, USU_UPDT, PONT_MANU, PROCESS, FONTE, NSR, CPF, HASH_UID, LATITUDE, LONGITUDE, COLETOR_ID, COLETOR_NOME, COLETOR_CATEGORIA, CODLOCAL)
+        VALUES (Source.ID, Source.CODEMP, Source.CODFUNC, Source.MARCA_PONTO, Source.ENVIAWPP, Source.SHOW, Source.IP, Source.MOMENTO, Source.DT_CREATED, Source.USU_CREATED, Source.DT_UPDT, Source.USU_UPDT, Source.PONT_MANU, Source.PROCESS, Source.FONTE, Source.NSR, Source.CPF, Source.HASH_UID, Source.LATITUDE, Source.LONGITUDE, Source.COLETOR_ID, Source.COLETOR_NOME, Source.COLETOR_CATEGORIA, Source.CODLOCAL);
+END;
+GO
+ALTER TABLE [SANKHYA].[AD_GIGPONTOSINTEGRA] ENABLE TRIGGER [TRG_PONTO_ESPELHO_COMPLETO]
+GO

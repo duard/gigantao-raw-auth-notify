@@ -1,0 +1,90 @@
+import { Column, Entity, Index } from 'typeorm';
+
+@Index(
+  'PK_TRITPCO',
+  ['codemp', 'dtref', 'tpamb', 'sequencia', 'chave', 'indcom'],
+  { unique: true },
+)
+@Entity('TRITPCO', { schema: 'SANKHYA' })
+export class TritpcoEntity {
+  @Column('int', { primary: true, name: 'CODEMP' })
+  codemp: number;
+
+  @Column('datetime', { primary: true, name: 'DTREF' })
+  dtref: Date;
+
+  @Column('char', { primary: true, name: 'TPAMB', length: 1 })
+  tpamb: string;
+
+  @Column('smallint', { primary: true, name: 'SEQUENCIA' })
+  sequencia: number;
+
+  @Column('varchar', { primary: true, name: 'CHAVE', length: 255 })
+  chave: string;
+
+  @Column('smallint', { primary: true, name: 'INDCOM' })
+  indcom: number;
+
+  @Column('float', { name: 'VLRRECBRUTA', nullable: true, precision: 53 })
+  vlrrecbruta: number | null;
+
+  @Column('smallint', { name: 'TPINSC', nullable: true })
+  tpinsc: number | null;
+
+  @Column('varchar', { name: 'NRINSC', nullable: true, length: 14 })
+  nrinsc: string | null;
+
+  @Column('smallint', { name: 'TPINSCESTAB', nullable: true })
+  tpinscestab: number | null;
+
+  @Column('varchar', { name: 'NRINSCESTAB', nullable: true, length: 14 })
+  nrinscestab: string | null;
+
+  @Column('float', { name: 'VLRCPAPUR', nullable: true, precision: 53 })
+  vlrcpapur: number | null;
+
+  @Column('float', { name: 'VLRRATAPUR', nullable: true, precision: 53 })
+  vlrratapur: number | null;
+
+  @Column('float', { name: 'VLRSENARAPUR', nullable: true, precision: 53 })
+  vlrsenarapur: number | null;
+
+  @Column('float', { name: 'VLRCPSUSP', nullable: true, precision: 53 })
+  vlrcpsusp: number | null;
+
+  @Column('float', { name: 'VLRRATSUSP', nullable: true, precision: 53 })
+  vlrratsusp: number | null;
+
+  @Column('float', { name: 'VLRSENARSUSP', nullable: true, precision: 53 })
+  vlrsenarsusp: number | null;
+
+  @Column('float', { name: 'VLRBASECPAPUR', nullable: true, precision: 53 })
+  vlrbasecpapur: number | null;
+
+  @Column('float', { name: 'VLRBASERATAPUR', nullable: true, precision: 53 })
+  vlrbaseratapur: number | null;
+
+  @Column('float', { name: 'VLRBASESENARAPUR', nullable: true, precision: 53 })
+  vlrbasesenarapur: number | null;
+
+  @Column('int', { name: 'CODEMPESTAB', nullable: true })
+  codempestab: number | null;
+
+  @Column('float', { name: 'ALIQUOTAINSSMAX', nullable: true, precision: 53 })
+  aliquotainssmax: number | null;
+
+  @Column('float', { name: 'ALIQUOTAGILRATMAX', nullable: true, precision: 53 })
+  aliquotagilratmax: number | null;
+
+  @Column('float', { name: 'ALIQUOTASENARMAX', nullable: true, precision: 53 })
+  aliquotasenarmax: number | null;
+
+  @Column('float', { name: 'ALIQUOTAINSSMIN', nullable: true, precision: 53 })
+  aliquotainssmin: number | null;
+
+  @Column('float', { name: 'ALIQUOTAGILRATMIN', nullable: true, precision: 53 })
+  aliquotagilratmin: number | null;
+
+  @Column('float', { name: 'ALIQUOTASENARMIN', nullable: true, precision: 53 })
+  aliquotasenarmin: number | null;
+}

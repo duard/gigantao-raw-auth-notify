@@ -1,0 +1,32 @@
+export interface Tsireg {
+  codreg: number;
+  nomereg: string;
+  fretemin?: number | null;
+  grau: number;
+  analitica: string;
+  codregpai: number;
+  ativa: string;
+  codvend?: number | null;
+  vlrantecipacao?: number | null;
+  gerarreceita: string;
+  percadicional?: number | null;
+  percpremio?: number | null;
+  perccusvar?: number | null;
+  semana1Dom?: number | null;
+  semana1Seg?: number | null;
+  semana1Ter?: number | null;
+  semana1Qua?: number | null;
+  semana1Qui?: number | null;
+  semana1Sex?: number | null;
+  semana1Sab?: number | null;
+  semana2Dom?: number | null;
+  semana2Seg?: number | null;
+  semana2Ter?: number | null;
+  semana2Qua?: number | null;
+  semana2Qui?: number | null;
+  semana2Sex?: number | null;
+  semana2Sab?: number | null;
+  percmeta?: number | null;
+  percdescfob?: number | null;
+  vendamin?: number | null;
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real-time Notifications</title>
+</head>
+<body>
+  <h1>Real-time Notifications</h1>
+  <ul id="notifications"></ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io('http://localhost:3103');
+
+    socket.on('connect', () => {
+      console.log('Connected to socket server');
+    });
+
+    socket.on('new-notification', (notification) => {
+      console.log('New notification:', notification);
+      const item = document.createElement('li');
+      item.textContent = `[${notification.type}] ${notification.content}`;
+      document.getElementById('notifications').appendChild(item);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from socket server');
+    });
+  </script>
+</body>
+</html>

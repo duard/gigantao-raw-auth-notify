@@ -1,0 +1,1308 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PaginatedOutputDto } from 'src/utils/dto/paginated-output.dto';
+import { buildTypeOrmQuery } from 'src/utils/typeorm-query';
+import { ILike, Repository } from 'typeorm';
+import { TgfproEntity } from '../../../entities/tGFPRO.entity';
+import { Tgfpro } from '../domain/tgfpro.domain';
+import { TgfproMapper } from '../domain/tgfpro.mapper';
+import { CreateTgfproDto } from '../dto/create-tgfpro.dto';
+import { FindAllMobileTgfproDto } from '../dto/find-all-mobile-tgfpro.dto';
+import { FindAllWithStockTgfproDto } from '../dto/find-all-with-stock-tgfpro.dto';
+import { QueryTgfproDto } from '../dto/query-tgfpro.dto';
+import { TgfproSummaryDto } from '../dto/tgfpro-summary.dto';
+import { UpdateTgfproDto } from '../dto/update-tgfpro.dto';
+import { TgfproRepository } from './tgfpro.repository.abstract';
+
+import { trim } from 'src/utils/string.utils';
+
+@Injectable()
+export class TgfproRepositoryImpl extends TgfproRepository {
+  constructor(
+    @InjectRepository(TgfproEntity)
+    private readonly repository: Repository<TgfproEntity>,
+  ) {
+    super();
+  }
+
+  async create(createDto: CreateTgfproDto): Promise<Tgfpro> {
+    const persistenceEntity = this.repository.create(createDto);
+    const createdEntity = await this.repository.save(persistenceEntity);
+    return TgfproMapper.toDomain(createdEntity);
+  }
+
+  async findAll(
+    query: QueryTgfproDto,
+  ): Promise<PaginatedOutputDto<TgfproSummaryDto>> {
+    if (!query.sort || query.sort.length === 0) {
+      query.sort = [
+        {
+          orderBy: 'codprod',
+          order: 'DESC',
+        },
+      ];
+    }
+
+    const findOptions = buildTypeOrmQuery<TgfproEntity>(query);
+
+    findOptions.select = {
+      codprod: true,
+      descrprod: true,
+      referencia: true,
+      compldesc: true,
+      caracteristicas: true,
+      marca: true,
+      ativo: true,
+      liscontest: true,
+      titcontest: true,
+      codgrupoprod: true,
+      pesobruto: true,
+      pesoliq: true,
+      estmin: true,
+      estmax: true,
+      dtalter: true,
+      unidade: true,
+      ncm: true,
+      controlado: true,
+      controlmedic: true,
+      cnae: true,
+      tgfests: {
+        estoque: true,
+      },
+      tgfgru: {
+        descrgrupoprod: true,
+      },
+    };
+
+    if (query.search) {
+      const search = `%${query.search}%`;
+      findOptions.where = [
+        { descrprod: ILike(search) },
+        { compldesc: ILike(search) },
+        { caracteristicas: ILike(search) },
+        { referencia: ILike(search) },
+        { marca: ILike(search) },
+        { localizacao: ILike(search) },
+        { alertaestmin: ILike(search) },
+        { promocao: ILike(search) },
+        { temicms: ILike(search) },
+        { temiss: ILike(search) },
+        { temipivenda: ILike(search) },
+        { temipicompra: ILike(search) },
+        { temirf: ILike(search) },
+        { teminss: ILike(search) },
+        { usoprod: ILike(search) },
+        { origprod: ILike(search) },
+        { tipsubst: ILike(search) },
+        { tiplancnota: ILike(search) },
+        { tipcontest: ILike(search) },
+        { ativo: ILike(search) },
+        { apresdetalhe: ILike(search) },
+        { selecionado: ILike(search) },
+        { titcontest: ILike(search) },
+        { liscontest: ILike(search) },
+        { local: ILike(search) },
+        { usalocal: ILike(search) },
+        { homepage: ILike(search) },
+        { endimagem: ILike(search) },
+        { codprodroi: ILike(search) },
+        { grupodescprod: ILike(search) },
+        { refforn: ILike(search) },
+        { hrdobrada: ILike(search) },
+        { icmsgerencia: ILike(search) },
+        { temciap: ILike(search) },
+        { implaudolote: ILike(search) },
+        { dimensoes: ILike(search) },
+        { endmodrotulo: ILike(search) },
+        { padrao: ILike(search) },
+        { naturezaoperdes: ILike(search) },
+        { solcompra: ILike(search) },
+        { confere: ILike(search) },
+        { remeter: ILike(search) },
+        { motivoincexc: ILike(search) },
+        { temcomissao: ILike(search) },
+        { componobrig: ILike(search) },
+        { fattotal: ILike(search) },
+        { nometab: ILike(search) },
+        { ap1Rctego: ILike(search) },
+        { calculogiro: ILike(search) },
+        { unidade: ILike(search) },
+        { confcegapeso: ILike(search) },
+        { regrawms: ILike(search) },
+        { grupopis: ILike(search) },
+        { grupocofins: ILike(search) },
+        { grupocssl: ILike(search) },
+        { statusincexc: ILike(search) },
+        { utilizawms: ILike(search) },
+        { balanca: ILike(search) },
+        { rendimento: ILike(search) },
+        { obsetiqueta: ILike(search) },
+        { codautcodif: ILike(search) },
+        { cultura: ILike(search) },
+        { cientifico: ILike(search) },
+        { formulacao: ILike(search) },
+        { concentracao: ILike(search) },
+        { modoaplic: ILike(search) },
+        { epocaaplic: ILike(search) },
+        { manejoint: ILike(search) },
+        { voldosagem: ILike(search) },
+        { voldosagempor: ILike(search) },
+        { rendimentopr: ILike(search) },
+        { receituario: ILike(search) },
+        { exigebenefic: ILike(search) },
+        { geraplaprod: ILike(search) },
+        { ncm: ILike(search) },
+        { codvolplan: ILike(search) },
+        { flex: ILike(search) },
+        { imprimir: ILike(search) },
+        { confirmaimp: ILike(search) },
+        { apuraprodepe: ILike(search) },
+        { indespprodepe: ILike(search) },
+        { codtribmuniss: ILike(search) },
+        { tipcontestwms: ILike(search) },
+        { listalpm: ILike(search) },
+        { oneroso: ILike(search) },
+        { refmercmed: ILike(search) },
+        { termolabil: ILike(search) },
+        { controlado: ILike(search) },
+        { controlmedic: ILike(search) },
+        { idenportaria: ILike(search) },
+        { idenotc: ILike(search) },
+        { idencorrelato: ILike(search) },
+        { idencosme: ILike(search) },
+        { prodfalta: ILike(search) },
+        { infpureza: ILike(search) },
+        { fabricante: ILike(search) },
+        { usastatuslote: ILike(search) },
+        { unidminarmaz: ILike(search) },
+        { origemfat: ILike(search) },
+        { usacodbarrasqtd: ILike(search) },
+        { md5Paf: ILike(search) },
+        { valcapm3: ILike(search) },
+        { qtdpecafrac: ILike(search) },
+        { utilordcorte: ILike(search) },
+        { descrutilbem: ILike(search) },
+        { impordemcorte: ILike(search) },
+        { temcredpiscofinsdepr: ILike(search) },
+        { utilsmartcard: ILike(search) },
+        { recupavaria: ILike(search) },
+        { codregmapa: ILike(search) },
+        { apresform: ILike(search) },
+        { codbarcomp: ILike(search) },
+        { temmedicao: ILike(search) },
+        { natbcpiscofins: ILike(search) },
+        { contarporpeso: ILike(search) },
+        { permcompprod: ILike(search) },
+        { dtvaldif: ILike(search) },
+        { codbarbalanca: ILike(search) },
+        { valcbglobal: ILike(search) },
+        { usapontos: ILike(search) },
+        { integraeconect: ILike(search) },
+        { enqreintegra: ILike(search) },
+        { notifconf: ILike(search) },
+        { usaseriefab: ILike(search) },
+        { tipsernfe: ILike(search) },
+        { vencompindiv: ILike(search) },
+        { excluirconf: ILike(search) },
+        { produzaut: ILike(search) },
+        { usaimpagrupmin: ILike(search) },
+        { rastrestoque: ILike(search) },
+        { impetiqconf: ILike(search) },
+        { codfci: ILike(search) },
+        { codativreintegra: ILike(search) },
+        { servparaindust: ILike(search) },
+        { cat1799Spres: ILike(search) },
+        { descrprodnfe: ILike(search) },
+        { geracustcompseg: ILike(search) },
+        { aplicasazo: ILike(search) },
+        { usaseriesepwms: ILike(search) },
+        { serfaturcon: ILike(search) },
+        { exigelastrocamadas: ILike(search) },
+        { fixoagenda: ILike(search) },
+        { usalotedtval: ILike(search) },
+        { usalotedtfab: ILike(search) },
+        { exibcompexpkit: ILike(search) },
+        { codvolpesovar: ILike(search) },
+        { usacontpesovar: ILike(search) },
+        { controlmedic: ILike(search) },
+        { descvenconsul: ILike(search) },
+        { tipokit: ILike(search) },
+        { visivelappos: ILike(search) },
+        { utilizaendflut: ILike(search) },
+        { tipoidentif: ILike(search) },
+        { impetiqsepwms: ILike(search) },
+        { nroprocesso: ILike(search) },
+        { armazelote: ILike(search) },
+        { temrastrolote: ILike(search) },
+        { codanvisa: ILike(search) },
+        { descranp: ILike(search) },
+        { tipocontagem: ILike(search) },
+        { comercializacaoagri: ILike(search) },
+        { tipoinssespecial: ILike(search) },
+        { calcdifal: ILike(search) },
+        { indescala: ILike(search) },
+        { cnpjfabricante: ILike(search) },
+        { codbenefnauf: ILike(search) },
+        { codagregacao: ILike(search) },
+        { forcaexpeconect: ILike(search) },
+        { registrarpeso: ILike(search) },
+        { servprestter: ILike(search) },
+        { fragmentalote: ILike(search) },
+        { motisencaoanvisa: ILike(search) },
+        { codnbs: ILike(search) },
+        { consprodcat42: ILike(search) },
+        { tipoitemsped: ILike(search) },
+        { atunuversao: ILike(search) },
+        { gradepadrao: ILike(search) },
+        { obtstantmedent: ILike(search) },
+        { descproddrcst: ILike(search) },
+        { participaadrcst: ILike(search) },
+        { prodsujfecop: ILike(search) },
+        { desdesccalcpis: ILike(search) },
+        { conestorigprod: ILike(search) },
+        { gerimpnretreinfaq: ILike(search) },
+        { prodaliadrcst: ILike(search) },
+        { prodinterno: ILike(search) },
+        { calcfustpro: ILike(search) },
+        { calcfunttelpro: ILike(search) },
+        { codbardifgtin: ILike(search) },
+        { codbartribdifgtin: ILike(search) },
+        { usanrofogo: ILike(search) },
+        { tipcargarepom: ILike(search) },
+        { tipcargapamcard: ILike(search) },
+        { tipcargaefrete: ILike(search) },
+        { tpcargamdfe: ILike(search) },
+        { tipcargapb: ILike(search) },
+        { adObscesta: ILike(search) },
+        { wmsprodrastsermed: ILike(search) },
+        { statusncm: ILike(search) },
+        { adCapacidade: ILike(search) },
+        { adDescrcomplemento: ILike(search) },
+        { bloqvendafrac: ILike(search) },
+        { adQtdfixo: ILike(search) },
+        { indtiprefbcicmsst: ILike(search) },
+        { codvolkanban: ILike(search) },
+        { calrupturaestoque: ILike(search) },
+        { opeexpfethab: ILike(search) },
+        { opeintestfethab: ILike(search) },
+        { opeintfethab: ILike(search) },
+        { servdespntrib: ILike(search) },
+        { codigonfcom: ILike(search) },
+      ];
+    }
+
+    /* findOptions.relations = [
+      'adAcessorios',
+      'adApontsols',
+      'adCadhabs',
+      'adGeraoscomites',
+      'adItensroteiros',
+      'adItequitas',
+      'adProdmanutencaos',
+      'adProdservos',
+      'adSolcompraos',
+      'astreqs',
+      'comprarecentes',
+      'gfratendimentoclienteitens',
+      'tapiaps',
+      'tapirms',
+      'tappfas',
+      'tapseos',
+      'tcbimors',
+      'tccites',
+      'tceites',
+      'tceiteHis',
+      'tcfabtites',
+      'tcfitepnus',
+      'tcfmansrvs',
+      'tcfmansrvs2',
+      'tcfoscabs',
+      'tcfpnus',
+      'tcfservos',
+      'tcibems',
+      'tcibems2',
+      'tcictas',
+      'tcictes',
+      'tcidems',
+      'tcidibis',
+      'tciests',
+      'tcilocs',
+      'tcimovs',
+      'tcimovajs',
+      'tcisals',
+      'tcisalajs',
+      'tcitaxes',
+      'tcitaxajs',
+      'tcsagfs',
+      'tcsblos',
+      'tcsbmes',
+      'tcscoms',
+      'tcscprs',
+      'tcscves',
+      'tcsehis',
+      'tcserrs',
+      'tcsfpes',
+      'tcsfprs',
+      'tcsites',
+      'tcsites2',
+      'tcslbes',
+      'tcsmods',
+      'tcsmprs',
+      'tgfnats',
+      'tcsoccs',
+      'tcspfps',
+      'tcspits',
+      'tcsppfs',
+      'tcspres',
+      'tcspreqtds',
+      'tcsprjs',
+      'tcsprns',
+      'tcspscs',
+      'tcstpns',
+      'tcsoos',
+      'tcssers',
+      'tcsits',
+      'tcsvpcs',
+      'tgaahs',
+      'tgaahis',
+      'tgaarts',
+      'tgaclls',
+      'tgaclts',
+      'tgacujs',
+      'tgaculs',
+      'tgadprs',
+      'tgagars',
+      'tgagpls',
+      'tgagts',
+      'tgagtps',
+      'tgaicps',
+      'tgains',
+      'tgains2',
+      'tgamaas',
+      'tgamovs',
+      'tgampas',
+      'tgangrs',
+      'tgapats',
+      'tgapesis',
+      'tgarecs',
+      'tgaris',
+      'tgasals',
+      'tgfadrcstr1s',
+      'tgfadrcstr1s2',
+      'tgfadrcstr1s3',
+      'tgfadrcstr1s4',
+      'tgfadrcstr1s5',
+      'tgfadrcstr1s6',
+      'tgfadrcstr1s7',
+      'tgfadrcstr1s8',
+      'tgfadrcstr1s9',
+      'tgfadrcstr110',
+      'tgfadrcstr111',
+      'tgfadrcstr112',
+      'tgfadrcstr113',
+      'tgfadrcstr114',
+      'tgfadrcstr115',
+      'tgfadrcstr116',
+      'tgfadrcstr117',
+      'tgfas',
+      'tgfamps',
+      'tgfavrs',
+      'tgfbars',
+      'tgfcacs',
+      'tgfcajas',
+      'tgfccfs',
+      'tgfcipmpros',
+      'tgfclas',
+      'tgfcmps',
+      'tgfcodrecdirfpros',
+      'tgfcois',
+      'tgfcpos',
+      'tgfcpps',
+      'tgfctes','
+      'tgfctps',
+      'tgfcuses',
+      'tgfdavs',
+      'tgfddcs',
+      'tgfdeps',
+      'tgfds',
+      'tgfeacs',
+      'tgfefdfks',
+      'tgfefdfks2',
+      'tgfemms',
+      'tgfepis',
+      'tgfepps',
+      'tgfeprs',
+      'tgfests',
+      'tgfetqs',
+      'tgfexcs',
+      'tgffams',
+      'tgffam',
+      'tgffcps',
+      'tgffrms',
+      'tgffvcs',
+      'tgfgars',
+      'tgfgirs',
+      'tgftpps',
+      'tgfgvas',
+      'tgfgvrs',
+      'tgfgxes',
+      'tgfgxes2',
+      'tgfiacs',
+      'tgfias',
+      'tgficps',
+      'tgfiffps',
+      'tgfimals',
+      'tgfipcs',
+      'tgfipms',
+      'tgfircsts',
+      'tgfisus',
+      'tgfitcs',
+      'tgfitcs2',
+      'tgfitds',
+      'tgfites',
+      'tgfites2',
+      'tgfites3',
+      'tgfites4',
+      'tgfites5',
+      'tgfites6',
+      'tgfits',
+      'tgfivcs',
+      'tgflots',
+      'tgflses',
+      'tgfmcs',
+      'tgfmepis',
+      'tgfmeqs',
+      'tgfmfcis',
+      'tgfmpes',
+      'tgfnats2',
+      'tgfnats3',
+      'tgfnmas',
+      'tgfords',
+      'tgfpals',
+      'tgfpals2',
+      'tgfpaps',
+      'tgfpars',
+      'tgfpcos',
+      'tgfpdds',
+      'tgfpems',
+      'tgfimgs',
+      'tgfplais',
+      'tgfplcs',
+      'tgfmves',
+      'tgfpmfs',
+      'tgfpmpes',
+      'tgfppes',
+      'tgfppls',
+      'tgfppms',
+      'tgfrpcs',
+      'tgfpprs',
+      'tgfpras',
+      'tgfprds',
+      'tgfprfs',
+      'modetiqsepwms',
+      'grupotransg',
+      'codformprec',
+      'codcencus',
+      'codcat',
+      'tgadig',
+      'tgadig2',
+      'codipi2',
+      'codpais',
+      'codrfa',
+      'codtab2',
+      'tgadig3',
+      'tgadig4',
+      'codprodagrupaptenc2',
+      'tgfpros',
+      'codter',
+      'codcpr',
+      'codservtelecom',
+      'codmoeda',
+      'codprodinnatura2',
+      'tgfpros2',
+      'codprodagrupapt2',
+      'tgfpros3',
+      'adCodigomo',
+      'tgfpros4',
+      'codgprod',
+      'codconfkit',
+      'codnat',
+      'idgrade',
+      'codlst',
+      'codvolcompra',
+      'codvolres',
+      'codvolfethab',
+      'codvol',
+      'codgrupoprod2',
+      'codlocalpadrao',
+      'codmarca',
+      'codareasep',
+      'codpat',
+      'codctactb',
+      'codctactbefd',
+      'codcprb',
+      'codcos',
+      'codproj',
+      'codfab',
+      'codparcconsig',
+      'codparcforn',
+      'tgfprois',
+      'tgfpsds',
+      'tgfptps',
+      'tgframs',
+      'tgfreclas',
+      'tgfreclas2',
+      'tgfrsts',
+      'tgfsaps',
+      'tgfsazs',
+      'tgfsems',
+      'tgfsers',
+      'tgfseus',
+      'tgfseus2',
+      'tgfsols',
+      'tgfstmvpros',
+      'tgfmeqs2',
+      'tgftaxes',
+      'tgftras',
+      'tgftras2',
+      'tgfvces',
+      'tgfvcs',
+      'tgfvdps',
+      'tgfveis',
+      'tgfveis2',
+      'tgfveis3',
+      'tgfvoas',
+      'tgfvoahs',
+      'tgfvoems',
+      'tgfvors',
+      'tgiites',
+      'tgvavprs',
+      'tgvpeprs',
+      'tgvravs',
+      'tgvres',
+      'tgvrngs',
+      'tgwaxps',
+      'tgwcsers',
+      'tgwctes',
+      'tgwempes',
+      'tgwenps',
+      'tgwepas',
+      'tgwepls',
+      'tgwests',
+      'tgwexps',
+      'tgwexpls',
+      'tgwgpds',
+      'tgwinvs',
+      'tgwitrs',
+      'tgwitts',
+      'tgwivls',
+      'tgwivrs',
+      'tgwivrsers',
+      'tgwlbos',
+      'tgwlces',
+      'tgwquas',
+      'tgwrags',
+      'tgwrarms',
+      'tgwrarms2',
+      'tgwrcons',
+      'tgwroms',
+      'tgwrpls',
+      'tgwtrcds',
+      'tgwtrfs',
+      'timcnfs',
+      'timimbs',
+      'timimbs2',
+      'tmsordcarregs',
+      'tmsparqbs',
+      'tmspeds',
+      'totcons',
+      'totlen',
+      'totlens',
+      'totlens2',
+      'totrecs',
+      'totrecs2',
+      'tprboms',
+      'tprcois',
+      'tprcpmps',
+      'tprcprs',
+      'tprestsmps',
+      'tprfxts',
+      'tprfxts2',
+      'tprhmrps',
+      'tprhsmps',
+      'tprhsmps2',
+      'tprimps',
+      'tprimrps',
+      'tprirpas',
+      'tprlmps',
+      'tprlmps2',
+      'tprlpas',
+      'tprlsps',
+      'tprmpas',
+      'tprmpas2',
+      'tprrwas',
+      'tprswxps',
+      'tprtacs',
+      'tprtpps',
+      'tprtxps',
+      'tprtxpps',
+      'tprwxps',
+      'tripprods',
+      'tsieves',
+      'tsitdas',
+      'tsitokps',
+      'tsitokpvrs',
+      'tsiusus',
+      'tslipxes',
+      'ttkprotemps',
+    ];*/
+
+    findOptions.relations = ['tgfests', 'tgfgru'];
+
+    const [entities, total] = await this.repository.findAndCount(findOptions);
+    const lastPage = Math.ceil(total / query.limit!);
+    const hasMore = query.page! < lastPage;
+
+    return {
+      data: entities.map(TgfproMapper.toSummaryDto),
+      meta: {
+        total,
+        lastPage,
+        currentPage: query.page!,
+        perPage: query.limit!,
+        prev: query.page! > 1 ? query.page! - 1 : null,
+        next: hasMore ? query.page! + 1 : null,
+        hasMore,
+      },
+    };
+  }
+
+  async findAllDoNotWorks(
+    query: QueryTgfproDto,
+  ): Promise<PaginatedOutputDto<TgfproSummaryDto>> {
+    if (!query.sort || query.sort.length === 0) {
+      query.sort = [
+        {
+          orderBy: 'codprod',
+          order: 'DESC',
+        },
+      ];
+    }
+
+    const findOptions = buildTypeOrmQuery<TgfproEntity>(query);
+
+    findOptions.select = {
+      codprod: true,
+      descrprod: true,
+      referencia: true,
+      compldesc: true,
+      caracteristicas: true,
+      marca: true,
+      ativo: true,
+      liscontest: true,
+      titcontest: true,
+      codgrupoprod: true,
+      pesobruto: true,
+      pesoliq: true,
+      estmin: true,
+      estmax: true,
+      dtalter: true,
+      unidade: true,
+      ncm: true,
+      controlado: true,
+      controlmedic: true,
+      cnae: true,
+      tgfests: {
+        estoque: true,
+      },
+      tgfgru: {
+        descrgrupoprod: true,
+      },
+    };
+
+    if (query.search) {
+      const search = `%${query.search}%`;
+      findOptions.where = [
+        { descrprod: ILike(search) },
+        { compldesc: ILike(search) },
+        { caracteristicas: ILike(search) },
+        { referencia: ILike(search) },
+        { marca: ILike(search) },
+        { localizacao: ILike(search) },
+        { alertaestmin: ILike(search) },
+        { promocao: ILike(search) },
+        { temicms: ILike(search) },
+        { temiss: ILike(search) },
+        { temipivenda: ILike(search) },
+        { temipicompra: ILike(search) },
+        { temirf: ILike(search) },
+        { teminss: ILike(search) },
+        { usoprod: ILike(search) },
+        { origprod: ILike(search) },
+        { tipsubst: ILike(search) },
+        { tiplancnota: ILike(search) },
+        { tipcontest: ILike(search) },
+        { ativo: ILike(search) },
+        { apresdetalhe: ILike(search) },
+        { selecionado: ILike(search) },
+        { titcontest: ILike(search) },
+        { liscontest: ILike(search) },
+        { local: ILike(search) },
+        { usalocal: ILike(search) },
+        { homepage: ILike(search) },
+        { endimagem: ILike(search) },
+        { codprodroi: ILike(search) },
+        { grupodescprod: ILike(search) },
+        { refforn: ILike(search) },
+        { hrdobrada: ILike(search) },
+        { icmsgerencia: ILike(search) },
+        { temciap: ILike(search) },
+        { implaudolote: ILike(search) },
+        { dimensoes: ILike(search) },
+        { endmodrotulo: ILike(search) },
+        { padrao: ILike(search) },
+        { naturezaoperdes: ILike(search) },
+        { solcompra: ILike(search) },
+        { confere: ILike(search) },
+        { remeter: ILike(search) },
+        { motivoincexc: ILike(search) },
+        { temcomissao: ILike(search) },
+        { componobrig: ILike(search) },
+        { fattotal: ILike(search) },
+        { nometab: ILike(search) },
+        { ap1Rctego: ILike(search) },
+        { calculogiro: ILike(search) },
+        { unidade: ILike(search) },
+        { confcegapeso: ILike(search) },
+        { regrawms: ILike(search) },
+        { grupopis: ILike(search) },
+        { grupocofins: ILike(search) },
+        { grupocssl: ILike(search) },
+        { statusincexc: ILike(search) },
+        { utilizawms: ILike(search) },
+        { balanca: ILike(search) },
+        { rendimento: ILike(search) },
+        { obsetiqueta: ILike(search) },
+        { codautcodif: ILike(search) },
+        { cultura: ILike(search) },
+        { cientifico: ILike(search) },
+        { formulacao: ILike(search) },
+        { concentracao: ILike(search) },
+        { modoaplic: ILike(search) },
+        { epocaaplic: ILike(search) },
+        { manejoint: ILike(search) },
+        { voldosagem: ILike(search) },
+        { voldosagempor: ILike(search) },
+        { rendimentopr: ILike(search) },
+        { receituario: ILike(search) },
+        { exigebenefic: ILike(search) },
+        { geraplaprod: ILike(search) },
+        { ncm: ILike(search) },
+        { codvolplan: ILike(search) },
+        { flex: ILike(search) },
+        { imprimir: ILike(search) },
+        { confirmaimp: ILike(search) },
+        { apuraprodepe: ILike(search) },
+        { indespprodepe: ILike(search) },
+        { codtribmuniss: ILike(search) },
+        { tipcontestwms: ILike(search) },
+        { listalpm: ILike(search) },
+        { oneroso: ILike(search) },
+        { refmercmed: ILike(search) },
+        { termolabil: ILike(search) },
+        { controlado: ILike(search) },
+        { controlmedic: ILike(search) },
+        { idenportaria: ILike(search) },
+        { idenotc: ILike(search) },
+        { idencorrelato: ILike(search) },
+        { idencosme: ILike(search) },
+        { prodfalta: ILike(search) },
+        { infpureza: ILike(search) },
+        { fabricante: ILike(search) },
+        { usastatuslote: ILike(search) },
+        { unidminarmaz: ILike(search) },
+        { origemfat: ILike(search) },
+        { usacodbarrasqtd: ILike(search) },
+        { md5Paf: ILike(search) },
+        { valcapm3: ILike(search) },
+        { qtdpecafrac: ILike(search) },
+        { utilordcorte: ILike(search) },
+        { descrutilbem: ILike(search) },
+        { impordemcorte: ILike(search) },
+        { temcredpiscofinsdepr: ILike(search) },
+        { utilsmartcard: ILike(search) },
+        { recupavaria: ILike(search) },
+        { codregmapa: ILike(search) },
+        { apresform: ILike(search) },
+        { codbarcomp: ILike(search) },
+        { temmedicao: ILike(search) },
+        { natbcpiscofins: ILike(search) },
+        { contarporpeso: ILike(search) },
+        { permcompprod: ILike(search) },
+        { dtvaldif: ILike(search) },
+        { codbarbalanca: ILike(search) },
+        { valcbglobal: ILike(search) },
+        { usapontos: ILike(search) },
+        { integraeconect: ILike(search) },
+        { enqreintegra: ILike(search) },
+        { notifconf: ILike(search) },
+        { usaseriefab: ILike(search) },
+        { tipsernfe: ILike(search) },
+        { vencompindiv: ILike(search) },
+        { excluirconf: ILike(search) },
+        { produzaut: ILike(search) },
+        { usaimpagrupmin: ILike(search) },
+        { rastrestoque: ILike(search) },
+        { impetiqconf: ILike(search) },
+        { codfci: ILike(search) },
+        { codativreintegra: ILike(search) },
+        { servparaindust: ILike(search) },
+        { cat1799Spres: ILike(search) },
+        { descrprodnfe: ILike(search) },
+        { geracustcompseg: ILike(search) },
+        { aplicasazo: ILike(search) },
+        { usaseriesepwms: ILike(search) },
+        { serfaturcon: ILike(search) },
+        { exigelastrocamadas: ILike(search) },
+        { fixoagenda: ILike(search) },
+        { usalotedtval: ILike(search) },
+        { usalotedtfab: ILike(search) },
+        { exibcompexpkit: ILike(search) },
+        { codvolpesovar: ILike(search) },
+        { usacontpesovar: ILike(search) },
+        { controlmedic: ILike(search) },
+        { descvenconsul: ILike(search) },
+        { tipokit: ILike(search) },
+        { visivelappos: ILike(search) },
+        { utilizaendflut: ILike(search) },
+        { tipoidentif: ILike(search) },
+        { impetiqsepwms: ILike(search) },
+        { nroprocesso: ILike(search) },
+        { armazelote: ILike(search) },
+        { temrastrolote: ILike(search) },
+        { codanvisa: ILike(search) },
+        { descranp: ILike(search) },
+        { tipocontagem: ILike(search) },
+        { comercializacaoagri: ILike(search) },
+        { tipoinssespecial: ILike(search) },
+        { calcdifal: ILike(search) },
+        { indescala: ILike(search) },
+        { cnpjfabricante: ILike(search) },
+        { codbenefnauf: ILike(search) },
+        { codagregacao: ILike(search) },
+        { forcaexpeconect: ILike(search) },
+        { registrarpeso: ILike(search) },
+        { servprestter: ILike(search) },
+        { fragmentalote: ILike(search) },
+        { motisencaoanvisa: ILike(search) },
+        { codnbs: ILike(search) },
+        { consprodcat42: ILike(search) },
+        { tipoitemsped: ILike(search) },
+        { atunuversao: ILike(search) },
+        { gradepadrao: ILike(search) },
+        { obtstantmedent: ILike(search) },
+        { descproddrcst: ILike(search) },
+        { participaadrcst: ILike(search) },
+        { prodsujfecop: ILike(search) },
+        { desdesccalcpis: ILike(search) },
+        { conestorigprod: ILike(search) },
+        { gerimpnretreinfaq: ILike(search) },
+        { prodaliadrcst: ILike(search) },
+        { prodinterno: ILike(search) },
+        { calcfustpro: ILike(search) },
+        { calcfunttelpro: ILike(search) },
+        { codbardifgtin: ILike(search) },
+        { codbartribdifgtin: ILike(search) },
+        { usanrofogo: ILike(search) },
+        { tipcargarepom: ILike(search) },
+        { tipcargapamcard: ILike(search) },
+        { tipcargaefrete: ILike(search) },
+        { tpcargamdfe: ILike(search) },
+        { tipcargapb: ILike(search) },
+        { adObscesta: ILike(search) },
+        { wmsprodrastsermed: ILike(search) },
+        { statusncm: ILike(search) },
+        { adCapacidade: ILike(search) },
+        { adDescrcomplemento: ILike(search) },
+        { bloqvendafrac: ILike(search) },
+        { adQtdfixo: ILike(search) },
+        { indtiprefbcicmsst: ILike(search) },
+        { codvolkanban: ILike(search) },
+        { calrupturaestoque: ILike(search) },
+        { opeexpfethab: ILike(search) },
+        { opeintestfethab: ILike(search) },
+        { opeintfethab: ILike(search) },
+        { servdespntrib: ILike(search) },
+        { codigonfcom: ILike(search) },
+      ];
+    }
+
+    findOptions.relations = ['tgfests', 'tgfgru'];
+
+    const [entities, total] = await this.repository.findAndCount(findOptions);
+    const lastPage = Math.ceil(total / query.limit!);
+    const hasMore = query.page! < lastPage;
+
+    return {
+      data: entities.map(TgfproMapper.toSummaryDto),
+      meta: {
+        total,
+        lastPage,
+        currentPage: query.page!,
+        perPage: query.limit!,
+        prev: query.page! > 1 ? query.page! - 1 : null,
+        next: hasMore ? query.page! + 1 : null,
+        hasMore,
+      },
+    };
+  }
+
+  async findById(codprod: number): Promise<Tgfpro | null> {
+    const entity = await this.repository.findOne({
+      where: { codprod },
+    });
+    return entity ? TgfproMapper.toDomain(entity) : null;
+  }
+
+  async findAllMobile(
+    query: FindAllMobileTgfproDto,
+  ): Promise<PaginatedOutputDto<any>> {
+    const { page = 1, limit = 10, codlocal, codprod, codgru, search } = query;
+    const offset = (page - 1) * limit;
+
+    const whereClauses: string[] = [];
+    const params: any[] = [];
+
+    if (codlocal) {
+      whereClauses.push(`TGFEST.CODLOCAL = @${params.length}`);
+      params.push(codlocal);
+    }
+    if (codprod) {
+      whereClauses.push(`TGFPRO.CODPROD = @${params.length}`);
+      params.push(codprod);
+    }
+    if (codgru) {
+      whereClauses.push(`TGFPRO.CODGRUPOPROD = @${params.length}`);
+      params.push(codgru);
+    }
+    if (search) {
+      whereClauses.push(
+        `TGFPRO.DESCRPROD COLLATE Latin1_General_CI_AI LIKE '%' + @${params.length} + '%'`,
+      );
+      params.push(search);
+    }
+
+    const where =
+      whereClauses.length > 0 ? `AND ${whereClauses.join(' AND ')}` : '';
+
+    const sql = `
+      SELECT *
+      FROM (
+          SELECT 
+              ROW_NUMBER() OVER (
+                  ORDER BY 
+                      TGFPRO.CODPROD DESC,
+                      CASE
+                          WHEN TGFPRO.ESTMIN IS NOT NULL AND TGFPRO.ESTMAX IS NOT NULL AND ISNULL(TGFEST.ESTOQUE,0) > TGFPRO.ESTMIN THEN 1
+                          WHEN TGFPRO.ESTMIN IS NOT NULL AND ISNULL(TGFEST.ESTOQUE,0) < TGFPRO.ESTMIN THEN 0
+                          WHEN TGFPRO.ESTMIN IS NOT NULL AND TGFPRO.ESTMAX IS NOT NULL AND ISNULL(TGFEST.ESTOQUE,0) BETWEEN TGFPRO.ESTMIN AND TGFPRO.ESTMAX THEN 1
+                          WHEN TGFPRO.ESTMIN = 0 AND TGFPRO.ESTMAX = 0 THEN 3
+                          WHEN TGFPRO.ESTMIN IS NULL OR TGFPRO.ESTMAX IS NULL THEN 4
+                          ELSE 5
+                      END,
+                      (TGFPRO.ESTMIN - ISNULL(TGFEST.ESTOQUE,0))
+              ) AS RN,
+
+              -- Produto
+              TGFPRO.CODPROD,
+              TGFPRO.DESCRPROD,
+              TGFPRO.MARCA,
+              TGFPRO.REFERENCIA,
+              TGFPRO.CARACTERISTICAS,
+              TGFPRO.CODGRUPOPROD,
+              TGFGRU.DESCRGRUPOPROD,
+              TGFPRO.LOCALIZACAO, 
+              TGFPRO.ESTMIN, 
+              TGFPRO.ESTMAX,
+
+              -- Estoque por local
+              TGFEST.CODEMP, 
+              TGFEST.CODLOCAL,
+              TGFLOC.DESCRLOCAL, 
+              TGFEST.CONTROLE, 
+              ISNULL(TGFEST.ESTOQUE,0) AS ESTOQUE,
+              ISNULL(TGFEST.RESERVADO,0) AS RESERVADO, 
+              (ISNULL(TGFEST.ESTOQUE,0) - ISNULL(TGFEST.RESERVADO,0)) AS DISPONIVEL,
+
+              -- Necessidade de compra
+              CASE
+                  WHEN ISNULL(TGFPRO.ESTMAX, 0) - ISNULL(TGFEST.ESTOQUE,0) < 0 THEN 0
+                  ELSE ISNULL(TGFPRO.ESTMAX, 0) - ISNULL(TGFEST.ESTOQUE,0)
+              END AS Necessidade_de_compra,
+
+              -- Status do estoque
+              CASE
+                  WHEN TGFPRO.ESTMIN IS NULL OR TGFPRO.ESTMAX IS NULL THEN 'Dados faltando'
+                  WHEN TGFPRO.ESTMIN = 0 AND TGFPRO.ESTMAX = 0 THEN 'Sem controle'
+                  WHEN (ISNULL(TGFEST.ESTOQUE,0) - TGFPRO.ESTMIN) < 0 THEN 'Disponível negativo'
+                  WHEN ISNULL(TGFEST.ESTOQUE,0) < TGFPRO.ESTMIN THEN 'Abaixo do mínimo'
+                  WHEN ISNULL(TGFEST.ESTOQUE,0) BETWEEN TGFPRO.ESTMIN AND TGFPRO.ESTMAX THEN 'Dentro da faixa'
+                  WHEN ISNULL(TGFEST.ESTOQUE,0) > TGFPRO.ESTMAX THEN 'Acima do máximo'
+                  ELSE 'Outros'
+              END AS STATUS_ESTOQUE,
+
+              TGFPRO.CODUSU,
+              (SELECT NOMEUSU FROM TSIUSU WHERE CODUSU = TGFPRO.CODUSU) AS NOMEUSU
+
+          FROM TGFPRO
+          LEFT JOIN TGFEST ON TGFEST.CODPROD = TGFPRO.CODPROD
+          LEFT JOIN TGFLOC ON TGFLOC.CODLOCAL = TGFEST.CODLOCAL
+          JOIN TGFGRU ON TGFGRU.CODGRUPOPROD = TGFPRO.CODGRUPOPROD
+          
+          WHERE 1=1
+          ${where}
+      ) AS QRY
+      WHERE 1=1
+      ORDER BY RN
+      OFFSET ${offset} ROWS
+      FETCH NEXT ${limit} ROWS ONLY
+    `;
+
+    const countSql = `
+      SELECT COUNT(*) as count
+      FROM TGFPRO
+      LEFT JOIN TGFEST ON TGFEST.CODPROD = TGFPRO.CODPROD
+      LEFT JOIN TGFLOC ON TGFLOC.CODLOCAL = TGFEST.CODLOCAL
+      JOIN TGFGRU ON TGFGRU.CODGRUPOPROD = TGFPRO.CODGRUPOPROD
+      WHERE 1=1
+      ${where}
+    `;
+
+    const [entities, totalResult] = await Promise.all([
+      this.repository.query(sql, params),
+      this.repository.query(countSql, params),
+    ]);
+
+    const total = totalResult[0].count;
+    const lastPage = Math.ceil(total / limit);
+    const hasMore = page < lastPage;
+
+    return {
+      data: entities,
+      meta: {
+        total,
+        lastPage,
+        currentPage: page,
+        perPage: limit,
+        prev: page > 1 ? page - 1 : null,
+        next: hasMore ? page + 1 : null,
+        hasMore,
+      },
+    };
+  }
+
+  async findAllWithStock(query: FindAllWithStockTgfproDto): Promise<any> {
+    const {
+      page = 1,
+      limit = 10,
+      codlocal,
+      codprod,
+      codgru,
+      search,
+      sort,
+    } = query;
+    const offset = (page - 1) * limit;
+
+    const whereClauses: string[] = [];
+    const params: any[] = [];
+
+    if (codlocal) {
+      whereClauses.push(`TGFEST.CODLOCAL = @${params.length}`);
+      params.push(codlocal);
+    }
+    if (codprod) {
+      whereClauses.push(`TGFPRO.CODPROD = @${params.length}`);
+      params.push(codprod);
+    }
+    if (codgru) {
+      whereClauses.push(`TGFPRO.CODGRUPOPROD = @${params.length}`);
+      params.push(codgru);
+    }
+    if (search) {
+      const searchClauses = [
+        `TGFPRO.DESCRPROD COLLATE Latin1_General_CI_AI LIKE '%' + @${params.length} + '%'`,
+        `TGFGRU.DESCRGRUPOPROD COLLATE Latin1_General_CI_AI LIKE '%' + @${params.length} + '%'`,
+        `TGFPRO.LOCALIZACAO COLLATE Latin1_General_CI_AI LIKE '%' + @${params.length} + '%'`,
+        `TGFLOC.DESCRLOCAL COLLATE Latin1_General_CI_AI LIKE '%' + @${params.length} + '%'`,
+      ];
+      whereClauses.push(`(${searchClauses.join(' OR ')})`);
+      params.push(search);
+    }
+
+    const where =
+      whereClauses.length > 0 ? `AND ${whereClauses.join(' AND ')}` : '';
+
+    let orderBy = 'ORDER BY RN';
+    if (sort && sort.length > 0) {
+      const sortClauses = sort.map((s) => `${s.orderBy} ${s.order}`);
+      orderBy = `ORDER BY ${sortClauses.join(', ')}`;
+    }
+
+    const sql = `
+      SELECT *
+      FROM (
+          SELECT 
+              ROW_NUMBER() OVER (
+                  ORDER BY 
+                      TGFPRO.CODPROD DESC,
+                      CASE
+                          WHEN TGFPRO.ESTMIN IS NOT NULL AND TGFPRO.ESTMAX IS NOT NULL AND ISNULL(TGFEST.ESTOQUE,0) > TGFPRO.ESTMIN THEN 1
+                          WHEN TGFPRO.ESTMIN IS NOT NULL AND ISNULL(TGFEST.ESTOQUE,0) < TGFPRO.ESTMIN THEN 0
+                          WHEN TGFPRO.ESTMIN IS NOT NULL AND TGFPRO.ESTMAX IS NOT NULL AND ISNULL(TGFEST.ESTOQUE,0) BETWEEN TGFPRO.ESTMIN AND TGFPRO.ESTMAX THEN 1
+                          WHEN TGFPRO.ESTMIN = 0 AND TGFPRO.ESTMAX = 0 THEN 3
+                          WHEN TGFPRO.ESTMIN IS NULL OR TGFPRO.ESTMAX IS NULL THEN 4
+                          ELSE 5
+                      END,
+                      (TGFPRO.ESTMIN - ISNULL(TGFEST.ESTOQUE,0))
+              ) AS RN,
+
+              -- Produto
+              TGFPRO.CODPROD,
+              TGFPRO.DESCRPROD,
+              TGFPRO.MARCA,
+              TGFPRO.REFERENCIA,
+              TGFPRO.CARACTERISTICAS,
+              TGFPRO.CODGRUPOPROD,
+              TGFGRU.DESCRGRUPOPROD,
+              TGFPRO.LOCALIZACAO, 
+              TGFPRO.ESTMIN, 
+              TGFPRO.ESTMAX,
+
+              -- Estoque por local
+              TGFEST.CODEMP, 
+              TGFEST.CODLOCAL,
+              TGFLOC.DESCRLOCAL, 
+              TGFEST.CONTROLE, 
+              ISNULL(TGFEST.ESTOQUE,0) AS ESTOQUE,
+              ISNULL(TGFEST.RESERVADO,0) AS RESERVADO, 
+              (ISNULL(TGFEST.ESTOQUE,0) - ISNULL(TGFEST.RESERVADO,0)) AS DISPONIVEL,
+
+              -- Necessidade de compra
+              CASE
+                  WHEN ISNULL(TGFPRO.ESTMAX, 0) - ISNULL(TGFEST.ESTOQUE,0) < 0 THEN 0
+                  ELSE ISNULL(TGFPRO.ESTMAX, 0) - ISNULL(TGFEST.ESTOQUE,0)
+              END AS Necessidade_de_compra,
+
+              -- Status do estoque
+              CASE
+                  WHEN TGFPRO.ESTMIN IS NULL OR TGFPRO.ESTMAX IS NULL THEN 'Dados faltando'
+                  WHEN TGFPRO.ESTMIN = 0 AND TGFPRO.ESTMAX = 0 THEN 'Sem controle'
+                  WHEN (ISNULL(TGFEST.ESTOQUE,0) - TGFPRO.ESTMIN) < 0 THEN 'Disponível negativo'
+                  WHEN ISNULL(TGFEST.ESTOQUE,0) < TGFPRO.ESTMIN THEN 'Abaixo do mínimo'
+                  WHEN ISNULL(TGFEST.ESTOQUE,0) BETWEEN TGFPRO.ESTMIN AND TGFPRO.ESTMAX THEN 'Dentro da faixa'
+                  WHEN ISNULL(TGFEST.ESTOQUE,0) > TGFPRO.ESTMAX THEN 'Acima do máximo'
+                  ELSE 'Outros'
+              END AS STATUS_ESTOQUE,
+
+              TGFPRO.CODUSU,
+              (SELECT NOMEUSU FROM TSIUSU WHERE CODUSU = TGFPRO.CODUSU) AS NOMEUSU
+
+          FROM TGFPRO
+          LEFT JOIN TGFEST ON TGFEST.CODPROD = TGFPRO.CODPROD
+          LEFT JOIN TGFLOC ON TGFLOC.CODLOCAL = TGFEST.CODLOCAL
+          JOIN TGFGRU ON TGFGRU.CODGRUPOPROD = TGFPRO.CODGRUPOPROD
+          
+          WHERE 1=1
+          ${where}
+      ) AS QRY
+      WHERE 1=1
+      ${orderBy}
+      OFFSET ${offset} ROWS
+      FETCH NEXT ${limit} ROWS ONLY
+    `;
+
+    const countSql = `
+      SELECT COUNT(*) as count
+      FROM TGFPRO
+      LEFT JOIN TGFEST ON TGFEST.CODPROD = TGFPRO.CODPROD
+      LEFT JOIN TGFLOC ON TGFLOC.CODLOCAL = TGFEST.CODLOCAL
+      JOIN TGFGRU ON TGFGRU.CODGRUPOPROD = TGFPRO.CODGRUPOPROD
+      WHERE 1=1
+      ${where}
+    `;
+
+    const [entities, totalResult] = await Promise.all([
+      this.repository.query(sql, params),
+      this.repository.query(countSql, params),
+    ]);
+
+    const total = totalResult[0].count;
+    const lastPage = Math.ceil(total / limit);
+    const hasMore = page < lastPage;
+
+    const entitiesWithTrimmedStrings = entities.map((entity) => ({
+      RN: entity.RN,
+      CODPROD: entity.CODPROD,
+      DESCRPROD: entity.DESCRPROD ? trim(entity.DESCRPROD) : null,
+      CODGRUPOPROD: entity.CODGRUPOPROD,
+      DESCRGRUPOPROD: entity.DESCRGRUPOPROD
+        ? trim(entity.DESCRGRUPOPROD)
+        : null,
+      MARCA: entity.MARCA ? trim(entity.MARCA) : null,
+      REFERENCIA: entity.REFERENCIA ? trim(entity.REFERENCIA) : null,
+      CARACTERISTICAS: entity.CARACTERISTICAS
+        ? trim(entity.CARACTERISTICAS)
+        : null,
+      STATUS_ESTOQUE: entity.STATUS_ESTOQUE
+        ? trim(entity.STATUS_ESTOQUE)
+        : null,
+      ESTOQUE: entity.ESTOQUE,
+      ESTMIN: entity.ESTMIN,
+      ESTMAX: entity.ESTMAX,
+      DISPONIVEL: entity.DISPONIVEL,
+      RESERVADO: entity.RESERVADO,
+      Necessidade_de_compra: entity.Necessidade_de_compra,
+      CODEMP: entity.CODEMP,
+      CODLOCAL: entity.CODLOCAL,
+      DESCRLOCAL: entity.DESCRLOCAL ? trim(entity.DESCRLOCAL) : null,
+      LOCALIZACAO: entity.LOCALIZACAO,
+      CONTROLE: entity.CONTROLE ? trim(entity.CONTROLE) : null,
+      CODUSU: entity.CODUSU,
+      NOMEUSU: entity.NOMEUSU ? trim(entity.NOMEUSU) : null,
+    }));
+
+    return {
+      data: entitiesWithTrimmedStrings,
+      meta: {
+        total,
+        lastPage,
+        currentPage: page,
+        perPage: limit,
+        prev: page > 1 ? page - 1 : null,
+        next: hasMore ? page + 1 : null,
+        hasMore,
+      },
+    };
+  }
+
+  async update(
+    codprod: number,
+    updateDto: UpdateTgfproDto,
+  ): Promise<Tgfpro | null> {
+    const entity = await this.repository.findOne({
+      where: { codprod },
+    });
+
+    if (!entity) {
+      return null;
+    }
+
+    Object.assign(entity, updateDto);
+    const updatedEntity = await this.repository.save(entity);
+    return TgfproMapper.toDomain(updatedEntity);
+  }
+
+  async remove(codprod: number): Promise<void> {
+    await this.repository.delete(codprod);
+  }
+}

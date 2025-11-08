@@ -73,29 +73,14 @@
         }
       }
     },
-    "/notifications": {
+    "/sankhya/raw-queries": {
       "post": {
-        "summary": "Create a new notification",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Notification"
-              }
-            }
+        "summary": "Execute a raw SQL query on Sankhya SQL Server",
+        "security": [
+          {
+            "bearerAuth": []
           }
-        },
-        "responses": {
-          "200": {
-            "description": "Notification created"
-          }
-        }
-      }
-    },
-    "/email/send": {
-      "post": {
-        "summary": "Send an email",
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -103,23 +88,41 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "to": {
-                    "type": "string"
-                  },
-                  "subject": {
-                    "type": "string"
-                  },
-                  "body": {
-                    "type": "string"
+                  "query": {
+                    "type": "string",
+                    "description": "The raw SQL SELECT query to execute."
                   }
-                }
+                },
+                "required": ["query"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Email sent"
+            "description": "Query executed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Query is missing"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "403": {
+            "description": "Forbidden - Only SELECT queries are allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -158,6 +161,13 @@
             "type": "integer"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

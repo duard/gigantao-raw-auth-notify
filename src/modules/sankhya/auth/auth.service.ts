@@ -10,6 +10,7 @@ import { getUserConfigurations } from '../tsicfg/tsicfg.service' // Import getUs
 import { getPartnerDetails } from '../tgfpar/tgfpar.service' // Import getPartnerDetails
 import { getEmployeeDetails } from '../tfpfun/tfpfun.service' // Import getEmployeeDetails
 import { getAllUserPermissions } from '../tddper/tddper.service' // Import getAllUserPermissions
+import { getGroupDetails, SankhyaGroupDetails } from '../tsigru/tsigru.service' // Import getGroupDetails and SankhyaGroupDetails
 import { CompactSankhyaUser } from './auth.types' // Import CompactSankhyaUser
 
 // Tipagem para usuário Sankhya (basic, will be replaced by CompactSankhyaUser in return)
@@ -91,6 +92,7 @@ export async function login(username: string, password: string): Promise<{ token
   let userDetails: SankhyaUserDetails | undefined;
   let userGroups: SankhyaUserGroup[] = [];
   let userPermissions: string[] = [];
+  let detailedGroups: SankhyaGroupDetails[] = [];
 
   try {
     userDetails = await getUserDetails(basicUser.CODUSU);
@@ -102,6 +104,18 @@ export async function login(username: string, password: string): Promise<{ token
 
     userGroups = await getUserGroups(basicUser.CODUSU);
     logger.info('Sankhya User Groups after login:', { codUsu: basicUser.CODUSU, groups: userGroups });
+
+    // Fetch detailed group information
+    for (const group of userGroups) {
+      const groupDetails = await getGroupDetails(group.CODGRUPO);
+      if (groupDetails) {
+        detailedGroups.push(groupDetails);
+      } else {
+        logger.warn('Sankhya Group Details not found for CODGRUPO', { codUsu: basicUser.CODUSU, codGrupo: group.CODGRUPO });
+      }
+    }
+    logger.info('Sankhya Detailed Groups fetched:', { codUsu: basicUser.CODUSU, detailedGroupsCount: detailedGroups.length });
+
 
     // Fetch Partner Details if CODPARC exists
     if (userDetails.CODPARC) {
@@ -153,7 +167,7 @@ export async function login(username: string, password: string): Promise<{ token
     partnerDetails: userDetails.partnerDetails,
     employeeDetails: userDetails.employeeDetails,
     permissions: userPermissions,
-    groups: userGroups.map(group => group.CODGRUPO),
+    groups: detailedGroups, // Now contains detailed group objects
   };
 
   return { token, sessionId: sessionResult.insertId, user: compactedUser }

@@ -1,6 +1,7 @@
 // src/modules/sankhya/auth/auth.types.ts
 import { SankhyaPartnerDetails } from '../tgfpar/tgfpar.types';
 import { SankhyaEmployeeDetails } from '../tfpfun/tfpfun.types';
+import { SankhyaGroupDetails } from '../tsigru/tsigru.types'; // Import SankhyaGroupDetails
 
 export interface CompactSankhyaUser {
   CODUSU: number;
@@ -14,5 +15,5 @@ export interface CompactSankhyaUser {
   partnerDetails?: SankhyaPartnerDetails;
   employeeDetails?: SankhyaEmployeeDetails;
   permissions: string[]; // List of IDACESSO strings
-  groups: number[]; // List of CODGRUPO numbers
+  groups: SankhyaGroupDetails[]; // List of SankhyaGroupDetails objects
 }

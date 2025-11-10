@@ -1,5 +1,5 @@
 // src/modules/sankhya/tgfpar/tgfpar.types.ts
-import { SankhyaAddress } from '../../shared/sankhya.address.types'; // Import SankhyaAddress
+import { SankhyaAddress } from '../shared/sankhya.address.types'; // Import SankhyaAddress
 
 export interface SankhyaPartnerDetails {
   CODPARC: number;

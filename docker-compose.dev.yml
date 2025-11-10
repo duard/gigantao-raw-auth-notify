@@ -1,3 +1,12 @@
+networks:
+  default:
+    driver: bridge
+  # coolify:
+  #   external: true # Indicates that the 'coolify' network already exists (created by Coolify)
+
+volumes:
+  mysql_data:
+
 services:
   api:
     build:
@@ -7,7 +16,7 @@ services:
         MY_UID: ${MY_UID:-1001}
         MY_GID: ${MY_GID:-1001}
     ports:
-      - "0.0.0.0:3102:3102" # Assuming the app runs on port 3102 for development
+      - "0.0.0.0:3103:3103" # API runs on port 3103 internally
     user: root
     env_file:
       - .env.development
@@ -15,12 +24,27 @@ services:
       - NODE_ENV=development
       - FORCE_COLOR=3
       - TZ=America/Sao_Paulo
+      - MYSQL_HOST=mysql # Ensure API knows MySQL host
+    depends_on:
+      - mysql
+    command: sh -c "./wait-for-it.sh mysql:3306 -- npm start" # Use npm start as per Dockerfile CMD
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./wait-for-it.sh:/app/wait-for-it.sh  # Copying script into the container
     networks:
       - default
-      - coolify # Connects to the external Coolify network for Redis and MySQL
+      # - coolify # Connects to the external Coolify network for Redis and MySQL
 
-networks:
-  default:
-    driver: bridge
-  coolify:
-    external: true # Indicates that the 'coolify' network already exists (created by Coolify)
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: gigantao_auth_notify_dev
+      TZ: America/Sao_Paulo
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql

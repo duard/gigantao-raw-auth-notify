@@ -181,6 +181,7 @@ export async function login(username: string, password: string): Promise<{ token
     CODPARC: userDetails.CODPARC,
     AD_CARGO: userDetails.AD_CARGO,
     AD_FUNCAO: userDetails.AD_FUNCAO,
+    userAddress: userDetails.partnerDetails?.address, // Populate userAddress from partnerDetails if available
     partnerDetails: userDetails.partnerDetails,
     employeeDetails: userDetails.employeeDetails,
     companyDetails: userDetails.companyDetails,

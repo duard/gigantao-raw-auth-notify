@@ -6,25 +6,12 @@ import { SankhyaCompanyDetails } from './tsiemp.types'
 export async function getCompanyDetails(codEmp: number): Promise<SankhyaCompanyDetails | undefined> {
   const query = `
     SELECT
-      TSIEMP.CODEMP,
-      TSIEMP.NOMEEMP,
-      TSIEMP.RAZAOSOCIAL,
-      TSIEMP.CGC,
-      TSIEMP.INSCEST,
-      TSIEMP.INSCRM,
-      TSIEMP.TELEFONE,
-      TSIEMP.EMAIL,
-      TSIEMP.CEP,
-      TSIEMP.LOGRADOURO,
-      TSIEMP.NUMERO,
-      TSIEMP.COMPLEMENTO,
-      TSIEMP.BAIRRO,
-      TSIEMP.CODCID,
-      TSICID.NOMECID,
-      TSICID.UF
+      CODEMP,
+      NOMEEMP,
+      RAZAOSOCIAL,
+      CGC
     FROM TSIEMP
-    LEFT JOIN TSICID ON TSIEMP.CODCID = TSICID.CODCID
-    WHERE TSIEMP.CODEMP = @codEmp
+    WHERE CODEMP = @codEmp
   `;
   try {
     const pool = await getSqlServer();

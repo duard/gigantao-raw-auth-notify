@@ -2,10 +2,10 @@ import { getSqlServer } from '../../../config/sqlserver';
 import logger from '../../../utils/logger';
 import { SankhyaUserPermission } from './tddper.types';
 
-export async function getUserPermissions(codUsu: number): Promise<SankhyaUserPermission[]> {
+export async function getUserPermissions(codUsu: number): Promise<any[]> {
   const query = `
     SELECT
-      NOMEMODULO
+      *
     FROM TDDPER
     WHERE CODUSU = @codUsu
   `;
@@ -14,8 +14,8 @@ export async function getUserPermissions(codUsu: number): Promise<SankhyaUserPer
     const request = pool.request();
     request.input('codUsu', codUsu);
     const result = await request.query(query);
-    logger.debug('getUserPermissions executed', { codUsu, resultCount: result.recordset.length });
-    return result.recordset as SankhyaUserPermission[];
+    logger.debug('getUserPermissions executed', { codUsu, resultCount: result.recordset.length, recordset: result.recordset });
+    return result.recordset;
   } catch (error: any) {
     logger.error('Error in getUserPermissions', error, { codUsu });
     throw error;

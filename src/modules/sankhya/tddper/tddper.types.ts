@@ -1,3 +1,3 @@
 export interface SankhyaUserPermission {
-  NOMEMODULO: string;
+  IDACESSO: string;
 }

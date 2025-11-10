@@ -1,11 +1,12 @@
-import jwt from 'jsonwebtoken'
-import { getMysqlPool } from '../../../config/mysql'
-import { getSqlServer } from '../../../config/sqlserver'
-import { createNotification } from '../../../services/notification.service'
+import jwt from 'jsonwebtoken';
+import { getMysqlPool } from '../../../config/mysql';
+import { getSqlServer } from '../../../config/sqlserver';
+import { createNotification } from '../../../services/notification.service';
 import logger from '../../../utils/logger'; // Import the logger
-import { hashString } from '../../../utils/sankhya/pass'
+import { hashString } from '../../../utils/sankhya/pass';
 import { getEmployeeDetails } from '../tfpfun/tfpfun.service'; // Import getEmployeeDetails
 import { getPartnerDetails } from '../tgfpar/tgfpar.service'; // Import getPartnerDetails
+import { getAllUserPermissions } from '../tddper/tddper.service'; // Import getAllUserPermissions
 import { getUserGroups } from '../tsigpu/tsigpu.service'; // Import getUserGroups
 import { SankhyaUserGroup } from '../tsigpu/tsigpu.types'; // Import SankhyaUserGroup from its types file
 import { getUserDetails } from '../tsiusu/tsiusu.service'; // Import getUserDetails
@@ -13,7 +14,6 @@ import { SankhyaUserDetails } from '../tsiusu/tsiusu.types'; // Import SankhyaUs
 
 import { getCompanyDetails } from '../tsiemp/tsiemp.service'; // Import getCompanyDetails
 import { getGroupDetails } from '../tsigru/tsigru.service'; // Import getGroupDetails
-import { getUserPermissions } from '../tddper/tddper.service'; // Import getUserPermissions
 import { SankhyaGroupDetails } from '../tsigru/tsigru.types'; // Import SankhyaGroupDetails
 import { CompactSankhyaUser } from './auth.types'; // Import CompactSankhyaUser
 
@@ -156,9 +156,9 @@ export async function login(username: string, password: string): Promise<{ token
       }
     }
 
-    // Fetch all permissions for the user
-    const rawPermissions = await getUserPermissions(basicUser.CODUSU);
-    userPermissions = rawPermissions.map(p => p.NOMEMODULO);
+    // Fetch all permissions for the user and their groups
+    const groupCods = userGroups.map(group => group.CODGRUPO);
+    userPermissions = await getAllUserPermissions(basicUser.CODUSU, groupCods);
     logger.info('Sankhya User Permissions fetched:', { codUsu: basicUser.CODUSU, permissionsCount: userPermissions.length });
 
     // Example: Log a specific configuration if needed

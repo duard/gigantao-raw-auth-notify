@@ -1,10 +1,11 @@
 // src/modules/sankhya/auth/auth.types.ts
-import { SankhyaPartnerDetails } from '../tgfpar/tgfpar.types';
-import { SankhyaEmployeeDetails } from '../tfpfun/tfpfun.types';
-import { SankhyaGroupDetails } from '../tsigru/tsigru.types'; // Import SankhyaGroupDetails
-import { SankhyaCompanyDetails } from '../tsiemp/tsiemp.types'; // Import SankhyaCompanyDetails
 import { SankhyaAddress } from '../shared/sankhya.address.types'; // Import SankhyaAddress
+import { SankhyaUserPermission } from '../tddper/tddper.types';
+import { SankhyaEmployeeDetails } from '../tfpfun/tfpfun.types';
+import { SankhyaPartnerDetails } from '../tgfpar/tgfpar.types';
 import { SankhyaPersonDetails } from '../tgfpes/tgfpes.types'; // Import SankhyaPersonDetails
+import { SankhyaCompanyDetails } from '../tsiemp/tsiemp.types'; // Import SankhyaCompanyDetails
+import { SankhyaGroupDetails } from '../tsigru/tsigru.types'; // Import SankhyaGroupDetails
 
 export interface CompactSankhyaUser {
   CODUSU: number;

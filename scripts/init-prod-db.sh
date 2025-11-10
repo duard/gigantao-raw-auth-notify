@@ -56,7 +56,7 @@ echo "Master User: $MYSQL_MASTER_USER"
 
 docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" \
   mysql:8 \
-  mysql -4 -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" < docker/mysql/init-prod-root.sql
+  mysql -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" < docker/mysql/init-prod-root.sql
 
 if [ $? -ne 0 ]; then
     echo "Error: Stage 1 (master initialization) failed."
@@ -73,7 +73,7 @@ echo "App Database: $MYSQL_APP_DATABASE"
 
 docker run --rm -e MYSQL_PWD="$MYSQL_APP_PASSWORD" \
   mysql:8 \
-  mysql -4 -h "$MYSQL_APP_HOST" -P "$MYSQL_APP_PORT" -u "$MYSQL_APP_USER" "$MYSQL_APP_DATABASE" < docker/mysql/init-prod-app.sql
+  mysql -h "$MYSQL_APP_HOST" -P "$MYSQL_APP_PORT" -u "$MYSQL_APP_USER" "$MYSQL_APP_DATABASE" < docker/mysql/init-prod-app.sql
 
 if [ $? -eq 0 ]; then
     echo "Production database initialized successfully!"

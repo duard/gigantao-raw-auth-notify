@@ -8,7 +8,8 @@ export async function getEmployeeDetails(codEmp: number, codFunc: number): Promi
     SELECT
       CODFUNC,
       NOMEFUNC,
-      CPF
+      CPF,
+      PERTENCEDP
     FROM TFPFUN
     WHERE CODEMP = @codEmp AND CODFUNC = @codFunc
   `;

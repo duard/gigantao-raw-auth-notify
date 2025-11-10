@@ -4,7 +4,10 @@ import { SankhyaEmployeeDetails } from '../tfpfun/tfpfun.types'
 
 export interface SankhyaUserDetails {
   CODUSU: number;
-  NOMEUSU: string; // Added NOMEUSU
+  NOMEUSU?: string; // Added NOMEUSU
+  EMAIL?: string; // Added EMAIL
+  INTERNO?: string; // Added INTERNO
+  CPF?: string; // Added CPF
   ABREGAVETA?: string;
   ACCOUNTDHEXPIRA?: Date;
   ACCOUNTEMAIL?: string;

@@ -11,11 +11,7 @@ CREATE USER IF NOT EXISTS 'auth_api'@'%' IDENTIFIED WITH caching_sha2_password B
 
 -- Grant privileges to the API user
 GRANT ALL PRIVILEGES ON `gigantao_auth_notify_prod`.* TO 'auth_api'@'%';
-
--- (Optional) Explicit host grants for environments with static IPs
-GRANT ALL PRIVILEGES ON `gigantao_auth_notify_prod`.* TO 'auth_api'@'10.0.1.6';
+GRANT ALL PRIVILEGES ON `gigantao_auth_notify_prod`.* TO 'auth_api'@'::1';
 GRANT ALL PRIVILEGES ON `gigantao_auth_notify_prod`.* TO 'auth_api'@'fd27:1fa:ace::6';
-GRANT ALL PRIVILEGES ON `gigantao_auth_notify_prod`.* TO 'auth_api'@'192.168.1.9';
 
--- Apply the changes
 FLUSH PRIVILEGES;

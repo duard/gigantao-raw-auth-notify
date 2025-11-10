@@ -26,6 +26,6 @@ echo "Building production Docker image..."
 docker compose -f docker-compose.prod.yml --env-file .env.production build
 
 echo "Starting production services..."
-docker compose -f docker-compose.prod.yml --env-file .env.production up -d --remove-orphans api
+docker compose -f docker-compose.prod.yml --env-file .env.production up --remove-orphans api
 
 echo "Production services started."

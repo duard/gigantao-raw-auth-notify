@@ -3,7 +3,8 @@
 # ---------------------------
 FROM node:20-alpine AS base
 
-RUN apk add --no-cache bash tzdata iputils-ping \
+# Instala pacotes essenciais + mysql-client
+RUN apk add --no-cache bash tzdata iputils-ping mysql-client \
     && cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
     && echo "America/Sao_Paulo" > /etc/timezone
 

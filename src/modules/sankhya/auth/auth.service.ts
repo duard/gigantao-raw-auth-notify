@@ -13,7 +13,7 @@ import { SankhyaUserDetails } from '../tsiusu/tsiusu.types'; // Import SankhyaUs
 
 import { getCompanyDetails } from '../tsiemp/tsiemp.service'; // Import getCompanyDetails
 import { getGroupDetails } from '../tsigru/tsigru.service'; // Import getGroupDetails
-import { getAllUserPermissions } from '../tsiacs/tsiacs.service';
+import { getUserPermissions } from '../tddper/tddper.service'; // Import getUserPermissions
 import { SankhyaGroupDetails } from '../tsigru/tsigru.types'; // Import SankhyaGroupDetails
 import { CompactSankhyaUser } from './auth.types'; // Import CompactSankhyaUser
 
@@ -156,9 +156,9 @@ export async function login(username: string, password: string): Promise<{ token
       }
     }
 
-    // Fetch all permissions for the user and their groups
-    const groupCods = userGroups.map(group => group.CODGRUPO);
-    userPermissions = await getAllUserPermissions(basicUser.CODUSU, groupCods);
+    // Fetch all permissions for the user
+    const rawPermissions = await getUserPermissions(basicUser.CODUSU);
+    userPermissions = rawPermissions.map(p => p.NOMEMODULO);
     logger.info('Sankhya User Permissions fetched:', { codUsu: basicUser.CODUSU, permissionsCount: userPermissions.length });
 
     // Example: Log a specific configuration if needed

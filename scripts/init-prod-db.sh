@@ -1,54 +1,45 @@
 #!/bin/bash
 set -e
 
-# Variáveis do MySQL (externo Coolify)
-MYSQL_MASTER_URL="mysql://mysql:hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO@192.168.1.9:3306/default?ssl-mode=REQUIRED"
-MYSQL_APP_URL="mysql://auth_api:senha123@192.168.1.9:3306/gigantao_auth_notify_prod?ssl-mode=REQUIRED"
+# ------------------------------
+# Variáveis de conexão MySQL
+# ------------------------------
 
-# Parse master
-MYSQL_MASTER_USER=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
-MYSQL_MASTER_PASSWORD=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
-MYSQL_MASTER_HOST=$(echo $MYSQL_MASTER_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
-MYSQL_MASTER_PORT=$(echo $MYSQL_MASTER_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
+# Usuário root
+MYSQL_ROOT_USER="root"
+MYSQL_ROOT_PASSWORD="qDLIJoHcOa5wt5Zx5Zx5X9xwqEvdcyFU8DBg6LkqJLwzYayrtZ786PUnD9wvLHfJZh9"
+MYSQL_HOST="192.168.1.9"
+MYSQL_PORT="3306"
 
-# Parse app
-MYSQL_APP_USER=$(echo $MYSQL_APP_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
-MYSQL_APP_PASSWORD=$(echo $MYSQL_APP_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
-MYSQL_APP_HOST=$(echo $MYSQL_APP_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
-MYSQL_APP_PORT=$(echo $MYSQL_APP_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
-MYSQL_APP_DATABASE=$(echo $MYSQL_APP_URL | sed -n 's/.*\/\([^?]*\).*/\1/p')
+# Usuário da aplicação
+MYSQL_APP_USER="auth_api"
+MYSQL_APP_PASSWORD="senha123"
+MYSQL_APP_DATABASE="gigantao_auth_notify_prod"
 
-echo "Conectando no MySQL externo do Coolify..."
+# Caminho do arquivo SQL para criar tabelas
+INIT_SQL_FILE="$(pwd)/docker/mysql/init-prod-app.sql"
 
-echo "Testando conexão com o banco de dados..."
-if docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \
-    mysql --connect-timeout=10 --ssl-mode=REQUIRED -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" -e "SELECT 1" > /dev/null; then
-    echo "Conexão com o banco de dados bem-sucedida."
-else
-    echo "Falha ao conectar no banco de dados. Verifique as configurações e a conectividade."
-    exit 1
-fi
+echo "Conectando como root no MySQL externo..."
+docker run --rm -e MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql:8 \
+    mysql --ssl-mode=REQUIRED -h "$MYSQL_HOST" -P "$MYSQL_PORT" -u "$MYSQL_ROOT_USER" -e "SELECT 1;" > /dev/null
+echo "Conexão como root OK!"
 
-# --- Cria DB e usuário ---
-echo "Criando banco de dados..."
-docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \
-    mysql --ssl-mode=REQUIRED -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" -e "CREATE DATABASE IF NOT EXISTS $MYSQL_APP_DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+# Criar usuário da aplicação (idempotente)
+echo "Criando usuário '$MYSQL_APP_USER' e dando todos os privilégios no banco '$MYSQL_APP_DATABASE'..."
+docker run --rm -e MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql:8 \
+    mysql --ssl-mode=REQUIRED -h "$MYSQL_HOST" -P "$MYSQL_PORT" -u "$MYSQL_ROOT_USER" -e "
+CREATE DATABASE IF NOT EXISTS $MYSQL_APP_DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS '$MYSQL_APP_USER'@'%' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_APP_PASSWORD';
+GRANT ALL PRIVILEGES ON $MYSQL_APP_DATABASE.* TO '$MYSQL_APP_USER'@'%';
+FLUSH PRIVILEGES;
+"
 
-echo "Criando usuário..."
-docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \
-    mysql --ssl-mode=REQUIRED -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" -e "CREATE USER IF NOT EXISTS '$MYSQL_APP_USER'@'%' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_APP_PASSWORD';"
+echo "Usuário criado e privilégios concedidos."
 
-echo "Concedendo privilégios..."
-docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \
-    mysql --ssl-mode=REQUIRED -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" -e "GRANT ALL PRIVILEGES ON $MYSQL_APP_DATABASE.* TO '$MYSQL_APP_USER'@'%';"
-
-echo "Atualizando privilégios..."
-docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \
-    mysql --ssl-mode=REQUIRED -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" -e "FLUSH PRIVILEGES;"
-
-# --- Cria tabelas ---
+# Criar tabelas usando o usuário da aplicação
+echo "Criando tabelas em '$MYSQL_APP_DATABASE'..."
 docker run --rm -e MYSQL_PWD="$MYSQL_APP_PASSWORD" -v $(pwd)/docker/mysql:/docker/mysql mysql:8 \
-    mysql --ssl-mode=REQUIRED -h "$MYSQL_APP_HOST" -P "$MYSQL_APP_PORT" -u "$MYSQL_APP_USER" "$MYSQL_APP_DATABASE" \
+    mysql --ssl-mode=REQUIRED -h "$MYSQL_HOST" -P "$MYSQL_PORT" -u "$MYSQL_APP_USER" "$MYSQL_APP_DATABASE" \
     < /docker/mysql/init-prod-app.sql
 
 echo "Banco de dados e tabelas criados com sucesso!"

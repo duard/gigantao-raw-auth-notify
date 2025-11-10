@@ -4,13 +4,16 @@ import { getSqlServer } from '../../../config/sqlserver'
 import { createNotification } from '../../../services/notification.service'
 import { hashString } from '../../../utils/sankhya/pass'
 import logger from '../../../utils/logger' // Import the logger
-import { getUserDetails, SankhyaUserDetails } from '../tsiusu/tsiusu.service' // Import getUserDetails and SankhyaUserDetails from its new location
-import { getUserGroups, SankhyaUserGroup } from '../tsigpu/tsigpu.service' // Import getUserGroups and SankhyaUserGroup from its new location
+import { getUserDetails } from '../tsiusu/tsiusu.service' // Import getUserDetails
+import { SankhyaUserDetails } from '../tsiusu/tsiusu.types' // Import SankhyaUserDetails from its types file
+import { getUserGroups } from '../tsigpu/tsigpu.service' // Import getUserGroups
+import { SankhyaUserGroup } from '../tsigpu/tsigpu.types' // Import SankhyaUserGroup from its types file
 import { getUserConfigurations } from '../tsicfg/tsicfg.service' // Import getUserConfigurations from its new location
 import { getPartnerDetails } from '../tgfpar/tgfpar.service' // Import getPartnerDetails
 import { getEmployeeDetails } from '../tfpfun/tfpfun.service' // Import getEmployeeDetails
 import { getAllUserPermissions } from '../tddper/tddper.service' // Import getAllUserPermissions
-import { getGroupDetails, SankhyaGroupDetails } from '../tsigru/tsigru.service' // Import getGroupDetails and SankhyaGroupDetails
+import { getGroupDetails } from '../tsigru/tsigru.service' // Import getGroupDetails
+import { SankhyaGroupDetails } from '../tsigru/tsigru.types' // Import SankhyaGroupDetails from its types file
 import { CompactSankhyaUser } from './auth.types' // Import CompactSankhyaUser
 
 // Tipagem para usuário Sankhya (basic, will be replaced by CompactSankhyaUser in return)
@@ -97,7 +100,7 @@ export async function login(username: string, password: string): Promise<{ token
   try {
     userDetails = await getUserDetails(basicUser.CODUSU);
     if (!userDetails) {
-      logger.error('Sankhya User Details not found after login for CODUSU', null, { codUsu: basicUser.CODUSU });
+      logger.error('Sankhya User Details not found after login for CODUSU', undefined, { codUsu: basicUser.CODUSU }); // Changed null to undefined
       throw new Error('Detalhes do usuário Sankhya não encontrados.');
     }
     logger.info('Sankhya User Details after login:', { codUsu: basicUser.CODUSU, details: userDetails });

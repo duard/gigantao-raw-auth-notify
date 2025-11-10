@@ -6,7 +6,7 @@ import logger from '../../../utils/logger' // Import the logger
 const rawQueriesController = new Hono()
 
 rawQueriesController.post('/', jwtMiddleware, async (c) => {
-  const user = c.get('user') // Get user from context set by jwtMiddleware
+  const user = c.get('user') // User type is now inferred from hono.d.ts
   const { query } = await c.req.json()
 
   logger.info('Raw query attempt', { userId: user?.id, username: user?.username, query })

@@ -19,5 +19,11 @@ RUN pnpm install --frozen-lockfile
 # Copia código da aplicação
 COPY . .
 
+# Build the TypeScript application
+RUN pnpm run build
+
 # Expondo porta da API
 EXPOSE 3103
+
+# Comando para iniciar a aplicação
+CMD ["pnpm", "start"]

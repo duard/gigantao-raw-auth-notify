@@ -1,4 +1,4 @@
-import { mysqlPool } from '../config/mysql'
+import { getMysqlPool } from '../config/mysql'
 import { getIO } from '../socket'
 
 export type Notification = {
@@ -25,6 +25,7 @@ export async function createNotification(notification: Notification) {
     parent_id,
     root_id,
   } = notification
+  const mysqlPool = await getMysqlPool(); // Get the initialized MySQL pool
   const [result] = await mysqlPool.query(
     'INSERT INTO notifications (user_id, tenant_id, type, category, title, message, data, parent_id, root_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [
@@ -56,6 +57,7 @@ export async function registerNotification(
   content: string,
   userId?: number
 ) {
+  const mysqlPool = await getMysqlPool(); // Get the initialized MySQL pool
   const [result] = await mysqlPool.query(
     'INSERT INTO notifications (type, title, message, user_id, created_at) VALUES (?, ?, ?, ?, NOW())',
     [type, 'Notification', content, userId || null]

@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MY_UID: ${MY_UID:-1001}
+        MY_GID: ${MY_GID:-1001}
+    ports:
+      - "0.0.0.0:3102:3102" # Assuming the app runs on port 3102 for development
+    user: root
+    env_file:
+      - .env.development
+    environment:
+      - NODE_ENV=development
+      - FORCE_COLOR=3
+      - TZ=America/Sao_Paulo
+    networks:
+      - default
+      - coolify # Connects to the external Coolify network for Redis and MySQL
+
+networks:
+  default:
+    driver: bridge
+  coolify:
+    external: true # Indicates that the 'coolify' network already exists (created by Coolify)

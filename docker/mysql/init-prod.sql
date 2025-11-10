@@ -1,19 +1,5 @@
--- Criação da base de dados
-CREATE DATABASE IF NOT EXISTS `NotificationsDB_prod`;
-
--- Usuário dedicado para a API
-CREATE USER IF NOT EXISTS 'mysql'@'%' IDENTIFIED WITH caching_sha2_password BY 'hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO';
-GRANT ALL PRIVILEGES ON `NotificationsDB_prod`.* TO 'mysql'@'%';
-
--- Root (opcional)
-CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED WITH caching_sha2_password BY '12345';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-
-GRANT ALL PRIVILEGES ON `NotificationsDB_prod`.* TO 'mysql'@'%';
-FLUSH PRIVILEGES;
-
-
-FLUSH PRIVILEGES;
+-- Switch to the correct database
+USE `NotificationsDB_prod`;
 
 -- Tabelas
 CREATE TABLE IF NOT EXISTS notifications (

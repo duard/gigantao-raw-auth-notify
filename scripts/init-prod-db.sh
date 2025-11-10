@@ -2,8 +2,8 @@
 set -e
 
 # Variáveis do MySQL (externo Coolify)
-MYSQL_MASTER_URL="mysql://mysql:hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO@mksck0o8sgok0kscssc4gk4w:3306/default?ssl-mode=REQUIRED"
-MYSQL_APP_URL="mysql://auth_api:senha123@mksck0o8sgok0kscssc4gk4w:3306/gigantao_auth_notify_prod?ssl-mode=REQUIRED"
+MYSQL_MASTER_URL="mysql://mysql:hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO@192.168.1.9:3306/default?ssl-mode=REQUIRED"
+MYSQL_APP_URL="mysql://auth_api:senha123@192.168.1.9:3306/gigantao_auth_notify_prod?ssl-mode=REQUIRED"
 
 # Parse master
 MYSQL_MASTER_USER=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
@@ -19,6 +19,15 @@ MYSQL_APP_PORT=$(echo $MYSQL_APP_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
 MYSQL_APP_DATABASE=$(echo $MYSQL_APP_URL | sed -n 's/.*\/\([^?]*\).*/\1/p')
 
 echo "Conectando no MySQL externo do Coolify..."
+
+echo "Testando conexão com o banco de dados..."
+if docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \
+    mysql --connect-timeout=10 --ssl-mode=REQUIRED -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" -e "SELECT 1" > /dev/null; then
+    echo "Conexão com o banco de dados bem-sucedida."
+else
+    echo "Falha ao conectar no banco de dados. Verifique as configurações e a conectividade."
+    exit 1
+fi
 
 # --- Cria DB e usuário ---
 docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \

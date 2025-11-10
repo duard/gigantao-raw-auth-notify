@@ -1,5 +1,5 @@
 -- Switch to the correct database
-USE `NotificationsDB_prod`;
+USE `gigantao_auth_notify_prod`;
 
 -- Tabelas
 CREATE TABLE IF NOT EXISTS notifications (

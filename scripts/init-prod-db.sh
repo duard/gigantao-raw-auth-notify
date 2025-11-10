@@ -8,20 +8,25 @@ else
     exit 1
 fi
 
-# --- Parse MYSQL_ROOT_URL for root connection ---
-# Example: mysql://root:root_password@host:port/
-MYSQL_ROOT_USER=$(echo $MYSQL_ROOT_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
-MYSQL_ROOT_PASSWORD=$(echo $MYSQL_ROOT_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
-MYSQL_ROOT_HOST=$(echo $MYSQL_ROOT_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
-MYSQL_ROOT_PORT=$(echo $MYSQL_ROOT_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
+# --- Parse MYSQL_MASTER_URL for master connection (to create DB and app user) ---
+# Example: mysql://master_user:master_password@host:port/
+MYSQL_MASTER_USER=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
+MYSQL_MASTER_PASSWORD=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
+MYSQL_MASTER_HOST=$(echo $MYSQL_MASTER_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
+MYSQL_MASTER_PORT=$(echo $MYSQL_MASTER_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
 
-# Fallback for root user/password
-if [ -z "$MYSQL_ROOT_USER" ]; then
-    MYSQL_ROOT_USER="root"
+# Fallback for master user/password (should be provided by user)
+if [ -z "$MYSQL_MASTER_USER" ]; then
+    echo "Error: MYSQL_MASTER_USER not found in MYSQL_MASTER_URL. Please check .env.production."
+    exit 1
 fi
-# MYSQL_ROOT_PASSWORD should always be provided by the user for root access
+if [ -z "$MYSQL_MASTER_PASSWORD" ]; then
+    echo "Error: MYSQL_MASTER_PASSWORD not found in MYSQL_MASTER_URL. Please check .env.production."
+    exit 1
+fi
 
-# --- Parse MYSQL_URL for application user connection ---
+
+# --- Parse MYSQL_URL for application user connection (to create tables) ---
 # Example: mysql://user:password@host:port/database?ssl-mode=REQUIRED
 MYSQL_APP_USER=$(echo $MYSQL_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
 MYSQL_APP_PASSWORD=$(echo $MYSQL_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
@@ -31,29 +36,33 @@ MYSQL_APP_DATABASE=$(echo $MYSQL_URL | sed -n 's/.*\/\([^?]*\).*/\1/p')
 
 # Fallback for app user/password
 if [ -z "$MYSQL_APP_USER" ]; then
-    MYSQL_APP_USER="mysql"
+    MYSQL_APP_USER="auth_api"
 fi
 if [ -z "$MYSQL_APP_PASSWORD" ]; then
-    MYSQL_APP_PASSWORD="hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO"
+    MYSQL_APP_PASSWORD="senha123"
 fi
+if [ -z "$MYSQL_APP_DATABASE" ]; then
+    MYSQL_APP_DATABASE="gigantao_auth_notify_prod"
+fi
+
 
 echo "Attempting to initialize production database..."
 
-# --- Stage 1: Connect as root to create database and user ---
-echo "Stage 1: Creating database and user with root privileges..."
-echo "Root Host: $MYSQL_ROOT_HOST"
-echo "Root Port: $MYSQL_ROOT_PORT"
-echo "Root User: $MYSQL_ROOT_USER"
+# --- Stage 1: Connect as master user to create database and application user ---
+echo "Stage 1: Creating database and application user with master privileges..."
+echo "Master Host: $MYSQL_MASTER_HOST"
+echo "Master Port: $MYSQL_MASTER_PORT"
+echo "Master User: $MYSQL_MASTER_USER"
 
-docker run --rm -e MYSQL_PWD="$MYSQL_ROOT_PASSWORD" \
+docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" \
   mysql:8 \
-  mysql -h "$MYSQL_ROOT_HOST" -P "$MYSQL_ROOT_PORT" -u "$MYSQL_ROOT_USER" < docker/mysql/init-prod-root.sql
+  mysql -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" < docker/mysql/init-prod-root.sql
 
 if [ $? -ne 0 ]; then
-    echo "Error: Stage 1 (root initialization) failed."
+    echo "Error: Stage 1 (master initialization) failed."
     exit 1
 fi
-echo "Stage 1: Database and user created successfully."
+echo "Stage 1: Database and application user created successfully."
 
 # --- Stage 2: Connect as application user to create tables ---
 echo "Stage 2: Creating tables with application user privileges..."

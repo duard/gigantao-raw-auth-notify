@@ -1,6 +1,7 @@
 // src/modules/sankhya/tsiusu/tsiusu.types.ts
 import { SankhyaPartnerDetails } from '../tgfpar/tgfpar.types'
 import { SankhyaEmployeeDetails } from '../tfpfun/tfpfun.types'
+import { SankhyaCompanyDetails } from '../tsiemp/tsiemp.types' // Import SankhyaCompanyDetails
 
 export interface SankhyaUserDetails {
   CODUSU: number;
@@ -66,4 +67,5 @@ export interface SankhyaUserDetails {
   AD_FUNCAO?: string;
   partnerDetails?: SankhyaPartnerDetails; // Added partner details
   employeeDetails?: SankhyaEmployeeDetails; // Added employee details
+  companyDetails?: SankhyaCompanyDetails; // Added company details
 }

@@ -13,7 +13,8 @@ import { getPartnerDetails } from '../tgfpar/tgfpar.service' // Import getPartne
 import { getEmployeeDetails } from '../tfpfun/tfpfun.service' // Import getEmployeeDetails
 import { getAllUserPermissions } from '../tddper/tddper.service' // Import getAllUserPermissions
 import { getGroupDetails } from '../tsigru/tsigru.service' // Import getGroupDetails
-import { SankhyaGroupDetails } from '../tsigru/tsigru.types' // Import SankhyaGroupDetails from its types file
+import { SankhyaGroupDetails } from '../tsigru/tsigru.types' // Import SankhyaGroupDetails
+import { getCompanyDetails } from '../tsiemp/tsiemp.service' // Import getCompanyDetails
 import { CompactSankhyaUser } from './auth.types' // Import CompactSankhyaUser
 
 // Tipagem para usuário Sankhya (basic, will be replaced by CompactSankhyaUser in return)
@@ -142,6 +143,17 @@ export async function login(username: string, password: string): Promise<{ token
       }
     }
 
+    // Fetch Company Details if CODEMP exists
+    if (userDetails.CODEMP) {
+      const companyDetails = await getCompanyDetails(userDetails.CODEMP);
+      if (companyDetails) {
+        userDetails.companyDetails = companyDetails;
+        logger.info('Sankhya Company Details fetched.', { codUsu: basicUser.CODUSU, codEmp: userDetails.CODEMP, companyDetails });
+      } else {
+        logger.warn('Sankhya Company Details not found for CODEMP', { codUsu: basicUser.CODUSU, codEmp: userDetails.CODEMP });
+      }
+    }
+
     // Fetch all permissions for the user and their groups
     const groupCods = userGroups.map(group => group.CODGRUPO);
     userPermissions = await getAllUserPermissions(basicUser.CODUSU, groupCods);
@@ -162,6 +174,8 @@ export async function login(username: string, password: string): Promise<{ token
     CODUSU: userDetails.CODUSU,
     NOMEUSU: userDetails.NOMEUSU || basicUser.NOMEUSU, // Use basicUser.NOMEUSU if userDetails.NOMEUSU is null
     EMAIL: userDetails.ACCOUNTEMAIL || basicUser.EMAIL, // Use basicUser.EMAIL if userDetails.ACCOUNTEMAIL is null
+    INTERNO: userDetails.INTERNO,
+    CPF: userDetails.CPF,
     CODEMP: userDetails.CODEMP,
     CODFUNC: userDetails.CODFUNC,
     CODPARC: userDetails.CODPARC,
@@ -169,6 +183,7 @@ export async function login(username: string, password: string): Promise<{ token
     AD_FUNCAO: userDetails.AD_FUNCAO,
     partnerDetails: userDetails.partnerDetails,
     employeeDetails: userDetails.employeeDetails,
+    companyDetails: userDetails.companyDetails,
     permissions: userPermissions,
     groups: detailedGroups, // Now contains detailed group objects
   };

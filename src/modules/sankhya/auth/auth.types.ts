@@ -2,11 +2,14 @@
 import { SankhyaPartnerDetails } from '../tgfpar/tgfpar.types';
 import { SankhyaEmployeeDetails } from '../tfpfun/tfpfun.types';
 import { SankhyaGroupDetails } from '../tsigru/tsigru.types'; // Import SankhyaGroupDetails
+import { SankhyaCompanyDetails } from '../tsiemp/tsiemp.types'; // Import SankhyaCompanyDetails
 
 export interface CompactSankhyaUser {
   CODUSU: number;
   NOMEUSU: string;
   EMAIL: string;
+  INTERNO?: string; // Added INTERNO
+  CPF?: string; // Added CPF
   CODEMP?: number;
   CODFUNC?: number;
   CODPARC?: number;
@@ -14,6 +17,7 @@ export interface CompactSankhyaUser {
   AD_FUNCAO?: string;
   partnerDetails?: SankhyaPartnerDetails;
   employeeDetails?: SankhyaEmployeeDetails;
+  companyDetails?: SankhyaCompanyDetails; // Added company details
   permissions: string[]; // List of IDACESSO strings
   groups: SankhyaGroupDetails[]; // List of SankhyaGroupDetails objects
 }

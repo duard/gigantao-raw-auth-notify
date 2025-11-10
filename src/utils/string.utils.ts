@@ -12,7 +12,7 @@ export function trimObjectStrings(obj: any): any {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const value = obj[key];
       if (typeof value === 'string') {
-        newObj[key] = value.trimEnd();
+        newObj[key] = value.trim();
       } else if (typeof value === 'object') {
         newObj[key] = trimObjectStrings(value);
       } else {

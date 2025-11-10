@@ -4,6 +4,7 @@ import { getSqlServer } from '../../../config/sqlserver';
 import { createNotification } from '../../../services/notification.service';
 import logger from '../../../utils/logger'; // Import the logger
 import { hashString } from '../../../utils/sankhya/pass';
+import { trimObjectStrings } from '../../../utils/string.utils';
 import { getEmployeeDetails } from '../tfpfun/tfpfun.service'; // Import getEmployeeDetails
 import { getPartnerDetails } from '../tgfpar/tgfpar.service'; // Import getPartnerDetails
 import { getAllUserPermissions } from '../tddper/tddper.service'; // Import getAllUserPermissions
@@ -101,7 +102,7 @@ export async function login(username: string, password: string): Promise<{ token
   let detailedGroups: SankhyaGroupDetails[] = [];
 
   try {
-    userDetails = await getUserDetails(basicUser.CODUSU);
+    userDetails = trimObjectStrings(await getUserDetails(basicUser.CODUSU));
     if (!userDetails) {
       logger.error('Sankhya User Details not found after login for CODUSU', undefined, { codUsu: basicUser.CODUSU }); // Changed null to undefined
       throw new Error('Detalhes do usuário Sankhya não encontrados.');
@@ -125,7 +126,7 @@ export async function login(username: string, password: string): Promise<{ token
 
     // Fetch Partner Details if CODPARC exists
     if (userDetails.CODPARC) {
-      const partnerDetails = await getPartnerDetails(userDetails.CODPARC);
+      const partnerDetails = trimObjectStrings(await getPartnerDetails(userDetails.CODPARC));
       if (partnerDetails) {
         userDetails.partnerDetails = partnerDetails;
         logger.info('Sankhya Partner Details fetched.', { codUsu: basicUser.CODUSU, codParc: userDetails.CODPARC, partnerDetails });
@@ -136,7 +137,7 @@ export async function login(username: string, password: string): Promise<{ token
 
     // Fetch Employee Details if CODFUNC exists
     if (userDetails.CODFUNC && userDetails.CODEMP) { // Ensure CODEMP also exists
-      const employeeDetails = await getEmployeeDetails(userDetails.CODEMP, userDetails.CODFUNC); // Pass both CODEMP and CODFUNC
+      const employeeDetails = trimObjectStrings(await getEmployeeDetails(userDetails.CODEMP, userDetails.CODFUNC)); // Pass both CODEMP and CODFUNC
       if (employeeDetails) {
         userDetails.employeeDetails = employeeDetails;
         logger.info('Sankhya Employee Details fetched.', { codUsu: basicUser.CODUSU, codEmp: userDetails.CODEMP, codFunc: userDetails.CODFUNC, employeeDetails });
@@ -147,7 +148,7 @@ export async function login(username: string, password: string): Promise<{ token
 
     // Fetch Company Details if CODEMP exists
     if (userDetails.CODEMP) {
-      const companyDetails = await getCompanyDetails(userDetails.CODEMP);
+      const companyDetails = trimObjectStrings(await getCompanyDetails(userDetails.CODEMP));
       if (companyDetails) {
         userDetails.companyDetails = companyDetails;
         logger.info('Sankhya Company Details fetched.', { codUsu: basicUser.CODUSU, codEmp: userDetails.CODEMP, companyDetails });
@@ -173,22 +174,25 @@ export async function login(username: string, password: string): Promise<{ token
 
   // Construct the compacted user object
   const compactedUser: CompactSankhyaUser = {
-    CODUSU: userDetails.CODUSU,
-    NOMEUSU: userDetails.NOMEUSU || basicUser.NOMEUSU, // Use basicUser.NOMEUSU if userDetails.NOMEUSU is null
-    EMAIL: userDetails.ACCOUNTEMAIL || basicUser.EMAIL, // Use basicUser.EMAIL if userDetails.ACCOUNTEMAIL is null
-    INTERNO: userDetails.INTERNO,
-    CPF: userDetails.CPF,
-    CODEMP: userDetails.CODEMP,
-    CODFUNC: userDetails.CODFUNC,
-    CODPARC: userDetails.CODPARC,
-    AD_CARGO: userDetails.AD_CARGO,
-    AD_FUNCAO: userDetails.AD_FUNCAO,
-    userAddress: userDetails.partnerDetails?.address, // Populate userAddress from partnerDetails if available
+    id: userDetails.CODUSU,
+    name: userDetails.NOMEUSU || basicUser.NOMEUSU,
+    email: userDetails.ACCOUNTEMAIL || basicUser.EMAIL,
+    internalCode: userDetails.INTERNO,
+    cpf: userDetails.CPF,
+
+    companyId: userDetails.CODEMP,
+    employeeId: userDetails.CODFUNC,
+    partnerId: userDetails.CODPARC,
+    jobTitle: userDetails.AD_CARGO,
+    function: userDetails.AD_FUNCAO,
+
+    userAddress: userDetails.partnerDetails?.address,
     partnerDetails: userDetails.partnerDetails,
     employeeDetails: userDetails.employeeDetails,
     companyDetails: userDetails.companyDetails,
-    permissions: userPermissions,
-    groups: detailedGroups, // Now contains detailed group objects
+
+    permissionsDetails: userPermissions,
+    groupsDetails: detailedGroups,
   };
 
   return { token, sessionId: sessionResult.insertId, user: compactedUser }

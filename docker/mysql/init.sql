@@ -2,12 +2,16 @@
 CREATE DATABASE IF NOT EXISTS gigantao_auth_notify_dev;
 
 -- Usuário dedicado para a API
-CREATE USER IF NOT EXISTS 'auth_api'@'%' IDENTIFIED WITH mysql_native_password BY 'senha123';
+CREATE USER IF NOT EXISTS 'auth_api'@'%' IDENTIFIED WITH caching_sha2_password BY 'senha123';
 GRANT ALL PRIVILEGES ON gigantao_auth_notify_dev.* TO 'auth_api'@'%';
 
 -- Root (opcional)
-CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED WITH mysql_native_password BY '12345';
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED WITH caching_sha2_password BY '12345';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+
+GRANT ALL PRIVILEGES ON gigantao_auth_notify_dev.* TO 'auth_api'@'%';
+FLUSH PRIVILEGES;
+
 
 FLUSH PRIVILEGES;
 

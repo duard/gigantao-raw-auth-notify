@@ -1,49 +1,33 @@
 #!/bin/bash
-set -euo pipefail
-set -x
+set -e
 
-# Load .env.production
-if [ ! -f .env.production ]; then
-    echo "Error: .env.production not found!"
-    exit 1
-fi
+# Configuração do MySQL (ajuste conforme seu docker-compose)
+MYSQL_HOST="192.168.1.9"
+MYSQL_PORT="3306"
+MYSQL_ROOT_USER="mysql"
+MYSQL_ROOT_PASSWORD="hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO"
 
-export $(grep -v '^#' .env.production | xargs)
+# Usuário e database da aplicação
+APP_DB="gigantao_auth_notify_prod"
+APP_USER="auth_api"
+APP_PASSWORD="senha123"
 
-# --- Parse MASTER connection ---
-MYSQL_MASTER_USER=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
-MYSQL_MASTER_PASSWORD=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
-MYSQL_MASTER_HOST=$(echo $MYSQL_MASTER_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
-MYSQL_MASTER_PORT=$(echo $MYSQL_MASTER_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
+# Caminho do arquivo SQL (tabelas)
+SQL_FILE="./docker/mysql/init-prod-app.sql"
 
-# --- Parse APP connection ---
-MYSQL_APP_USER=$(echo $MYSQL_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
-MYSQL_APP_PASSWORD=$(echo $MYSQL_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
-MYSQL_APP_HOST=$(echo $MYSQL_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
-MYSQL_APP_PORT=$(echo $MYSQL_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
-MYSQL_APP_DATABASE=$(echo $MYSQL_URL | sed -n 's/.*\/\([^?]*\).*/\1/p')
+echo "Conectando no MySQL e inicializando banco de dados..."
 
-# --- Stage 1: Create database and user ---
-echo "Stage 1: Creating database and application user..."
-mysql --ssl-mode=REQUIRED \
-      -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" \
-      -u "$MYSQL_MASTER_USER" -p"$MYSQL_MASTER_PASSWORD" <<SQL
-CREATE DATABASE IF NOT EXISTS \`$MYSQL_APP_DATABASE\`
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-CREATE USER IF NOT EXISTS '$MYSQL_APP_USER'@'%' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_APP_PASSWORD';
-GRANT ALL PRIVILEGES ON \`$MYSQL_APP_DATABASE\`.* TO '$MYSQL_APP_USER'@'%';
-
+# 1️⃣ Criação de banco e usuários
+mysql --ssl-mode=REQUIRED -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD <<EOF
+CREATE DATABASE IF NOT EXISTS $APP_DB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS '$APP_USER'@'%' IDENTIFIED WITH caching_sha2_password BY '$APP_PASSWORD';
+GRANT ALL PRIVILEGES ON $APP_DB.* TO '$APP_USER'@'%';
 FLUSH PRIVILEGES;
-SQL
+EOF
 
-echo "Stage 1 completed."
+echo "Banco e usuário criados com sucesso."
 
-# --- Stage 2: Create tables ---
-echo "Stage 2: Creating tables..."
-mysql --ssl-mode=REQUIRED \
-      -h "$MYSQL_APP_HOST" -P "$MYSQL_APP_PORT" \
-      -u "$MYSQL_APP_USER" -p"$MYSQL_APP_PASSWORD" "$MYSQL_APP_DATABASE" < docker/mysql/init-prod-app.sql
+# 2️⃣ Criação das tabelas
+mysql --ssl-mode=REQUIRED -h $MYSQL_HOST -P $MYSQL_PORT -u $APP_USER -p$APP_PASSWORD $APP_DB < $SQL_FILE
 
-echo "Production database initialized successfully!"
+echo "Tabelas criadas com sucesso!"

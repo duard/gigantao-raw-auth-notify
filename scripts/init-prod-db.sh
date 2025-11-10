@@ -2,7 +2,7 @@
 set -e
 
 # Configuração do MySQL (ajuste conforme seu docker-compose)
-MYSQL_HOST="192.168.1.9"
+MYSQL_HOST="mksck0o8sgok0kscssc4gk4w"
 MYSQL_PORT="3306"
 MYSQL_ROOT_USER="mysql"
 MYSQL_ROOT_PASSWORD="hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO"

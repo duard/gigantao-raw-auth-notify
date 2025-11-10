@@ -14,8 +14,11 @@
   "dependencies": {
     "@hono/node-server": "^1.2.0",
     "@hono/swagger-ui": "^0.5.2",
+    "@types/crypto-js": "^4.2.2",
+    "axios": "^1.13.2",
     "bcrypt": "^5.1.1",
     "bullmq": "^4.13.3",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.3.1",
     "hono": "^3.11.11",
     "ioredis": "^5.8.2",
@@ -23,7 +26,9 @@
     "mssql": "^10.0.1",
     "mysql2": "^3.6.5",
     "nodemailer": "^6.9.7",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "xml2js": "^0.6.2",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -31,6 +36,7 @@
     "@types/mssql": "^9.1.3",
     "@types/node": "^20.10.4",
     "@types/nodemailer": "^6.4.14",
+    "@types/xml2js": "^0.4.14",
     "tsx": "^4.6.2",
     "typescript": "^5.3.3"
   }

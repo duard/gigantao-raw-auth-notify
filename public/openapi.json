@@ -5,7 +5,7 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/sankhya/login": {
+    "/auth/login": {
       "post": {
         "summary": "Authenticate a user",
         "requestBody": {

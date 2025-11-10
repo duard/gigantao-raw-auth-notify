@@ -1,12 +1,13 @@
-import { Hono } from 'hono'
-import authController from './auth/auth.controller' // Import auth controller
-import sankhyaController from './sankhya.controller' // Import the sankhya controller
-import rawQueriesRoutes from './raw-queries/raw-queries.routes' // Import raw queries routes
+import { Hono } from 'hono';
+import { getEmployeeDetails } from './tfpfun/tfpfun.service';
 
-const sankhyaRoutes = new Hono()
+const sankhyaRoutes = new Hono();
 
-sankhyaRoutes.route('/sankhya', authController) // Route auth controller under /sankhya
-sankhyaRoutes.route('/sankhya', sankhyaController) // Route sankhya controller under /sankhya
-sankhyaRoutes.route('/sankhya', rawQueriesRoutes) // Include raw queries routes under /sankhya
+sankhyaRoutes.get('/employee-details/:codEmp/:codFunc', async (c) => {
+  const codEmp = Number(c.req.param('codEmp'));
+  const codFunc = Number(c.req.param('codFunc'));
+  const employeeDetails = await getEmployeeDetails(codEmp, codFunc);
+  return c.json(employeeDetails);
+});
 
-export default sankhyaRoutes
+export default sankhyaRoutes;

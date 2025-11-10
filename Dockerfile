@@ -1,6 +1,6 @@
-# ---------------------------
+# --------------------------- 
 # Etapa base
-# ---------------------------
+# --------------------------- 
 FROM node:20-alpine AS base
 
 # Instala pacotes essenciais + mysql-client
@@ -27,4 +27,4 @@ RUN pnpm run build
 EXPOSE 3103
 
 # Comando para iniciar a aplicação
-CMD ["pnpm", "start"]
+CMD ["node", "dist/server.js"]

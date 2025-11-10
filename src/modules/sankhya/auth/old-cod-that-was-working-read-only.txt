@@ -2,20 +2,20 @@ import jwt from 'jsonwebtoken'
 import { getMysqlPool } from '../../../config/mysql'
 import { getSqlServer } from '../../../config/sqlserver'
 import { createNotification } from '../../../services/notification.service'
-import logger from '../../../utils/logger'; // Import the logger
 import { hashString } from '../../../utils/sankhya/pass'
-import { getEmployeeDetails } from '../tfpfun/tfpfun.service'; // Import getEmployeeDetails
-import { getPartnerDetails } from '../tgfpar/tgfpar.service'; // Import getPartnerDetails
-import { getUserGroups } from '../tsigpu/tsigpu.service'; // Import getUserGroups
-import { SankhyaUserGroup } from '../tsigpu/tsigpu.types'; // Import SankhyaUserGroup from its types file
-import { getUserDetails } from '../tsiusu/tsiusu.service'; // Import getUserDetails
-import { SankhyaUserDetails } from '../tsiusu/tsiusu.types'; // Import SankhyaUserDetails from its types file
-
-import { getCompanyDetails } from '../tsiemp/tsiemp.service'; // Import getCompanyDetails
-import { getGroupDetails } from '../tsigru/tsigru.service'; // Import getGroupDetails
-import { getAllUserPermissions } from '../tsiacs/tsiacs.service';
-import { SankhyaGroupDetails } from '../tsigru/tsigru.types'; // Import SankhyaGroupDetails
-import { CompactSankhyaUser } from './auth.types'; // Import CompactSankhyaUser
+import logger from '../../../utils/logger' // Import the logger
+import { getUserDetails } from '../tsiusu/tsiusu.service' // Import getUserDetails
+import { SankhyaUserDetails } from '../tsiusu/tsiusu.types' // Import SankhyaUserDetails from its types file
+import { getUserGroups } from '../tsigpu/tsigpu.service' // Import getUserGroups
+import { SankhyaUserGroup } from '../tsigpu/tsigpu.types' // Import SankhyaUserGroup from its types file
+import { getUserConfigurations } from '../tsicfg/tsicfg.service' // Import getUserConfigurations from its new location
+import { getPartnerDetails } from '../tgfpar/tgfpar.service' // Import getPartnerDetails
+import { getEmployeeDetails } from '../tfpfun/tfpfun.service' // Import getEmployeeDetails
+import { getAllUserPermissions } from '../tddper/tddper.service' // Import getAllUserPermissions
+import { getGroupDetails } from '../tsigru/tsigru.service' // Import getGroupDetails
+import { SankhyaGroupDetails } from '../tsigru/tsigru.types' // Import SankhyaGroupDetails
+import { getCompanyDetails } from '../tsiemp/tsiemp.service' // Import getCompanyDetails
+import { CompactSankhyaUser } from './auth.types' // Import CompactSankhyaUser
 
 // Tipagem para usuário Sankhya (basic, will be replaced by CompactSankhyaUser in return)
 export interface SankhyaUser {
@@ -50,16 +50,14 @@ export async function login(username: string, password: string): Promise<{ token
 
   // Gerar hash da senha
   const passwordHash = hashString((username + password).trim())
-  logger.debug('Password hash generated:', { passwordHash }) // Added logging for passwordHash
+  logger.debug('Password hash generated.', { username })
 
   // Verificar senha no SQL Server
-  logger.debug('Executing SQL query to verify password.', { normalizedUsername, passwordHash }); // Added logging before SQL query
   const result = await sql.query`
     SELECT CODUSU, NOMEUSU, EMAIL
     FROM TSIUSU
     WHERE NOMEUSU = ${normalizedUsername} AND INTERNO = ${passwordHash}
   `
-  logger.debug('SQL query result for password verification:', { recordsetLength: result.recordset.length, recordset: result.recordset }); // Added logging for SQL query result
   if (result.recordset.length === 0) {
     logger.warn('Login failed: Invalid password', { username });
     throw new Error('Senha inválida')
@@ -207,3 +205,4 @@ export async function findUserByUsername(username: string): Promise<SankhyaUser 
   if (result.recordset.length === 0) return null
   return result.recordset[0] as SankhyaUser
 }
+

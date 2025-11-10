@@ -17,6 +17,7 @@ import { getCompanyDetails } from '../tsiemp/tsiemp.service'; // Import getCompa
 import { getGroupDetails } from '../tsigru/tsigru.service'; // Import getGroupDetails
 import { SankhyaGroupDetails } from '../tsigru/tsigru.types'; // Import SankhyaGroupDetails
 import { CompactSankhyaUser } from './auth.types'; // Import CompactSankhyaUser
+import { AuthResponse, AuthTokenResponse, AuthSessionResponse, AuthUserDetailsResponse, AuthEmployeeResponse, AuthCompanyResponse, AuthEmployeeAddressResponse, AuthEmployeeScaleResponse, AuthCompanyAddressResponse } from './auth.response.types';
 
 // Tipagem para usuário Sankhya (basic, will be replaced by CompactSankhyaUser in return)
 export interface SankhyaUser {
@@ -27,7 +28,7 @@ export interface SankhyaUser {
   CPF?: string
 }
 
-export async function login(username: string, password: string): Promise<{ token: string, sessionId: number, user: CompactSankhyaUser }> {
+export async function login(username: string, password: string): Promise<AuthResponse> {
   const mysqlPool = await getMysqlPool() // garante que o pool esteja inicializado
   logger.info('Login attempt for username:', { username })
 
@@ -172,30 +173,101 @@ export async function login(username: string, password: string): Promise<{ token
   }
   // --- End of additional logging ---
 
-  // Construct the compacted user object
-  const compactedUser: CompactSankhyaUser = {
+  // Construct the token response
+  const authTokenResponse: AuthTokenResponse = {
+    accessToken: token,
+    expiresIn: 8 * 3600, // 8 hours in seconds
+    refreshToken: 'placeholder_refresh_token', // Refresh token not implemented yet
+  };
+
+  // Construct the session response
+  const authSessionResponse: AuthSessionResponse = {
+    sessionId: sessionResult.insertId.toString(),
+    createdAt: new Date().toISOString(), // Placeholder
+    lastAccess: new Date().toISOString(), // Placeholder
+    ipAddress: 'unknown', // Not available in current flow
+    userAgent: 'unknown', // Not available in current flow
+  };
+
+  // Construct the user details response
+  const authUserDetailsResponse: AuthUserDetailsResponse = {
     id: userDetails.CODUSU,
-    name: userDetails.NOMEUSU || basicUser.NOMEUSU,
+    username: userDetails.NOMEUSU || basicUser.NOMEUSU,
     email: userDetails.ACCOUNTEMAIL || basicUser.EMAIL,
-    internalCode: userDetails.INTERNO,
+    fullName: userDetails.employeeDetails?.NOMEFUNC || userDetails.NOMEUSU || basicUser.NOMEUSU,
     cpf: userDetails.CPF,
+    active: true, // Placeholder
+    createdAt: new Date().toISOString(), // Placeholder
+    updatedAt: new Date().toISOString(), // Placeholder
+  };
 
-    companyId: userDetails.CODEMP,
-    employeeId: userDetails.CODFUNC,
-    partnerId: userDetails.CODPARC,
-    jobTitle: userDetails.AD_CARGO,
-    function: userDetails.AD_FUNCAO,
+  // Construct the employee response (if employeeDetails exist)
+  let authEmployeeResponse: AuthEmployeeResponse | undefined;
+  if (userDetails.employeeDetails) {
+    const cargoMatch = userDetails.AD_CARGO?.match(/^(\d+) - (.*)$/);
+    const cargoCodigo = cargoMatch ? parseInt(cargoMatch[1], 10) : 0; // Default to 0 if not found
+    const cargoDescricao = cargoMatch ? cargoMatch[2] : userDetails.AD_CARGO || '';
 
-    userAddress: userDetails.partnerDetails?.address,
-    partnerDetails: userDetails.partnerDetails,
-    employeeDetails: userDetails.employeeDetails,
-    companyDetails: userDetails.companyDetails,
+    authEmployeeResponse = {
+      employeeId: userDetails.employeeDetails.CODFUNC,
+      matricula: userDetails.employeeDetails.CODFUNC.toString(), // Assuming CODFUNC is matricula
+      cargoCodigo: cargoCodigo,
+      cargoDescricao: cargoDescricao,
+      setorCodigo: 0, // Placeholder
+      setorDescricao: 'unknown', // Placeholder
+      vinculo: 'unknown', // Placeholder
+      dataAdmissao: new Date().toISOString(), // Placeholder
+      dataNascimento: new Date().toISOString(), // Placeholder
+      sexo: 'unknown', // Placeholder
+      telefone: userDetails.employeeDetails.TELEFONE || '',
+      endereco: {
+        CEP: userDetails.employeeDetails.address?.CEP || '',
+        NUMERO: userDetails.employeeDetails.address?.NUMERO || '',
+        COMPLEMENTO: userDetails.employeeDetails.address?.COMPLEMENTO || null,
+        BAIRRO: userDetails.employeeDetails.address?.BAIRRO || '',
+        CODCID: userDetails.employeeDetails.address?.CODCID || 0,
+        NOMECID: userDetails.employeeDetails.address?.NOMECID || '',
+        UF: userDetails.employeeDetails.address?.UF || '',
+      },
+      empresaId: userDetails.CODEMP || 0,
+      escala: {
+        tipo: 'unknown', // Placeholder
+        horarioEntrada: 'unknown', // Placeholder
+        horarioSaida: 'unknown', // Placeholder
+        intervalo: 'unknown', // Placeholder
+      },
+    };
+  }
 
+  // Construct the company response (if companyDetails exist)
+  let authCompanyResponse: AuthCompanyResponse | undefined;
+  if (userDetails.companyDetails) {
+    authCompanyResponse = {
+      id: userDetails.companyDetails.CODEMP,
+      name: userDetails.companyDetails.NOMEFANTASIA || '',
+      cnpj: userDetails.companyDetails.CGC || '',
+      address: {
+        CEP: userDetails.companyDetails.address?.CEP || '',
+        NUMERO: userDetails.companyDetails.address?.NUMERO || '',
+        BAIRRO: userDetails.companyDetails.address?.BAIRRO || '',
+        NOMECID: userDetails.companyDetails.address?.NOMECID || '',
+        UF: userDetails.companyDetails.address?.UF || '',
+      },
+    };
+  }
+
+  // Construct the final AuthResponse object
+  const authResponse: AuthResponse = {
+    token: authTokenResponse,
+    session: authSessionResponse,
+    userDetails: authUserDetailsResponse,
+    employee: authEmployeeResponse,
+    company: authCompanyResponse,
     permissionsDetails: userPermissions,
     groupsDetails: detailedGroups,
   };
 
-  return { token, sessionId: sessionResult.insertId, user: compactedUser }
+  return authResponse;
 }
 
 export async function findUserByUsername(username: string): Promise<SankhyaUser | null> {

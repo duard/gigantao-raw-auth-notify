@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # Load .env.production variables
 if [ -f .env.production ]; then

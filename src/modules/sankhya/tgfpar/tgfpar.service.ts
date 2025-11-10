@@ -6,12 +6,22 @@ import { SankhyaPartnerDetails } from './tgfpar.types'
 export async function getPartnerDetails(codParc: number): Promise<SankhyaPartnerDetails | undefined> {
   const query = `
     SELECT
-      CODPARC,
-      CGC_CPF,
-      RAZAOSOCIAL,
-      NOMEPARC
+      TGFPAR.CODPARC,
+      TGFPAR.CGC_CPF,
+      TGFPAR.RAZAOSOCIAL,
+      TGFPAR.NOMEPARC,
+      TGFPAR.CEP,
+      TGFPAR.CODEND AS CODEND,
+      TGFPAR.ENDEREC AS LOGRADOURO,
+      TGFPAR.NUMERO,
+      TGFPAR.COMPLEMENTO,
+      TGFPAR.BAIRRO,
+      TGFPAR.CODCID,
+      TSICID.NOMECID,
+      TSICID.UF
     FROM TGFPAR
-    WHERE CODPARC = @codParc
+    LEFT JOIN TSICID ON TGFPAR.CODCID = TSICID.CODCID
+    WHERE TGFPAR.CODPARC = @codParc
   `;
   try {
     const pool = await getSqlServer();

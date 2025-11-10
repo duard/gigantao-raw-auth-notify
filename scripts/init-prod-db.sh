@@ -33,7 +33,7 @@ echo "Database: $MYSQL_DATABASE"
 
 # Execute the SQL script using a temporary Docker container with mysql client
 # Pass password via MYSQL_PWD environment variable for security
-MYSQL_PWD="$MYSQL_PASSWORD" docker run --rm \
+docker run --rm -e MYSQL_PWD="$MYSQL_PASSWORD" \
   mysql:8 \
   mysql -h "$MYSQL_HOST" -P "$MYSQL_PORT" -u "$MYSQL_USER" "$MYSQL_DATABASE" < docker/mysql/init-prod.sql
 

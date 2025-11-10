@@ -52,7 +52,7 @@ docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \
 # --- Cria tabelas ---
 echo "Criando tabelas no banco de dados $MYSQL_APP_DATABASE..."
 docker run --rm -e MYSQL_PWD="$MYSQL_APP_PASSWORD" -v $(pwd)/docker/mysql:/docker/mysql mysql:8 \
-    mysql --ssl-mode=REQUIRED -h "$MYSQL_APP_HOST" -P "$MYSQL_APP_PORT" -u "$MYSQL_APP_USER" "$MYSQL_APP_DATABASE" \
+    mysql --verbose --ssl-mode=REQUIRED -h "$MYSQL_APP_HOST" -P "$MYSQL_APP_PORT" -u "$MYSQL_APP_USER" "$MYSQL_APP_DATABASE" \
     < "$INIT_SQL_FILE"
 
 echo "Banco de dados e tabelas criados com sucesso!"

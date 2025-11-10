@@ -1,48 +1,37 @@
 #!/bin/bash
 set -e
 
-# -----------------------------
-# Variáveis de conexão MySQL
-# -----------------------------
-MYSQL_HOST="mksck0o8sgok0kscssc4gk4w"
-MYSQL_PORT="3306"
-MYSQL_ROOT_USER="mysql"
-MYSQL_ROOT_PASSWORD="hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO"
+# Variáveis do MySQL (externo Coolify)
+MYSQL_MASTER_URL="mysql://mysql:hXvQcYwSnEqGLWV18BRjhPYpn8AFOhredMi42O69k7WIadboGok6kTAoLjxXTNiO@mksck0o8sgok0kscssc4gk4w:3306/default?ssl-mode=REQUIRED"
+MYSQL_APP_URL="mysql://auth_api:senha123@mksck0o8sgok0kscssc4gk4w:3306/gigantao_auth_notify_prod?ssl-mode=REQUIRED"
 
-APP_DB="gigantao_auth_notify_prod"
-APP_USER="auth_api"
-APP_PASSWORD="senha123"
-SQL_FILE="./docker/mysql/init-prod-app.sql"
+# Parse master
+MYSQL_MASTER_USER=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
+MYSQL_MASTER_PASSWORD=$(echo $MYSQL_MASTER_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
+MYSQL_MASTER_HOST=$(echo $MYSQL_MASTER_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
+MYSQL_MASTER_PORT=$(echo $MYSQL_MASTER_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
 
-# -----------------------------
-# Espera o MySQL ficar pronto
-# -----------------------------
-echo "Aguardando MySQL ficar pronto..."
-until mysqladmin ping -h "$MYSQL_HOST" -P "$MYSQL_PORT" --silent; do
-    echo "MySQL não está pronto ainda... esperando 2s"
-    sleep 2
-done
+# Parse app
+MYSQL_APP_USER=$(echo $MYSQL_APP_URL | sed -n 's/mysql:\/\/\([^:]*\):.*/\1/p')
+MYSQL_APP_PASSWORD=$(echo $MYSQL_APP_URL | sed -n 's/mysql:\/\/[^:]*:\([^@]*\).*@.*/\1/p')
+MYSQL_APP_HOST=$(echo $MYSQL_APP_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
+MYSQL_APP_PORT=$(echo $MYSQL_APP_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
+MYSQL_APP_DATABASE=$(echo $MYSQL_APP_URL | sed -n 's/.*\/\([^?]*\).*/\1/p')
 
-echo "MySQL pronto! Criando banco e usuário..."
+echo "Conectando no MySQL externo do Coolify..."
 
-# -----------------------------
-# Criação do banco e usuário
-# -----------------------------
-cat <<SQL > /tmp/init.sql
-CREATE DATABASE IF NOT EXISTS $APP_DB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER IF NOT EXISTS '$APP_USER'@'%' IDENTIFIED WITH caching_sha2_password BY '$APP_PASSWORD';
-GRANT ALL PRIVILEGES ON $APP_DB.* TO '$APP_USER'@'%';
+# --- Cria DB e usuário ---
+docker run --rm -e MYSQL_PWD="$MYSQL_MASTER_PASSWORD" mysql:8 \
+    mysql --ssl-mode=REQUIRED -h "$MYSQL_MASTER_HOST" -P "$MYSQL_MASTER_PORT" -u "$MYSQL_MASTER_USER" -e "
+CREATE DATABASE IF NOT EXISTS $MYSQL_APP_DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS '$MYSQL_APP_USER'@'%' IDENTIFIED WITH caching_sha2_password BY '$MYSQL_APP_PASSWORD';
+GRANT ALL PRIVILEGES ON $MYSQL_APP_DATABASE.* TO '$MYSQL_APP_USER'@'%';
 FLUSH PRIVILEGES;
-SQL
+"
 
-mysql --ssl-mode=PREFERRED -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD < /tmp/init.sql
+# --- Cria tabelas ---
+docker run --rm -e MYSQL_PWD="$MYSQL_APP_PASSWORD" -v $(pwd)/docker/mysql:/docker/mysql mysql:8 \
+    mysql --ssl-mode=REQUIRED -h "$MYSQL_APP_HOST" -P "$MYSQL_APP_PORT" -u "$MYSQL_APP_USER" "$MYSQL_APP_DATABASE" \
+    < /docker/mysql/init-prod-app.sql
 
-echo "Banco e usuário criados com sucesso!"
-
-# -----------------------------
-# Criação das tabelas via SQL externo
-# -----------------------------
-echo "Criando tabelas no banco $APP_DB..."
-mysql --ssl-mode=PREFERRED -h $MYSQL_HOST -P $MYSQL_PORT -u $APP_USER -p$APP_PASSWORD $APP_DB < $SQL_FILE
-
-echo "Tabelas criadas com sucesso!"
+echo "Banco de dados e tabelas criados com sucesso!"

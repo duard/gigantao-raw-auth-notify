@@ -2,6 +2,7 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import { swaggerUI } from '@hono/swagger-ui'
 import 'dotenv/config'
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 
 import sankhyaRoutes from './modules/sankhya/sankhya.routes'
 import authRoutes from './routes/auth.routes'
@@ -19,6 +20,11 @@ const app = new Hono()
 //   maxAge: 600,
 //   credentials: true,
 // }));
+
+app.use(cors({
+  origin: "*",
+  credentials: true,
+}))
 console.warn('CORS is configured to allow all origins. This is NOT recommended for production environments due to security risks.');
 
 // --- ✅ Preflight OPTIONS para todas as rotas ---

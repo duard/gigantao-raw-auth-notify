@@ -27,7 +27,7 @@ services:
       - MYSQL_HOST=mysql # Ensure API knows MySQL host
     depends_on:
       - mysql
-    command: sh -c "./wait-for-it.sh mysql:3306 -- npm run dev" # Use npm run dev for hot-reloading
+    command: sh -c "./wait-for-it.sh mysql:3306 -- pnpm run dev" # Use pnpm run dev for hot-reloading
     volumes:
       - .:/app
       - /app/node_modules

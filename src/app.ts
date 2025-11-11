@@ -1,36 +1,26 @@
-import { serveStatic } from '@hono/node-server/serve-static'
-import { swaggerUI } from '@hono/swagger-ui'
-import 'dotenv/config'
-import { Hono } from 'hono'
-import { cors } from 'hono/cors'
+import { serveStatic } from '@hono/node-server/serve-static';
+import { swaggerUI } from '@hono/swagger-ui';
+import 'dotenv/config';
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import sankhyaRoutes from './modules/sankhya/sankhya.routes';
+import authRoutes from './routes/auth.routes';
+import emailRoutes from './routes/email.routes';
+import notificationsRoutes from './routes/notifications.routes';
 
-import sankhyaRoutes from './modules/sankhya/sankhya.routes'
-import authRoutes from './routes/auth.routes'
-import emailRoutes from './routes/email.routes'
-import notificationsRoutes from './routes/notifications.routes'
+const app = new Hono();
 
-const app = new Hono()
+// Configure CORS
+app.use(cors({
+  origin: '*', // Temporarily allow all origins for debugging
+}));
+console.warn('CORS is temporarily configured to allow all origins for debugging purposes. Remember to restrict this in production.');
 
-// --- CORS global ---
-app.use('*', cors({
-  origin: '*', 
-  allowHeaders: ['Content-Type', 'Authorization'],
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  exposeHeaders: ['Content-Length'],
-  credentials: true,
-}))
-app.options('*', (c) => c.text('', 204))
+app.use('/*', serveStatic({ root: './public' }));
+app.get('/ui', swaggerUI({ url: '/openapi.json' }));
+app.route('/auth', authRoutes);
+app.route('/sankhya', sankhyaRoutes);
+app.route('/notifications', notificationsRoutes);
+app.route('/email', emailRoutes);
 
-// --- Rotas ---
-app.route('/auth', authRoutes)
-app.route('/sankhya', sankhyaRoutes)
-app.route('/notifications', notificationsRoutes)
-app.route('/email', emailRoutes)
-
-// --- Swagger ---
-app.get('/ui', swaggerUI({ url: '/openapi.json' }))
-
-// --- Arquivos estáticos ---
-app.use('/*', serveStatic({ root: './public' }))
-
-export default app
+export default app;

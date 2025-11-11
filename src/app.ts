@@ -21,21 +21,36 @@ const app = new Hono()
 //   credentials: true,
 // }));
 
-app.use(cors({
-  origin: "*",
-  credentials: true,
-}))
 console.warn('CORS is configured to allow all origins. This is NOT recommended for production environments due to security risks.');
 
-// --- ✅ Preflight OPTIONS para todas as rotas ---
-app.options('*', (c) =>
-  c.text('OK', 204, {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Origin, Content-Type, Authorization',
-    'Access-Control-Allow-Credentials': 'true',
-  })
-)
+app.use('*', cors({
+    origin: '*',
+    allowHeaders: ['Content-Type', 'Authorization'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    exposeHeaders: ['Content-Length'],
+    maxAge: 600,
+    credentials: true,
+}))
+
+app.options('*', (c) => {
+    return c.text('', 204)
+})
+
+
+// app.use(cors({
+//   origin: "*",
+//   credentials: true,
+// }))
+
+// // --- ✅ Preflight OPTIONS para todas as rotas ---
+// app.options('*', (c) =>
+//   c.text('OK', 204, {
+//     'Access-Control-Allow-Origin': '*',
+//     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+//     'Access-Control-Allow-Headers': 'Origin, Content-Type, Authorization',
+//     'Access-Control-Allow-Credentials': 'true',
+//   })
+// )
 
 // --- Rotas de API ---
 app.route('/auth', authRoutes)

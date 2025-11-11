@@ -11,10 +11,11 @@ import notificationsRoutes from './routes/notifications.routes'
 
 const app = new Hono()
 
-// --- ✅ CORS seguro e dinâmico ---
+// ✅ Configuração de CORS com tipagem correta
 app.use('*', cors({
-  origin: (origin) => {
-    if (!origin) return false // Bloqueia requisições sem origin (segurança extra)
+  origin: (origin: string | undefined) => {
+    if (!origin) return null // não 'false' — Hono espera null/undefined
+
     const allowedOrigins = [
       /^https?:\/\/([a-z0-9-]+\.)*gigantao\.net(:\d+)?$/,
       /^https?:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
@@ -28,7 +29,7 @@ app.use('*', cors({
       return origin
     } else {
       console.warn(`🔴 CORS bloqueado para: ${origin}`)
-      return false
+      return null
     }
   },
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -38,6 +39,15 @@ app.use('*', cors({
 
 console.warn(
   'CORS configurado: localhost, rede local (192.168.*), e *.gigantao.net estão permitidos.'
+)
+
+// ✅ Resposta manual para OPTIONS (Cloudflare costuma exigir isso)
+app.options('*', (c) =>
+  c.text('OK', 200, {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, Authorization',
+  })
 )
 
 // --- Rotas e estáticos ---

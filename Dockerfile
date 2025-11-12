@@ -58,6 +58,6 @@ EXPOSE 9300
 
 # Configuração de execução por ambiente
 # Pode ser sobrescrita via docker-compose (NODE_ENV e START_CMD)
-ENV START_CMD="pnpm run start:dev"
+ENV START_CMD="pnpm run dev"
 
 CMD ["dumb-init", "sh", "-c", "$START_CMD"]

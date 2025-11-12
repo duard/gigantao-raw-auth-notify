@@ -20,6 +20,7 @@ const port = Number(process.env.PORT) || 3103;
     {
       fetch: app.fetch,
       port,
+      hostname: '0.0.0.0',
     },
     (info) => {
       console.log(`🚀 Server running on http://localhost:${info.port}`)

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================
-#  API-PONTOTEL - Multi Environment Docker Starter
+#  GIGANTAO-AUTH-NOTIFY - Multi Environment Docker Starter
 # ============================================
 
 set -e
@@ -18,7 +18,7 @@ function show_help() {
   echo "  production     → produção"
   echo ""
   echo "Exemplo:"
-  echo "  ./start.sh homologation"
+  echo "  ./start.sh local"
   echo ""
   exit 1
 }
@@ -44,14 +44,26 @@ if [[ ! " ${VALID_ENVS[*]} " =~ " ${ENV} " ]]; then
   show_help
 fi
 
+# --- Define Port e URL Path por projeto ---
+PORT=""
+URL_PATH="/api" # Caminho para o Swagger UI
+case "$ENV" in
+    local)        PORT="9300" ;;
+    development)  PORT="9301" ;;
+esac
+
 # --- Limpeza e inicialização ---
 echo ""
 echo "🌍 Iniciando ambiente: $ENV"
 echo "---------------------------------------------"
+
+if [ -n "$PORT" ]; then
+        echo "✅ Serviço disponível em: http://localhost:$PORT$URL_PATH"
+        echo ""
+    fi
+
 trap cleanup SIGINT SIGTERM
 
 # Usa o profile correspondente
 echo "🐳 Subindo containers (Ctrl+C para parar)..."
 docker compose --profile "$ENV" up --build --force-recreate --remove-orphans
-
-# Cleanup será chamado automaticamente no Ctrl+C

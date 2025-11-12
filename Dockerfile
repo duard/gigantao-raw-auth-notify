@@ -53,7 +53,10 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./dist
 COPY . .
 
-EXPOSE 3102
+EXPOSE 3101
+EXPOSE 3103
+EXPOSE 3101
+
 
 # Configuração de execução por ambiente
 # Pode ser sobrescrita via docker-compose (NODE_ENV e START_CMD)

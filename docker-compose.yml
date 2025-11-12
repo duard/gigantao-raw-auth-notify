@@ -90,6 +90,7 @@ services:
     networks:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed
+    command: dumb-init sh -c "pnpm run start"
 
   mysql:
     image: mysql:8

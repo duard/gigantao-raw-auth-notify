@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
-    "build": "tsc"
+    "build": "tsc",
+    "docker:dev": "bash scripts/start.sh dev",
+    "docker:local": "bash scripts/start.sh local",
+    "docker:prod": "bash scripts/start.sh prod"
   },
   "keywords": [],
   "author": "",

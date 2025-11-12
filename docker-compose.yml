@@ -12,8 +12,6 @@ x-common-env: &common-env
     - /app/node_modules
     - ./wait-for-it.sh:/app/wait-for-it.sh # Ensure wait-for-it.sh is in the root
   user: root
-  ports:
-    - "0.0.0.0:3103:3103"
   environment:
     - FORCE_COLOR=3
     - TZ=America/Sao_Paulo
@@ -25,8 +23,10 @@ services:
     <<: *common-env
     container_name: api-development
     profiles: ["development"]
+    ports:
+      - "0.0.0.0:3203:3103"
     env_file:
-      - .env.development
+      - .env.dev
     environment:
       - NODE_ENV=development
       - MYSQL_HOST=mysql
@@ -38,6 +38,8 @@ services:
     <<: *common-env
     container_name: api-local
     profiles: ["local"]
+    ports:
+      - "0.0.0.0:3103:3103"
     env_file:
       - .env.local
     environment:
@@ -47,10 +49,40 @@ services:
       - mysql
     command: sh -c "./wait-for-it.sh mysql:3306 -- pnpm run dev"
 
+  api-homologation:
+    <<: *common-env
+    container_name: api-homologation
+    profiles: ["homologation"]
+    ports:
+      - "0.0.0.0:3303:3103"
+    env_file:
+      - .env.homolog
+    environment:
+      - NODE_ENV=production
+    networks:
+      - coolify # Connects to the external Coolify network for Redis and MySQL
+      - default # Also connect to default for internal communication if needed
+
+  api-test:
+    <<: *common-env
+    container_name: api-test
+    profiles: ["test"]
+    ports:
+      - "0.0.0.0:3403:3103"
+    env_file:
+      - .env.test
+    environment:
+      - NODE_ENV=test
+    networks:
+      - coolify # Connects to the external Coolify network for Redis and MySQL
+      - default # Also connect to default for internal communication if needed
+
   api-production:
     <<: *common-env
     container_name: api-production
     profiles: ["production"]
+    ports:
+      - "0.0.0.0:3503:3103"
     env_file:
       - .env.production
     environment:

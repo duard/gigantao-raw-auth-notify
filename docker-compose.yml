@@ -1,4 +1,4 @@
-version: '3.9'
+
 
 x-common-env: &common-env
   build:
@@ -30,7 +30,6 @@ services:
     environment:
       - NODE_ENV=development
       - MYSQL_HOST=mysql
-      - START_CMD="pnpm run dev"
     depends_on:
       - mysql
     command: dumb-init sh -c "./wait-for-it.sh mysql:3306 -- $START_CMD"
@@ -46,7 +45,6 @@ services:
     environment:
       - NODE_ENV=development # Assuming local is also for development
       - MYSQL_HOST=mysql
-      - START_CMD="pnpm run dev"
     depends_on:
       - mysql
     command: dumb-init sh -c "./wait-for-it.sh mysql:3306 -- $START_CMD"
@@ -61,7 +59,6 @@ services:
       - .env.homolog
     environment:
       - NODE_ENV=production
-      - START_CMD="pnpm run start"
     networks:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed
@@ -76,7 +73,6 @@ services:
       - .env.test
     environment:
       - NODE_ENV=test
-      - START_CMD="pnpm run start"
     networks:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed
@@ -91,7 +87,6 @@ services:
       - .env.production
     environment:
       - NODE_ENV=production
-      - START_CMD="pnpm run start"
     networks:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed

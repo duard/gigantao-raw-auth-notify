@@ -7,7 +7,7 @@ ARG MY_UID=1001
 ARG MY_GID=1001
 
 # Instala dependências básicas e timezone
-RUN apk add --no-cache tzdata dumb-init
+RUN apk add --no-cache tzdata dumb-init bash
 
 ENV TZ=America/Sao_Paulo
 ENV NODE_ENV=development

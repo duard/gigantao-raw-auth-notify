@@ -64,8 +64,8 @@ fi
 echo "--- Resolved Environment Variables for 'api' service ($ENVIRONMENT) ---"
 SERVICE_CONFIG_NAME="api-auth-$ENVIRONMENT"
 # Use the correct service name based on the profile for config inspection
-# This command requires 'yq' to be installed
-docker compose --profile "$ENVIRONMENT" --env-file "$ENV_FILE" config --format yaml | yq e ".services.$SERVICE_CONFIG_NAME" - | grep 'environment:' -A 10
+# This command uses grep as yq might not be installed
+docker compose --profile "$ENVIRONMENT" --env-file "$ENV_FILE" config | grep -E "^\s+$SERVICE_CONFIG_NAME:|^(\s+environment:|\s+- )" | grep 'environment:' -A 10
 echo "------------------------------------------------------"
 
 # Special handling for production environment
@@ -83,12 +83,13 @@ if [ "$ENVIRONMENT" == "production" ]; then
 fi
 
 echo "Starting services for environment: $ENVIRONMENT..."
+export START_CMD="$APP_START_CMD" # Export START_CMD to be available for docker compose
 # Use --build for development and local to ensure latest changes are picked up
 # For production, build is already done above
 if [ "$ENVIRONMENT" == "development" ] || [ "$ENVIRONMENT" == "local" ]; then
-    docker compose --profile "$ENVIRONMENT" --env-file "$ENV_FILE" up --build --remove-orphans $SERVICES_TO_START APP_START_CMD="$APP_START_CMD"
+    docker compose --profile "$ENVIRONMENT" --env-file "$ENV_FILE" up --build --remove-orphans $SERVICES_TO_START
 else
-    docker compose --profile "$ENVIRONMENT" --env-file "$ENV_FILE" up --remove-orphans $SERVICES_TO_START APP_START_CMD="$APP_START_CMD"
+    docker compose --profile "$ENVIRONMENT" --env-file "$ENV_FILE" up --remove-orphans $SERVICES_TO_START
 fi
 
 echo "Services for $ENVIRONMENT started."

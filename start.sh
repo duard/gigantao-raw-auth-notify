@@ -24,23 +24,23 @@ SERVICES_TO_START="" # Services will be determined by profile
 case "$ENVIRONMENT" in
     development)
         ENV_FILE=".env.dev"
-        SERVICES_TO_START="api-development mysql" # Explicitly start mysql for development profile
+        SERVICES_TO_START="api-auth-development mysql" # Explicitly start mysql for development profile
         ;;
     local)
         ENV_FILE=".env.local"
-        SERVICES_TO_START="api-local mysql" # Explicitly start mysql for local profile
+        SERVICES_TO_START="api-auth-local mysql" # Explicitly start mysql for local profile
         ;;
     homologation)
         ENV_FILE=".env.homolog"
-        SERVICES_TO_START="api-homologation"
+        SERVICES_TO_START="api-auth-homologation"
         ;;
     test)
         ENV_FILE=".env.test"
-        SERVICES_TO_START="api-test"
+        SERVICES_TO_START="api-auth-test"
         ;;
     production)
         ENV_FILE=".env.production"
-        SERVICES_TO_START="api-production"
+        SERVICES_TO_START="api-auth-production"
         ;;
     *)
         echo "Invalid environment: $ENVIRONMENT"
@@ -56,10 +56,9 @@ if [ ! -f "$ENV_FILE" ]; then
 fi
 
 echo "--- Resolved Environment Variables for 'api' service ($ENVIRONMENT) ---"
-# Use the correct service name based on the profile for config inspection
-SERVICE_CONFIG_NAME="api-$ENVIRONMENT"
+SERVICE_CONFIG_NAME="api-auth-$ENVIRONMENT"
 if [ "$ENVIRONMENT" == "local" ] || [ "$ENVIRONMENT" == "development" ]; then
-    SERVICE_CONFIG_NAME="api-$ENVIRONMENT" # Use the specific api service name
+    SERVICE_CONFIG_NAME="api-auth-$ENVIRONMENT" # Use the specific api service name
 fi
 
 docker compose --profile "$ENVIRONMENT" --env-file "$ENV_FILE" config services "$SERVICE_CONFIG_NAME" | grep 'environment:' -A 10

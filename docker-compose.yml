@@ -19,9 +19,9 @@ x-common-env: &common-env
     - default
 
 services:
-  api-development:
+  api-auth-development:
     <<: *common-env
-    container_name: api-development
+    container_name: api-auth-development
     profiles: ["development"]
     ports:
       - "0.0.0.0:3203:3102"
@@ -35,9 +35,9 @@ services:
       - mysql
     command: dumb-init sh -c "./wait-for-it.sh mysql:3306 -- $START_CMD"
 
-  api-local:
+  api-auth-local:
     <<: *common-env
-    container_name: api-local
+    container_name: api-auth-local
     profiles: ["local"]
     ports:
       - "0.0.0.0:3103:3102"
@@ -51,9 +51,9 @@ services:
       - mysql
     command: dumb-init sh -c "./wait-for-it.sh mysql:3306 -- $START_CMD"
 
-  api-homologation:
+  api-auth-homologation:
     <<: *common-env
-    container_name: api-homologation
+    container_name: api-auth-homologation
     profiles: ["homologation"]
     ports:
       - "0.0.0.0:3303:3102"
@@ -66,9 +66,9 @@ services:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed
 
-  api-test:
+  api-auth-test:
     <<: *common-env
-    container_name: api-test
+    container_name: api-auth-test
     profiles: ["test"]
     ports:
       - "0.0.0.0:3403:3102"
@@ -81,9 +81,9 @@ services:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed
 
-  api-production:
+  api-auth-production:
     <<: *common-env
-    container_name: api-production
+    container_name: api-auth-production
     profiles: ["production"]
     ports:
       - "0.0.0.0:3503:3102"

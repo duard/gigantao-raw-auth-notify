@@ -1,5 +1,3 @@
-
-
 x-common-env: &common-env
   build:
     context: .
@@ -10,7 +8,7 @@ x-common-env: &common-env
   volumes:
     - .:/app
     - /app/node_modules
-    - ./wait-for-it.sh:/app/wait-for-it.sh # Ensure wait-for-it.sh is in the root
+    - ./wait-for-it.sh:/app/wait-for-it.sh
   user: root
   environment:
     - FORCE_COLOR=3
@@ -19,20 +17,9 @@ x-common-env: &common-env
     - default
 
 services:
-  api-auth-development:
-    <<: *common-env
-    container_name: api-auth-development
-    profiles: ["development"]
-    ports:
-      - "9301:9300"
-    env_file:
-      - .env.dev
-    environment:
-      - NODE_ENV=development
-      - MYSQL_HOST=mysql
-    depends_on:
-      - mysql
-
+  # =========================================================
+  # Local environment - usa MySQL interno
+  # =========================================================
   api-auth-local:
     <<: *common-env
     container_name: api-auth-local
@@ -46,7 +33,42 @@ services:
       - MYSQL_HOST=mysql
     depends_on:
       - mysql
+    command: dumb-init sh -c "./wait-for-it.sh mysql:3306 -- ${START_CMD:-pnpm run dev}"
 
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    profiles: ["local"] # Só sobe no local
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: gigantao_auth_notify_dev
+      TZ: America/Sao_Paulo
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - default
+
+  # =========================================================
+  # Development environment - usa banco remoto
+  # =========================================================
+  api-auth-development:
+    <<: *common-env
+    container_name: api-auth-development
+    profiles: ["development"]
+    ports:
+      - "9301:9300"
+    env_file:
+      - .env.dev
+    environment:
+      - NODE_ENV=development
+    command: dumb-init sh -c "./wait-for-it.sh ${MYSQL_HOST:-remote.dev.host}:3306 -- ${START_CMD:-pnpm run dev}"
+
+  # =========================================================
+  # Homologation environment
+  # =========================================================
   api-auth-homologation:
     <<: *common-env
     container_name: api-auth-homologation
@@ -60,7 +82,11 @@ services:
     networks:
       - coolify
       - default
+    command: dumb-init sh -c "${START_CMD:-pnpm run start}"
 
+  # =========================================================
+  # Test environment
+  # =========================================================
   api-auth-test:
     <<: *common-env
     container_name: api-auth-test
@@ -74,7 +100,11 @@ services:
     networks:
       - coolify
       - default
+    command: dumb-init sh -c "${START_CMD:-pnpm run start}"
 
+  # =========================================================
+  # Production environment
+  # =========================================================
   api-auth-production:
     <<: *common-env
     container_name: api-auth-production
@@ -88,23 +118,11 @@ services:
     networks:
       - coolify
       - default
+    command: dumb-init sh -c "${START_CMD:-pnpm run start}"
 
-  mysql:
-    image: mysql:8
-    container_name: mysql
-    profiles: ["development", "local"]
-    environment:
-      MYSQL_ROOT_PASSWORD: 12345
-      MYSQL_DATABASE: gigantao_auth_notify_dev
-      TZ: America/Sao_Paulo
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - default
-
+# =========================================================
+# Networks & Volumes
+# =========================================================
 networks:
   default:
     driver: bridge

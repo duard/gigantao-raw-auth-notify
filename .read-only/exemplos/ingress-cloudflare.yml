@@ -1,0 +1,107 @@
+tunnel: gigantao
+credentials-file: /home/gigantinho/.cloudflared/533b4a00-f226-4a02-9bb8-d66fc24f1831.json
+
+ingress:
+  ######################################################
+  # 🔹 LOCAL / DESENVOLVIMENTO
+  ######################################################
+  - hostname: "rh-local.gigantao.net"
+    service: http://localhost:3101   # Frontend local (Vite dev)
+
+  - hostname: "api-local.gigantao.net"
+    service: http://localhost:3100   # API backend local
+
+  - hostname: "api-pontotel-local.gigantao.net"
+    service: http://localhost:3102   # API Pontotel local
+
+  - hostname: "api-auth-local.gigantao.net"
+    service: http://localhost:3103   # API Auth/Notify local
+
+  ######################################################
+  # 🔹 DEVELOPMENT
+  ######################################################
+  - hostname: "rh-dev.gigantao.net"
+    service: http://localhost:3201
+
+  - hostname: "api-dev.gigantao.net"
+    service: http://localhost:3200
+
+  - hostname: "api-pontotel-dev.gigantao.net"
+    service: http://localhost:3202
+
+  - hostname: "api-auth-dev.gigantao.net"
+    service: http://localhost:3203
+
+  ######################################################
+  # 🔹 HOMOLOGATION (Homolog)
+  ######################################################
+  - hostname: "rh-homolog.gigantao.net"
+    service: http://localhost:3301
+
+  - hostname: "api-homolog.gigantao.net"
+    service: http://localhost:3300
+
+  - hostname: "api-pontotel-homolog.gigantao.net"
+    service: http://localhost:3302
+
+  - hostname: "api-auth-homolog.gigantao.net"
+    service: http://localhost:3303
+
+  ######################################################
+  # 🔹 TEST
+  ######################################################
+  - hostname: "rh-test.gigantao.net"
+    service: http://localhost:3401
+
+  - hostname: "api-test.gigantao.net"
+    service: http://localhost:3400
+
+  - hostname: "api-pontotel-test.gigantao.net"
+    service: http://localhost:3402
+
+  - hostname: "api-auth-test.gigantao.net"
+    service: http://localhost:3403
+
+  ######################################################
+  # 🔹 PRODUCTION
+  ######################################################
+  - hostname: "rh.gigantao.net"
+    service: http://localhost:3501
+
+  - hostname: "api.gigantao.net"
+    service: http://localhost:3500
+
+  - hostname: "api-pontotel.gigantao.net"
+    service: http://localhost:3502
+
+  - hostname: "api-gigantao-raw-auth-notify.gigantao.net"
+    service: http://localhost:3503
+
+  ######################################################
+  # 🔹 SERVIÇOS INTERNOS E AUXILIARES
+  ######################################################
+  - hostname: "docs.gigantao.net"
+    service: http://localhost:3600
+
+  - hostname: "todo.gigantao.net"
+    service: http://localhost:3601
+
+  - hostname: "favoritos.gigantao.net"
+    service: http://localhost:3602
+
+  - hostname: "captain.gigantao.net"
+    service: http://localhost:3603
+
+  - hostname: "ssh.gigantao.net"
+    service: ssh://localhost:22
+
+  ######################################################
+  # 🔹 CORINGA / WILDCARD
+  ######################################################
+  - hostname: "*.gigantao.net"
+    service: http://localhost:80
+
+  ######################################################
+  # 🔸 DEFAULT HANDLER (404)
+  ######################################################
+  - service: http_status:404

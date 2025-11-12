@@ -1,0 +1,152 @@
+version: "3.9"
+
+x-common-env: &common-env
+  build:
+    context: .
+    dockerfile: Dockerfile
+    args:
+      MY_UID: ${MY_UID:-1001}
+      MY_GID: ${MY_GID:-1001}
+  volumes:
+    - .:/usr/src/app:cached
+    - node_modules_cache:/usr/src/app/node_modules
+  user: root
+  stdin_open: true
+  tty: true
+  environment:
+    - FORCE_COLOR=${FORCE_COLOR:-3}
+    - TZ=${TZ:-America/Sao_Paulo}
+
+services:
+  ######################################################
+  # 🔹 LOCAL / DESENVOLVIMENTO
+  ######################################################
+  api-pontotel-local:
+    <<: *common-env
+    container_name: api-pontotel-local
+    ports:
+      - "3102:3102"
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=redis://redis-local:6379
+    profiles: ["local", "development"]
+    depends_on:
+      - redis-local
+    networks:
+      - default
+
+  ######################################################
+  # 🔹 DEVELOPMENT
+  ######################################################
+  api-pontotel-development:
+    <<: *common-env
+    container_name: api-pontotel-development
+    ports:
+      - "3202:3102"
+    env_file:
+      - .env.dev
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=redis://redis-dev:6379
+    profiles: ["development"]
+    depends_on:
+      - redis-dev
+    networks:
+      - default
+
+  ######################################################
+  # 🔹 HOMOLOGATION
+  ######################################################
+  api-pontotel-homolog:
+    <<: *common-env
+    container_name: api-pontotel-homolog
+    ports:
+      - "3302:3102"
+    env_file:
+      - .env.homolog
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://192.168.1.9:6379
+    profiles: ["homologation"]
+    networks:
+      - default
+      - coolify
+
+  ######################################################
+  # 🔹 TEST
+  ######################################################
+  api-pontotel-test:
+    <<: *common-env
+    container_name: api-pontotel-test
+    ports:
+      - "3402:3102"
+    env_file:
+      - .env.test
+    environment:
+      - NODE_ENV=test
+      - REDIS_URL=redis://192.168.1.9:6379
+    profiles: ["test"]
+    networks:
+      - default
+      - coolify
+
+  ######################################################
+  # 🔹 PRODUCTION
+  ######################################################
+  # For production deployments, ensure the container is rebuilt with the latest code.
+  # Use 'docker compose --profile production up --build --force-recreate'
+  api-pontotel-production:
+    <<: *common-env
+    container_name: api-pontotel-production
+    ports:
+      - "3502:3102"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://default:Y1xLdFBfWHGU4IphNB7QD7fzKsacheX8Fsex4ByMOWg0pBfkRWLTUwXhKRHPZkFa@m48o4cc8kkkk8s84wkc0kw8g:6379/0
+    restart: always
+    profiles: ["production"]
+    networks:
+      - default
+      - coolify
+
+  ######################################################
+  # 🔸 REDIS (local)
+  ######################################################
+  redis-local:
+    image: redis:alpine
+    container_name: redis-local
+    restart: always
+    volumes:
+      - redis_local_data:/data
+    networks:
+      - default
+
+  ######################################################
+  # 🔸 REDIS (development)
+  ######################################################
+  redis-dev:
+    image: redis:alpine
+    container_name: redis-dev
+    restart: always
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - default
+
+######################################################
+# 🔸 VOLUMES E NETWORKS
+######################################################
+volumes:
+  node_modules_cache:
+  redis_local_data:
+  redis_dev_data:
+
+networks:
+  default:
+    driver: bridge
+  coolify:
+    external: true

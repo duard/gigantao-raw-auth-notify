@@ -24,41 +24,44 @@ services:
     container_name: api-development
     profiles: ["development"]
     ports:
-      - "0.0.0.0:3203:3103"
+      - "0.0.0.0:3203:3102"
     env_file:
       - .env.dev
     environment:
       - NODE_ENV=development
       - MYSQL_HOST=mysql
+      - START_CMD="pnpm run dev"
     depends_on:
       - mysql
-    command: sh -c "./wait-for-it.sh mysql:3306 -- pnpm run dev"
+    command: dumb-init sh -c "./wait-for-it.sh mysql:3306 -- $START_CMD"
 
   api-local:
     <<: *common-env
     container_name: api-local
     profiles: ["local"]
     ports:
-      - "0.0.0.0:3103:3103"
+      - "0.0.0.0:3103:3102"
     env_file:
       - .env.local
     environment:
       - NODE_ENV=development # Assuming local is also for development
       - MYSQL_HOST=mysql
+      - START_CMD="pnpm run dev"
     depends_on:
       - mysql
-    command: sh -c "./wait-for-it.sh mysql:3306 -- pnpm run dev"
+    command: dumb-init sh -c "./wait-for-it.sh mysql:3306 -- $START_CMD"
 
   api-homologation:
     <<: *common-env
     container_name: api-homologation
     profiles: ["homologation"]
     ports:
-      - "0.0.0.0:3303:3103"
+      - "0.0.0.0:3303:3102"
     env_file:
       - .env.homolog
     environment:
       - NODE_ENV=production
+      - START_CMD="pnpm run start"
     networks:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed
@@ -68,11 +71,12 @@ services:
     container_name: api-test
     profiles: ["test"]
     ports:
-      - "0.0.0.0:3403:3103"
+      - "0.0.0.0:3403:3102"
     env_file:
       - .env.test
     environment:
       - NODE_ENV=test
+      - START_CMD="pnpm run start"
     networks:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed
@@ -82,11 +86,12 @@ services:
     container_name: api-production
     profiles: ["production"]
     ports:
-      - "0.0.0.0:3503:3103"
+      - "0.0.0.0:3503:3102"
     env_file:
       - .env.production
     environment:
       - NODE_ENV=production
+      - START_CMD="pnpm run start"
     networks:
       - coolify # Connects to the external Coolify network for Redis and MySQL
       - default # Also connect to default for internal communication if needed

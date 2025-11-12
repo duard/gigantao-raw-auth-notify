@@ -1,0 +1,85 @@
+version: '3.9'
+
+x-common-env: &common-env
+  build:
+    context: .
+    dockerfile: Dockerfile
+    args:
+      MY_UID: ${MY_UID:-1001}
+      MY_GID: ${MY_GID:-1001}
+  volumes:
+    - .:/app
+    - /app/node_modules
+    - ./wait-for-it.sh:/app/wait-for-it.sh # Ensure wait-for-it.sh is in the root
+  user: root
+  ports:
+    - "0.0.0.0:3103:3103"
+  environment:
+    - FORCE_COLOR=3
+    - TZ=America/Sao_Paulo
+  networks:
+    - default
+
+services:
+  api-development:
+    <<: *common-env
+    container_name: api-development
+    profiles: ["development"]
+    env_file:
+      - .env.development
+    environment:
+      - NODE_ENV=development
+      - MYSQL_HOST=mysql
+    depends_on:
+      - mysql
+    command: sh -c "./wait-for-it.sh mysql:3306 -- pnpm run dev"
+
+  api-local:
+    <<: *common-env
+    container_name: api-local
+    profiles: ["local"]
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=development # Assuming local is also for development
+      - MYSQL_HOST=mysql
+    depends_on:
+      - mysql
+    command: sh -c "./wait-for-it.sh mysql:3306 -- pnpm run dev"
+
+  api-production:
+    <<: *common-env
+    container_name: api-production
+    profiles: ["production"]
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+    networks:
+      - coolify # Connects to the external Coolify network for Redis and MySQL
+      - default # Also connect to default for internal communication if needed
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    profiles: ["development", "local"] # MySQL service only for development and local
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: gigantao_auth_notify_dev
+      TZ: America/Sao_Paulo
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
+  coolify:
+    external: true
+
+volumes:
+  mysql_data:

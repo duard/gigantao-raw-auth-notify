@@ -7,9 +7,11 @@
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
-    "docker:dev": "bash scripts/start.sh dev",
-    "docker:local": "bash scripts/start.sh local",
-    "docker:prod": "bash scripts/start.sh prod"
+    "docker:development": "bash ./start.sh development",
+    "docker:local": "bash ./start.sh local",
+    "docker:homologation": "bash ./start.sh homologation",
+    "docker:test": "bash ./start.sh test",
+    "docker:production": "bash ./start.sh production"
   },
   "keywords": [],
   "author": "",

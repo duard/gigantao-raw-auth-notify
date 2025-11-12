@@ -24,7 +24,7 @@ services:
     container_name: api-auth-development
     profiles: ["development"]
     ports:
-      - "0.0.0.0:3203:3101"
+      - "0.0.0.0:3203:3103"
     env_file:
       - .env.dev
     environment:
@@ -39,7 +39,7 @@ services:
     container_name: api-auth-local
     profiles: ["local"]
     ports:
-      - "0.0.0.0:3103:3101"
+      - "0.0.0.0:3103:3103"
     env_file:
       - .env.local
     environment:
@@ -54,7 +54,7 @@ services:
     container_name: api-auth-homologation
     profiles: ["homologation"]
     ports:
-      - "0.0.0.0:3303:3101"
+      - "0.0.0.0:3303:3103"
     env_file:
       - .env.homolog
     environment:
@@ -68,7 +68,7 @@ services:
     container_name: api-auth-test
     profiles: ["test"]
     ports:
-      - "0.0.0.0:3403:3101"
+      - "0.0.0.0:3403:3103"
     env_file:
       - .env.test
     environment:
@@ -82,7 +82,7 @@ services:
     container_name: api-auth-production
     profiles: ["production"]
     ports:
-      - "0.0.0.0:3503:3101"
+      - "0.0.0.0:3503:3103"
     env_file:
       - .env.production
     environment:

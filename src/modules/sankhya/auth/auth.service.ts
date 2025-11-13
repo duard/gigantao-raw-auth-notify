@@ -37,6 +37,20 @@ function logError(username: string) {
   logger.info(`${username} ERRO AO ACESSAR ${new Date().toISOString()}`);
 }
 
+export async function verifyToken(token: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    if (!process.env.JWT_SECRET) {
+      return reject(new Error('JWT_SECRET is not defined'));
+    }
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(decoded);
+    });
+  });
+}
+
 export async function login(username: string, password: string): Promise<AuthResponse> {
   logAttempt(username);
 

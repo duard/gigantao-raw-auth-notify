@@ -53,7 +53,7 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./dist
 COPY . .
 
-EXPOSE 9300
+EXPOSE 9304
 
 
 # Configuração de execução por ambiente

@@ -13,8 +13,12 @@ ENV TZ=America/Sao_Paulo
 ENV NODE_ENV=development
 
 # Cria usuário não-root
-RUN addgroup -g ${MY_GID} -S appgroup \
-  && adduser -u ${MY_UID} -S appuser -G appgroup
+RUN if ! getent group ${MY_GID} >/dev/null; then \
+    addgroup -g ${MY_GID} -S appgroup; \
+  fi && \
+  if ! getent passwd ${MY_UID} >/dev/null; then \
+    adduser -u ${MY_UID} -S appuser -G $(getent group ${MY_GID} | cut -d: -f1); \
+  fi
 
 WORKDIR /usr/src/app
 

@@ -15,6 +15,7 @@ const app = new Hono();
 // =============================================
 const allowedOrigins = [
   // 🔹 LOCAL
+  'http://localhost:3101',
   'http://localhost:9300',
   'http://localhost:9200',
   'http://localhost:9100',
